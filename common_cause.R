@@ -39,36 +39,26 @@ drawdag(X.is.cause.DAG)
 #How can you know which is the case? How do you know if you want to consider X, Y or both?
 #Let's analyze all the possibilities!
 
-#define the numerical relationship between variables, and size of the dataset (N)
-N <- 500
-b_xy <- 10
-b_xz <- 3
-b_yz <- 2
-e_x <- 1
-e_y <- 1
-e_z <- 1
+create.dataset <- function(b_yz, N = 500, b_xy = 10, b_xz = 3,
+                           e_x = 1, e_y = 1, e_z = 1) {
+  name_df <- data.frame(X = runif(N, 1, 100) + rnorm(N, sd = e_x))
+  name_df$Y <- name_df$X * b_xy + rnorm(N, sd = e_y)
+  name_df$Z <- name_df$X * b_xz - name_df$Y * b_yz + rnorm(N, sd = e_z)
+  return(name_df)
+}
 
-#create dataset in which X enhances Z, but Y decreases it
 set.seed(13)
-comm.cause.df1 <- data.frame(X = runif(N, 1, 100) + rnorm(N, sd = e_x))
-comm.cause.df1$Y <- comm.cause.df1$X * b_xy + rnorm(N, sd = e_y)
-comm.cause.df1$Z <- comm.cause.df1$X * b_xz - comm.cause.df1$Y * b_yz + rnorm(N, sd = e_z)
+Ynoinfluences <- create.dataset(0)
+Yinfluences <- create.dataset(4)
 
-#there are three ways to adjust this model
-summary(lm(Z~X+Y, data = comm.cause.df1)) #both significant, only direct effect of Z
-summary(lm(Z~X, data = comm.cause.df1)) #significant, total effect of X
-summary(lm(Z~Y, data = comm.cause.df1)) #significant, direct effect of Y why 0.3 less even if you change it ?
-
-b_yz <- 0
-
-comm.cause.df1 <- data.frame(X = runif(N, 1, 100) + rnorm(N, sd = e_x))
-comm.cause.df1$Y <- comm.cause.df1$X * b_xy + rnorm(N, sd = e_y)
-comm.cause.df1$Z <- comm.cause.df1$X * b_xz - comm.cause.df1$Y * b_yz + rnorm(N, sd = e_z)
+summary(lm(Z~X+Y, data = Yinfluences)) #both significant, only direct effect of Z
+summary(lm(Z~X, data = Yinfluences)) #significant, total effect of X
+summary(lm(Z~Y, data = Yinfluences)) #significant, direct effect of Y why 0.3 less even if you change it ?
 
 #there are three possibilities to analyze the causal relations
-summary(lm(Z~X+Y, data = comm.cause.df1)) #only X is significant
-summary(lm(Z~X, data = comm.cause.df1)) #significant, total effect of X
-summary(lm(Z~Y, data = comm.cause.df1)) #significant, 0.3
+summary(lm(Z~X+Y, data = Ynoinfluences)) #only X is significant
+summary(lm(Z~X, data = Ynoinfluences)) #significant, total effect of X
+summary(lm(Z~Y, data = Ynoinfluences)) #significant, 0.3
 
 
 
