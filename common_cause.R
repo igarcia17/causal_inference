@@ -21,7 +21,7 @@ e_z -> Z
 }")
 
 coordinates(XYaffect.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
-                                    y = c(Y = 1, X = 3, Z = 1, e_y = 0.75, e_z = 0.75))
+                                    y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
 drawdag(XYaffect.DAG)
 
 #As well as the DAG:
@@ -33,7 +33,8 @@ e_z -> Z
 }")
 
 coordinates(X.is.cause.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
-                                    y = c(Y = 1, X = 3, Z = 1, e_y = 0.75, e_z = 0.75))
+                                  y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+
 drawdag(X.is.cause.DAG)
 
 #In both cases X is common cause of Y and Z. In the first case, Y has a causal effect
@@ -43,7 +44,7 @@ drawdag(X.is.cause.DAG)
 #Let's analyze all the possibilities!
 
 #Let's create a function that creates the different datasets that we need.
-create.dataset <- function(b_yz, N = 500, b_xy = 10, b_xz = 3,
+create.dataset <- function(b_yz, N = 500, b_xy = 3, b_xz = 3,
                            e_x = 1, e_y = 1, e_z = 1) {
   name_df <- data.frame(X = runif(N, 1, 100) + rnorm(N, sd = e_x))
   name_df$Y <- name_df$X * b_xy + rnorm(N, sd = e_y)
@@ -53,9 +54,9 @@ create.dataset <- function(b_yz, N = 500, b_xy = 10, b_xz = 3,
 
 set.seed(13)
 Ynoinfluences <- create.dataset(0)
-Yinfluences <- create.dataset(4)
+Yinfluences <- create.dataset(0.5)
 #non.influences <- create.dataset(0, b_xz = 0)
-Yistruecause <- create.dataset(5, b_xz = 0)
+#Yistruecause <- create.dataset(5, b_xz = 0)
 
 summary(lm(Z~X+Y, data = Yinfluences)) #both significant, only direct effect of Z
 summary(lm(Z~X, data = Yinfluences)) #significant, total effect of X
@@ -85,25 +86,19 @@ Y_check <- function (dataset, conflevel = 0.01) {
     drawdag(X.is.cause.DAG)}
   if ((p.v.X > conflevel)&(p.v.Y > conflevel))
   {cat("It seems that neither X or Y affect Z")}
-  if ((p.v.X > conflevel)&(p.v.Y <= conflevel)){cat('You may want to review your experimental model')}
+  if (((p.v.X > conflevel)&(p.v.Y <= conflevel))|((p.v.X > conflevel)&(p.v.Y > conflevel))){cat('You may want to review your experimental model')}
 }
 
 Y_check(non.influences)
 Y_check(Yinfluences)
 Y_check(Ynoinfluences)
 
+#Let's focus first on the case in which Y doesn't has a causal relationship with Z
+#That is, the dataset Ynoinfluences
 
-
-
-
-#create a dataset in which Z is enhanced by both X and Y
-comm.cause.df2 <- data.frame(X = runif(N, 1, 100) + rnorm(N, sd = 1))
-comm.cause.df2$Y <- comm.cause.df2$X * b_xy + rnorm(N, sd = 1)
-comm.cause.df2$Z <- comm.cause.df2$X * b_xz + comm.cause.df2$Y * 6 + rnorm(N, sd = 1)
-
-#how does each of the scenarios behave in the adjustment of Y?
-summary(lm(Z~X+Y, data = comm.cause.df2))
-summary(lm(Z~X, data = comm.cause.df2))
-summary(lm(Z~Y, data =comm.cause.df2))
-
-
+Y.noin.condboth <- lm(Z~X + Y, data = Ynoinfluences)
+Y.noin.condY <- lm(Z~Y, data = Ynoinfluences)
+Y.noin.condX <- lm(Z~X, data = Ynoinfluences)
+summary(Y.noin.condboth)
+summary(Y.noin.condY)
+summary(Y.noin.condX)

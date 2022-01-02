@@ -11,15 +11,6 @@ m_common_cause_adjust <- lm(Cholesterol ~Exercise + Age, data = common_cause)
 m_common_cause_no_adjust <- lm(Cholesterol~Exercise, data = common_cause)
 
 S(m_common_cause_adjust)
+summary(m_common_cause_adjust)
 S(m_common_cause_no_adjust)
 
-
-#prueba, welch test o anova?
-prueba <- data.frame(y = c(rnorm(1000, mean = 0.1, sd = 0.9), rnorm(5000, sd = 0.1)),
-                     strain = factor(c(rep('mutado', times= 1000 ), rep('wt', times=5000))
-                     ))
-summary(prueba)
-t.test(y~strain, data = prueba, var.equal = TRUE, alternative = 'two.sided')
-t.test(y~strain, data = prueba, var.equal = FALSE, alternative = 'two.sided')
-
-anova(lm(y~strain, data = prueba))
