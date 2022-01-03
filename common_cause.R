@@ -96,8 +96,7 @@ Y_check <- function (dataset, conflevel = 0.01) {
     return(invisible(2))}
 
   if ((p.v.X > conflevel)&(p.v.Y > conflevel))
-  {cat("It seems that neither X or Y affect Z\n 
-       You may want to review your experimental model\n")
+  {cat("It seems that neither X or Y affect Z\nYou may want to review your experimental model\n")
   return(invisible(0))}}
 
 a <- Y_check(non.influences)
@@ -132,11 +131,11 @@ sc1.comm <- function(dataset){
   sc <- Y_check(dataset)
   if (sc==1){
     
-    cat('The p value of Y is ', summary(onlyY)$coefficients['Y', 'Pr(>|t|)'])
+    cat('\nWhen Z ~ Y: \nThe p value of Y is ', summary(onlyY)$coefficients['Y', 'Pr(>|t|)'],'\n')
     
-    cat('The p value of Y is ', summary(both)$coefficients['Y', 'Pr(>|t|)'])
+    cat('\nWhen Z ~Y + X: \nThe p value of Y is ', summary(both)$coefficients['Y', 'Pr(>|t|)'])
     
-  }else {print('The data doesn\'t belong to scenario 1 \n')}
+  } else {print('The data doesn\'t belong to scenario 1 \n')}
 }
 
 sc1.comm(i_uv_i)
@@ -150,8 +149,8 @@ UV.radiation -> Ice.cream.consumption
 UV.radiation -> INK4a
 }")
 
-coordinates(i_uv_i_sun.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
-                                y = c(Y = 3, X = 1, Z = 3))
+#coordinates(i_uv_i_sun.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
+                                #y = c(Y = 3, X = 1, Z = 3))
 drawdag(i_uv_i_sun.DAG)
 
 
