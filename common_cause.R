@@ -57,7 +57,7 @@ set.seed(13)
 Ynoinfluences <- create.dataset(0)
 Yinfluences <- create.dataset(-2)
 non.influences <- create.dataset(0, b_xz = 0)
-#Yistruecause <- create.dataset(5, b_xz = 0)
+#wrongcommoncause <- create.dataset(5, b_xz = 0)
 
 #there are three possibilities to analyze the causal relations
 summary(lm(Z~X+Y, data = Ynoinfluences)) #only X is significant
@@ -67,8 +67,6 @@ summary(lm(Z~Y, data = Ynoinfluences)) #significant
 summary(lm(Z~X+Y, data = Yinfluences)) #both significant, only direct effect of Z
 summary(lm(Z~X, data = Yinfluences)) #significant, total effect of X
 summary(lm(Z~Y, data = Yinfluences)) #significant
-
-
 
 #We create a function that checks which is the scenario. We assume that X is in any
 #case a common cause of both Y and Z
@@ -96,12 +94,21 @@ Y_check <- function (dataset, conflevel = 0.01) {
     return(invisible(2))}
 
   if ((p.v.X > conflevel)&(p.v.Y > conflevel))
-  {cat("It seems that neither X or Y affect Z\nYou may want to review your experimental model\n")
-  return(invisible(0))}}
+  {cat("It seems that neither X or Y affect Z\nYou may want to review your working model\n")
+  return(invisible(0))}
+  
+  if ((p.v.Y <= conflevel)&(p.v.X > conflevel))
+  {cat('It looks like Y is related to Z, but not Z\nYou may want to revisit the hypothesis \'X = common cause of Y and Z\'')
+  return(invisible(0))}
+  }
 
 a <- Y_check(non.influences)
 b <- Y_check(Yinfluences)
 c <- Y_check(Ynoinfluences)
+#d <- Y_check(wrongcommoncause)
+
+#Another sensitive question that may arise before the analysis is if we have identified
+#the common cause correctly: the objective of the analysis is to 
 
 #We will now create a toy example to illustrate the problems of a bad modeling of 
 #scenario 1.
@@ -112,18 +119,22 @@ c <- Y_check(Ynoinfluences)
 #You collect data of potentially cancerous tissue from 100 people, from which you know the
 #hours they have spent in the sun the last year, the amount of consumed ice cream and
 #the expression of INK4a.
-i_uv_i <- create.dataset(0, N = 100, b_xy = 5, b_xz = 10)
-# i_uv_i %>% rename(UV.radiation = X, ice.cream = Y, INK4a = Z)
+
+b_xy_i_uv_i <- 5
+b_xz_i_uv_i <- 10
+b_yz_i_uv_i <- 0
+samplesize <- 100
+
 i_uv_i.DAG <- dagitty("dag {
 UV.radiation -> Ice.cream.consumption
 UV.radiation -> INK4a
 }")
-
-coordinates(i_uv_i.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
-                                   y = c(Y = 3, X = 1, Z = 3))
+#coordinates(i_uv_i.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
+                                   #y = c(Y = 3, X = 1, Z = 3))
 drawdag(i_uv_i.DAG)
 
-sc1.comm <- function(dataset){
+sc1.comm <- function(b_yz, N, b_xz, b_xy, ...){
+  dataset <- create.dataset(b_yz, N = N, b_xz = b_xz, b_xy = b_xy, ...)
   both <- lm(Z~X+Y, data = dataset)
   onlyY <- lm(Z~Y, data = dataset)
   onlyX <- lm(Z~X, data = dataset)
@@ -136,11 +147,17 @@ sc1.comm <- function(dataset){
     cat('\nWhen Z ~Y + X: \nThe p value of Y is ', summary(both)$coefficients['Y', 'Pr(>|t|)'])
     
   } else {print('The data doesn\'t belong to scenario 1 \n')}
-}
+  
+  #########como varia el efecto de X y de Y en cada caso? estimates, frente a linea con default estimates
+### lo mismo que en la funcion de Z_X_Y, scar varios valores y hacerlos en grafica con linea donde este el b_xz y b_yz
+  ###meter la funcion createdataset dentro de esta
+  }
 
-sc1.comm(i_uv_i)
+sc1.comm(b_yz = b_yz_i_uv_i, N = samplesize, b_xz = b_xz_i_uv_i, b_xy = b_xy_i_uv_i)
 #The ice cream consumption is not significative relevant to INK4a expression
-#when Uv radiation is present in the model.
+#when Uv radiation is present in the model. Uv radiation is a confounder.
+#Hence, in scenario 1 we should always condition on the common cause X or we could see 
+#a fake, but significant, causal relation between Y and Z.
 
 #A variation would be to consider that uv raditaion depends on sun exposure, having the following DAG:
 i_uv_i_sun.DAG <- dagitty("dag {
@@ -152,6 +169,17 @@ UV.radiation -> INK4a
 #coordinates(i_uv_i_sun.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
                                 #y = c(Y = 3, X = 1, Z = 3))
 drawdag(i_uv_i_sun.DAG)
+
+create.datasetv2 <- function(b_ax, b_yz=0, N = 500, b_xy = 3, b_xz = 3,
+                           e_x = 1, e_y = 1, e_z = 1) {
+  name_df <- data.frame(A = runif(N, 1, 100) + rnorm(N))
+  name_df$X <- name_df$A * b_ax + rnorm(N, sd = e_x)
+  name_df$Y <- name_df$X * b_xy + rnorm(N, sd = e_y)
+  name_df$Z <- name_df$X * b_xz + name_df$Y * b_yz + rnorm(N, sd = e_z)
+  return(name_df)
+}
+i_uv_i_a <- create.datasetv2(3)
+#Should we condition for the cause of the common cause?
 
 
 
