@@ -54,8 +54,8 @@ create.dataset <- function(b_yz, N = 500, b_xy = 3, b_xz = 3,
 
 set.seed(13)
 Ynoinfluences <- create.dataset(0)
-Yinfluences <- create.dataset(0.5)
-#non.influences <- create.dataset(0, b_xz = 0)
+Yinfluences <- create.dataset(2)
+non.influences <- create.dataset(0, b_xz = 0)
 #Yistruecause <- create.dataset(5, b_xz = 0)
 
 summary(lm(Z~X+Y, data = Yinfluences)) #both significant, only direct effect of Z
@@ -85,9 +85,8 @@ Y_check <- function (dataset, conflevel = 0.01) {
     cat('See plot')
     drawdag(X.is.cause.DAG)}
   if ((p.v.X > conflevel)&(p.v.Y > conflevel))
-  {cat("It seems that neither X or Y affect Z")}
-  if (((p.v.X > conflevel)&(p.v.Y <= conflevel))|((p.v.X > conflevel)&(p.v.Y > conflevel))){cat('You may want to review your experimental model')}
-}
+  {cat("It seems that neither X or Y affect Z\n You may want to review your experimental model")}
+  }
 
 Y_check(non.influences)
 Y_check(Yinfluences)
@@ -96,9 +95,11 @@ Y_check(Ynoinfluences)
 #Let's focus first on the case in which Y doesn't has a causal relationship with Z
 #That is, the dataset Ynoinfluences
 
+impliedConditionalIndependencies(X.is.cause.DAG)
 Y.noin.condboth <- lm(Z~X + Y, data = Ynoinfluences)
 Y.noin.condY <- lm(Z~Y, data = Ynoinfluences)
 Y.noin.condX <- lm(Z~X, data = Ynoinfluences)
 summary(Y.noin.condboth)
 summary(Y.noin.condY)
 summary(Y.noin.condX)
+
