@@ -1,0 +1,55 @@
+#collider and selection bias, cases:
+
+#import modules
+#import modules
+library(tidyverse)
+library(dagitty)
+library(car)
+library(rethinking)
+if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
+  drawdag <- plot
+}
+## library(rethinking) ## for drawdag
+## Installing rethinking can be complicated just for a few graphs
+## So have a fallback if rethinking not available
+
+
+
+#DAG representing a collider: 
+comm.effect.DAG <- dagitty("dag {
+X -> Z
+Y -> Z
+e_z -> Z
+}")
+
+coordinates(comm.effect.DAG) <- list(x = c(X = 1, Y = 3, Z = 2, 
+                                           e_z = 1.25),
+                                    y = c(X = 1, Y = 1, Z = 3, 
+                                           e_z = 3))
+drawdag(comm.effect.DAG)
+
+
+##We are going to try two specific scenarios, one where we adjust for Z and
+## another where we don't.
+##Lets first generate our data according to a collider structure where 
+## X and :
+
+N <- 500 #our sample size will be 500
+b_xz <- 3 
+b_yz <- 2
+sd_z <- 5
+
+X <- runif(N, 1, 5)
+Y <- runif(N, 2, 4)
+Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
+
+df_collider_ind <- data.frame(X, Y, Z)
+df_collider_ind
+
+
+##As we can see, two independent variables (X and Y) when we adjust by Z 
+## raise a correlation that wasn't supposed to be there.
+summary(lm(Z ~ X))
+summary(lm(Z ~ Y))
+summary(lm(X ~ Y))
+summary(lm(X ~ Y + Z))
