@@ -9,13 +9,16 @@ library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
   drawdag <- plot
 }
-## library(rethinking) ## for drawdag
-## Installing rethinking can be complicated just for a few graphs
-## So have a fallback if rethinking not available
+# library(rethinking) ## for drawdag
+# Installing rethinking can be complicated just for a few graphs
+# So have a fallback if rethinking not available
 
 
 
-#DAG representing a collider: 
+#We are going to try two specific scenarios, one where we adjust for Z and
+#another where we don't.
+#Lets first generate our DAG according to a collider structure where X and Y
+#are independent:
 comm.effect.DAG <- dagitty("dag {
 X -> Z
 Y -> Z
@@ -29,15 +32,14 @@ coordinates(comm.effect.DAG) <- list(x = c(X = 1, Y = 3, Z = 2,
 drawdag(comm.effect.DAG)
 
 
-##We are going to try two specific scenarios, one where we adjust for Z and
-## another where we don't.
-##Lets first generate our data according to a collider structure where 
-## X and :
+#Let us generate the data according to the DAG:
 
 N <- 500 #our sample size will be 500
-b_xz <- 3 
+b_xz <- 3 # 
 b_yz <- 2
 sd_z <- 5
+
+set.seed(11)
 
 X <- runif(N, 1, 5)
 Y <- runif(N, 2, 4)
@@ -47,9 +49,65 @@ df_collider_ind <- data.frame(X, Y, Z)
 df_collider_ind
 
 
+##Let's take a look at our data distribution:
+
+reg_line_ZX <- lm(Z ~ X)
+plot(Z ~ X)
+abline(reg_line_ZX)
+
+reg_line_ZY <- lm(Z ~ Y)
+plot(Z ~ Y)
+abline(reg_line_ZY)
+
+reg_line_XY <- lm(X ~ Y)
+plot(X ~ Y)
+abline(reg_line_XY)
+
+#As we can see, there is a positive correlation between Z and X and also
+# Z and Y. On the other hand, there is no visible correlation between X and Y 
+# (as should). We can check it by calculating the estimates and significance of
+# each pair:
+
+summary(lm(Z ~ X)) #we can see a strong correlation between Z and X
+summary(lm(Z ~ Y)) #we can see a strong correlation between Z and Y
+summary(lm(X ~ Y)) #we can't any correlation between X and Y
+
+
+#
+summary(lm(X ~ Y + Z))
+
+
 ##As we can see, two independent variables (X and Y) when we adjust by Z 
 ## raise a correlation that wasn't supposed to be there.
-summary(lm(Z ~ X))
-summary(lm(Z ~ Y))
-summary(lm(X ~ Y))
-summary(lm(X ~ Y + Z))
+
+
+#_______________________________________________________________________________
+## We could also have cases in which our X and Y variables have some sort of
+## relation but the estimate changes when we condition on Z.
+
+comm.effect.DAG_2 <- dagitty("dag {
+X2 -> Z2
+Y2 -> Z2
+X2 -> Y2
+e_z -> Z2
+}")
+
+coordinates(comm.effect.DAG_2) <- list(x = c(X2 = 1, Y2 = 3, Z2 = 2, 
+                                           e_z = 1.25),
+                                     y = c(X2 = 1, Y2 = 1, Z2 = 3, 
+                                           e_z = 3))
+drawdag(comm.effect.DAG_2)
+
+
+N2 <- 500
+X2 <- runif(N2, 1, 10)
+Y2 <- X2 * 1.7 + rnorm(N, mean = 0, sd = 0.1)
+Z2 <- 1.5 * X2 + 2.5 * Y2 + rnorm(N2, mean = 0, sd = 0.1)
+
+
+
+summary(lm(X2 ~ Y2))
+summary(lm(X2 ~ Y2 + Z2))
+
+## As we can see, in this particular case, conditioning on Z changes the sign 
+##of the estimate for the Y2 variable, as in Simpson's paradox
