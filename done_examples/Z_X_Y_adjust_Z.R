@@ -88,7 +88,7 @@ dist_x <- function(N = 50, b_xz = 3, b_yx = 2, sd_x = 1, sd_y = 5, B = 2000,
     #causa de una causa
     cat("\n Summary X without Z\n")
     print(summary(X_noZ))
-    #se presenta el error estandar
+    #se presenta el error estandar de los coeficientes
     cat("\n s.d. estimate = ", sd(X_noZ))
     #se presenta el resumen de los coeficientes cuando se ajusta por Z
     cat("\n\n Summary X with Z\n")
@@ -97,12 +97,12 @@ dist_x <- function(N = 50, b_xz = 3, b_yx = 2, sd_x = 1, sd_y = 5, B = 2000,
     cat("\n s.d. estimate = ", sd(X_yesZ), "\n")
     
     #se abre un plot device de 2 * 2
-    op <- par(mfrow = c(2, 2))
+    op <- par(mfrow = c(2, 2), mar =c(1.5,1.5,1.5,1.5))
     #se hace un histograma de los coeficientes sin y con Z en el modelo
     hist(X_noZ, main = "X without Z in the model", xlab = "Estimate")
-    abline(v = b_yx, lty = 2)
+    abline(v = b_yx, lty = 2, col = 'red')
     hist(X_yesZ, main = "X with Z in the model", xlab = "Estimate")
-    abline(v = b_yx, lty = 2)
+    abline(v = b_yx, lty = 2, col = 'red')
     #se hace un histograma de los p valores con y sin Z en el modelo
     hist(pv_X_noZ, main = "X without Z in the model", xlab = "p-value")
     hist(pv_X_yesZ, main = "X with Z in the model", xlab = "p-value")
