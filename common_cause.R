@@ -81,14 +81,14 @@ Y_check <- function (dataset, conflevel = 0.01) {
   p.v.Y <- (summary(model_with_Y)$coefficients['Y', 'Pr(>|t|)'])
   
   if ((p.v.X <= conflevel)&(p.v.Y > conflevel))
-  {cat("The provided outcome of the dataset is not influenced by Y\n")
+  {cat("The variable of analysis is not influenced by Y\n")
     cat('See plot\n')
     drawdag(scenario1.DAG)
     return(invisible(1))
     }
   
   if ((p.v.X <= conflevel)&(p.v.Y <= conflevel))
-  {cat("The provided outcome of the dataset is influenced by both X and Y\n")
+  {cat("The variable of analysis is influenced by both X and Y\n")
     cat('See plot\n')
     drawdag(scenario2.DAG)
     return(invisible(2))}
@@ -133,33 +133,57 @@ UV.radiation -> INK4a
                                    #y = c(Y = 3, X = 1, Z = 3))
 drawdag(i_uv_i.DAG)
 
-sc1.comm <- function(b_yz, N, b_xz, b_xy, ...){
-  dataset <- create.dataset(b_yz, N = N, b_xz = b_xz, b_xy = b_xy, ...)
-  both <- lm(Z~X+Y, data = dataset)
-  onlyY <- lm(Z~Y, data = dataset)
-  onlyX <- lm(Z~X, data = dataset)
+sc1.comm <- function(b_yz, N, b_xz, b_xy, reps = 30, ...){
+  onlyY_pv <- c(NA, reps)
+  both_pv <- c(NA,reps)
   
-  sc <- Y_check(dataset)
-  if (sc==1){
-    
-    cat('\nWhen Z ~ Y: \nThe p value of Y is ', summary(onlyY)$coefficients['Y', 'Pr(>|t|)'],'\n')
-    
-    cat('\nWhen Z ~Y + X: \nThe p value of Y is ', summary(both)$coefficients['Y', 'Pr(>|t|)'])
-    
-  } else {print('The data doesn\'t belong to scenario 1 \n')}
+  onlyX_coefX <- c(NA,reps)
+  both_coefX <- c(NA, reps)
   
-  #########como varia el efecto de X y de Y en cada caso? estimates, frente a linea con default estimates
-### lo mismo que en la funcion de Z_X_Y, scar varios valores y hacerlos en grafica con linea donde este el b_xz y b_yz
-  ###meter la funcion createdataset dentro de esta
+  for (i in 1:reps) {
+    
+    dataset <- create.dataset(b_yz, N = N, b_xz = b_xz, b_xy = b_xy, ...)
+    
+    both <- lm(Z~X+Y, data = dataset)
+    onlyY <- lm(Z~Y, data = dataset)
+    onlyX <- lm(Z~X, data = dataset)
+    
+    onlyY_pv[i] <- summary(onlyY)$coefficients["Y", "Pr(>|t|)"]
+    both_pv[i] <- summary(both)$coefficients["Y", "Pr(>|t|)"]
+    
+    onlyX_coefX[i] <- summary(onlyX)$coefficients["X", "Estimate"]
+    both_coefX[i] <- summary(both)$coefficients["X", "Estimate"]
+    
+    rm(dataset)
+  }
+  cat('\n Change in relevance of Y on Z\n')
+  cat('\nWhen Z ~ Y: \nThe p value of Y is ', mean(onlyY_pv),'\n')
+  cat('\nWhen Z ~Y + X: \nThe p value of Y is ', mean(both_pv), '\n')
+  
+  cat('\n Change in effect of X over Z\n')
+  cat('Input x -> z: ', b_xz,'\n')
+  cat('\nWhen Z ~ X: \nThe estimate for X is ', mean(onlyX_coefX),'\n')
+  cat('\nWhen Z ~Y + X: \nThe estimate for X is ', mean(both_coefX), '\n')
+  
+  op <- par(mfrow= c(2,1))
+  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
+  abline(v = b_xz, lty = 2)
+  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
+  abline(v = b_xz, lty = 2)
+  par(op)
   }
 
 sc1.comm(b_yz = b_yz_i_uv_i, N = samplesize, b_xz = b_xz_i_uv_i, b_xy = b_xy_i_uv_i)
-#The ice cream consumption is not significative relevant to INK4a expression
-#when Uv radiation is present in the model. Uv radiation is a confounder.
+#The ice cream consumption is not significant relevant to INK4a expression
+#when Uv radiation is present in the model. UV radiation is a confounder.
+#This corresponds to:
+cat('This corresponds to ', impliedConditionalIndependencies(i_uv_i.DAG))
+#The power of UV radiation over INK4a doesn't vary much with the presence or absence of Y in the model.
 #Hence, in scenario 1 we should always condition on the common cause X or we could see 
 #a fake, but significant, causal relation between Y and Z.
 
-#A variation would be to consider that uv raditaion depends on sun exposure, having the following DAG:
+#A variation would be to consider that uv raditaion depends on sun exposure, 
+#having the following DAG:
 i_uv_i_sun.DAG <- dagitty("dag {
 Sun -> UV.radiation
 UV.radiation -> Ice.cream.consumption
@@ -170,6 +194,12 @@ UV.radiation -> INK4a
                                 #y = c(Y = 3, X = 1, Z = 3))
 drawdag(i_uv_i_sun.DAG)
 
+b_ax_i_uv_i2 <- 100
+b_xy_i_uv_i2 <- 5
+b_xz_i_uv_i2 <- 10
+b_yz_i_uv_i2 <- 0
+samplesize <- 100
+
 create.datasetv2 <- function(b_ax, b_yz=0, N = 500, b_xy = 3, b_xz = 3,
                            e_x = 1, e_y = 1, e_z = 1) {
   name_df <- data.frame(A = runif(N, 1, 100) + rnorm(N))
@@ -178,9 +208,73 @@ create.datasetv2 <- function(b_ax, b_yz=0, N = 500, b_xy = 3, b_xz = 3,
   name_df$Z <- name_df$X * b_xz + name_df$Y * b_yz + rnorm(N, sd = e_z)
   return(name_df)
 }
-i_uv_i_a <- create.datasetv2(3)
-#Should we condition for the cause of the common cause?
 
+#As the significance of ice cream, Y, was covered in the previous function, 
+#it will be skipped in this one. We are interested in knowing if the sun, A, plays a role 
+#in the value of INK4a, Z, and how important is it.
+
+sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, ...){
+  onlyA_pvA <- c(NA, reps)
+  bothAndX_pvA <- c(NA,reps)
+  
+  onlyX_coefX <- c(NA,reps)
+  bothXY_coefX <- c(NA, reps)
+  
+  for (i in 1:reps) {
+    
+    dataset <- create.datasetv2(b_yz= b_yz, N = N, b_xz = b_xz, b_ax = b_ax,
+                                b_xy = b_xy, ...)
+    
+    both <- lm(Z~X+Y, data = dataset)
+    onlyY <- lm(Z~Y, data = dataset)
+    onlyX <- lm(Z~X, data = dataset)
+    
+    onlyY_pv[i] <- summary(onlyY)$coefficients["Y", "Pr(>|t|)"]
+    both_pv[i] <- summary(both)$coefficients["Y", "Pr(>|t|)"]
+    
+    onlyX_coefX[i] <- summary(onlyX)$coefficients["X", "Estimate"]
+    both_coefX[i] <- summary(both)$coefficients["X", "Estimate"]
+    
+    rm(dataset)
+  }
+  cat('\n Change in relevance of Y on Z\n')
+  cat('\nWhen Z ~ Y: \nThe p value of Y is ', mean(onlyY_pv),'\n')
+  cat('\nWhen Z ~Y + X: \nThe p value of Y is ', mean(both_pv), '\n')
+  
+  cat('\n Change in effect of X over Z\n')
+  cat('Input x -> z: ', b_xz,'\n')
+  cat('\nWhen Z ~ X: \nThe estimate for X is ', mean(onlyX_coefX),'\n')
+  cat('\nWhen Z ~Y + X: \nThe estimate for X is ', mean(both_coefX), '\n')
+  
+  op <- par(mfrow= c(2,1))
+  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
+  abline(v = b_xz, lty = 2)
+  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
+  abline(v = b_xz, lty = 2)
+  par(op)
+}
+
+
+i_uv_i2 <- create.datasetv2(b_ax = b_ax_i_uv_i2, N = samplesize, b_xy = b_xy_i_uv_i2,
+                             b_xz = b_xz_i_uv_i2, b_yz = b_yz_i_uv_i2)
+
+onlyX <- lm(Z~X, data = i_uv_i2)
+onlyY <- lm(Z~Y, data = i_uv_i2)
+onlyA <- lm(Z~A, data = i_uv_i2)
+YandX <- lm(Z~Y + X, data = i_uv_i2)
+XandA <- lm(Z~X + A, data = i_uv_i2)
+YandA <- lm(Z~Y + A, data = i_uv_i2)
+YXA <- lm(Z~X +A +Y, data = i_uv_i2)
+
+summary(onlyX) #significant
+summary(onlyY) #significant
+summary(onlyA) #significant
+summary(YandX) #X is significant, Y is not
+summary(XandA) #X is significant, A is slightly significant
+summary(YandA) #Y is strongly significant, A not at all, depends on the size of A
+summary(YXA) #X is significant, A is slightly
+#Should we condition for the cause of the common cause?
+impliedConditionalIndependencies(i_uv_i_sun.DAG)
 
 
 #_____________________________
