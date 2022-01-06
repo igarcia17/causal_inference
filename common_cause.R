@@ -291,11 +291,11 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   abline(v = b_xz*b_ax, col = 'red')
   
   ###Changes in X
-  #p value
-  cat('\n____Change in p value of X on Z\n')
-  cat('\nWhen Z ~ A: \nThe p value of A is ', mean(onlyX_pvX),'\n')
-  cat('\nWhen Z ~ X +A: \nThe p value of A is ', mean(bothXA_pvX), '\n')
-  cat('\nWhen Z ~ Y + X + A: \nThe p value of A is ', mean(three_pvX), '\n')
+  #p value         ######it is very obvious
+  #cat('\n____Change in p value of X on Z\n')
+  #cat('\nWhen Z ~ A: \nThe p value of A is ', mean(onlyX_pvX),'\n')
+  #cat('\nWhen Z ~ X +A: \nThe p value of A is ', mean(bothXA_pvX), '\n')
+  #cat('\nWhen Z ~ Y + X + A: \nThe p value of A is ', mean(three_pvX), '\n')
   
   #estimate de X en los modelos y error estandar
   cat('\n____Effect of X over Z\n\n')
@@ -389,8 +389,9 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
     onlyY_coefY[i] <- summary(onlyY)$coefficients['Y', 'Estimate']
     both_coefY[i] <- summary(both)$coefficients['Y', 'Estimate']
     
-    rm(dataset)
+    #rm(dataset)
   }
+  
   cat('p value of Y')
   cat('\nWhen Z~Y:', mean(onlyY_pvY))
   cat('\nWhen Z~Y+X', mean(both_pvY),'\n')
@@ -401,57 +402,70 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   cat('\n\n___Changes in Y\n')
   cat('When Z ~ Y:\nY coefficient:', mean(onlyY_coefY), 's.d:', sd(onlyY_coefY))
   cat('\nWhen Z ~ Y + X:\nY coefficient:', mean(both_coefY), 's.d:', sd(both_coefY))
-  ##legend: blue, total efffect X, red direct effect X, green effect Y
+  ##legend: blue, direct effect X, red total effect X, green effect Y
   
   op <- par(mfrow= c(2,2), mar = rep(3,4))
   hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
-  abline(v = b_xz, col = 'red')#direct effect
-  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
+  abline(v = b_xz, col = 'red')#total effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#direct effect
   hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
-  abline(v = b_xz, col = 'red')#direct effect
-  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
+  abline(v = b_xz, col = 'red')#total effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#direct effect
   
   hist(onlyY_coefY, main = 'Z ~ Y', xlab = 'Effect X over Z')
   abline(v = b_yz, col = 'green')
   hist(both_coefY, main = 'Z ~ Y + X', xlab = 'Effect X over Z')
-  abline(v = b_yz, col = 'green')
+  abline(v = b_yz, col = 'green') #total effect
   par(op)
+
  }
 
 sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
+
+when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
+                              N = samplesize)
+scatterplot(Z~X, data = when_xz_4, main ='Original case', regLine=TRUE)
+
 #In this case, Y, thus, MATP, has a significant p value in both models, in presence
 #and absence of the common cause X, UV radiation.
-#On blue it is shown the total effect of X over Z, as it takes into account the effect
-#of X over Y. On red, it is shown the direct effect of X over Z. On green, the effect of Y over 
-#Z. In any case, when there are two covariates in the model the variance of the estimate increases
+#On blue it is shown the direct effect of X over Z, as it takes into account the effect
+#of X over Y. On red, it is shown the total effect of X over Z. On green, the effect of Y over 
+#Z. 
+#In any case, when there are two covariates in the model the variance of the estimate increases
 #The estimate for Y is biased when X is in the model. Therefore, to know the real
 #effect of MATP on INK4a, the common cause UV radiation shouldn't be in the model
 #To condition on Y enables to know different types of effect of X. In this case,
 #if MATP is not considered, it seems that UV radiation has a negative effect over 
-#the expression of INK4a, as it is the total effect, when it actually enhances its expression.
+#the expression of INK4a, as it is the total effect.
 #If we input a higher X->Z value
 sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
-#The estimate for X in the simpler model isn't negative, but still underestimates
-#the effect of UV radiation over INK4a.
+when_xz_40 <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
+                             N = samplesize)
+scatterplot(Z~X, data = when_xz_40, main = 'If UV radiation effect is stronger', regLine=TRUE)
+#The estimate for X in the simpler model isn't negative, it's total effect is lower
+#than the direct effect.
 #If the Y -> Z value wasn't negative:
 sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
          N = samplesize)
+when_xz_40andnegative <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
+                             N = samplesize)
+#scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', regLine=TRUE)
 #Then the effect of X, UV radiation, over Z, INK4a, is overestimated.
 #In a healthy individual we would prefer to consider the total effect of UV radiation
 #on the INK4a expression because it is not possible to prevent also its effect over MATP.
 #But for other applications we may be interested on the direct effect.
 
 #The study goes on and we discovers that both the expression of MATP and INK4a
-#is also influenced by another key factor, which is the cortisol level of the 
-#individual. This leaves us with the following DAG:
+#is also influenced by another key factor, the cortisol level. This leaves us 
+#with the following DAG:
 
 m_uv_i_c.DAG <- dagitty("dag {
 UV.radiation -> MATP
 UV.radiation -> INK4a
-cortisol -> MATP
-cortisol -> INK4a
+Ccortisol -> MATP
+Cortisol -> INK4a
 MATP -> INK4a
 }")
 
@@ -466,55 +480,59 @@ b_xz_m_uv_i_c <- 4
 b_xy_m_uv_i_c <- 2
 b_yz_m_uv_i_c <- (-3)
 
+#From the previous function we have learnt that the condition on the mediator
+#variable Y, MATP, would allow us to know the direct effect of UV.radiation. If it is not 
+#present in the model, what we can see is the total effect.
+#The reasoning behing the UV.radiation-MATP-INK4a set also apply to the Cortisol-MATP-INK4a set.
 sc2.comm.extraoverY <- function(b_by, b_bz, b_xz, b_xy, b_yz, N, reps = 200, ...) {
   #que variables quiero ver ahora
-  onlyX_coefX <- rep(NA,reps)
-  both_coefX <- rep(NA, reps)
-  onlyY_coefY <- rep(NA,reps)
-  both_coefY <- rep(NA,reps)
+  onlyB_coefB <- rep(NA,reps)
+  bothBX_coefB <- rep(NA, reps)
+  three_coefB <- rep(NA,reps)
   
   for (i in 1:reps){
     dataset <- create.datasetv3(N=N, b_xz = b_xz, b_yz = b_yz, b_xy = b_xy,
                                 b_by = b_by, b_bz = b_bz, ...)
-    both <- lm(Z~X + Y, dataset)
-    onlyY <- lm(Z~Y, dataset)
-    onlyX <- lm(Z~X, dataset)
+    onlyB <- lm(Z ~ B, dataset)
+    bothBX <- lm(Z ~ X + B, dataset)
+    three <- lm(Z ~ Y + X + B, dataset)
     
-    onlyX_coefX[i] <- summary(onlyX)$coefficients['X', 'Estimate']
-    both_coefX[i] <- summary(both)$coefficients['X', 'Estimate']
-    onlyY_coefY[i] <- summary(onlyY)$coefficients['Y', 'Estimate']
-    both_coefY[i] <- summary(both)$coefficients['Y', 'Estimate']
-    
+    onlyB_coefB[i] <- summary(onlyB)$coefficients['B', 'Estimate']
+    bothBX_coefB[i] <- summary(bothBX)$coefficients['B', 'Estimate']
+    three_coefB[i] <- summary(three)$coefficients['B', 'Estimate']
+
     rm(dataset)
   }
 
-  cat('___Changes in X\n')
-  cat('When Z ~ X:\nX coefficient:', mean(onlyX_coefX), 's.d:', sd(onlyX_coefX))
-  cat('\nWhen Z ~ X + Y:\nX coefficient:', mean(both_coefX), 's.d:', sd(both_coefX))
+  cat('___Changes in B\n')
+  cat('When Z ~ B:\nB coefficient:', mean(onlyB_coefB), 's.d:', sd(onlyB_coefB))
+  cat('\nWhen Z ~ X + B:\nB coefficient:', mean(bothBX_coefB), 's.d:', sd(bothBX_coefB))
+  cat('\nWhen Z ~ Y + X + B:\nB coefficient:', mean(three_coefB), 's.d:', sd(three_coefB))
   
-  cat('\n\n___Changes in Y\n')
-  cat('When Z ~ Y:\nY coefficient:', mean(onlyY_coefY), 's.d:', sd(onlyY_coefY))
-  cat('\nWhen Z ~ Y + X:\nY coefficient:', mean(both_coefY), 's.d:', sd(both_coefY))
-  ##legend: blue, total efffect X, red direct effect X, green effect Y
+ ##legend: blue, total efffect X, red direct effect X, green effect Y
   
-  op <- par(mfrow= c(2,2), mar = rep(3,4))
-  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
-  abline(v = b_xz, col = 'red')#direct effect
-  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
-  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
-  abline(v = b_xz, col = 'red')#direct effect
-  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
+  op <- par(mfrow= c(1,3), mar = rep(3,4))
+  hist(onlyB_coefB, main = 'Z ~ B', xlab = 'Effect B over Z')
+  abline(v = b_bz, col = 'red')#direct effect
+  abline(v = b_bz + b_yz*b_by, col = 'blue')#total effect of B
   
-  hist(onlyY_coefY, main = 'Z ~ Y', xlab = 'Effect X over Z')
-  abline(v = b_yz, col = 'green')
-  hist(both_coefY, main = 'Z ~ Y + X', xlab = 'Effect X over Z')
-  abline(v = b_yz, col = 'green')
+  hist(bothBX_coefB, main = 'Z ~ B + X', xlab = 'Effect B over Z')
+  abline(v = b_bz, col = 'red')#direct effect
+  abline(v = b_bz + b_yz*b_by, col = 'blue')#total effect of B
+  
+  hist(three_coefB, main = 'Z ~ B + X + Y', xlab = 'Effect B over Z')
+  abline(v = b_bz, col = 'red')#direct effect
+  abline(v = b_bz + b_yz*b_by, col = 'blue')#total effect of B
   par(op)
 }
 
-sc2.commm.extraoverY(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
+sc2.comm.extraoverY(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
                      b_xz = b_xz_m_uv_i_c, b_xy = b_xy_m_uv_i_c,
                      b_yz = b_yz_m_uv_i_c, N = samplesize)
+#The direct effect of cortisol, B, is well reflected when it is on its own in the model or 
+#when UV radition, X, is considered, because they are independent from each other
+#as can be seen in
+impliedConditionalIndependencies(m_uv_i_c.DAG)
 
 prueba <- create.datasetv3(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
                            b_xz = b_xz_m_uv_i_c, b_xy = b_xy_m_uv_i_c,
