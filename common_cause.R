@@ -395,6 +395,7 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   cat('p value of Y')
   cat('\nWhen Z~Y:', mean(onlyY_pvY))
   cat('\nWhen Z~Y+X', mean(both_pvY),'\n')
+  
   cat('___Changes in X\n')
   cat('When Z ~ X:\nX coefficient:', mean(onlyX_coefX), 's.d:', sd(onlyX_coefX))
   cat('\nWhen Z ~ X + Y:\nX coefficient:', mean(both_coefX), 's.d:', sd(both_coefX))
@@ -406,16 +407,17 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   
   op <- par(mfrow= c(2,2), mar = rep(3,4))
   hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
-  abline(v = b_xz, col = 'red')#total effect
-  abline(v = b_xz + b_yz*b_xy, col = 'blue')#direct effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect, it takes into account both sources of effect
+  abline(v = b_xz, col = 'red')#direct effect
+  
   hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
-  abline(v = b_xz, col = 'red')#total effect
-  abline(v = b_xz + b_yz*b_xy, col = 'blue')#direct effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
+  abline(v = b_xz, col = 'red')#direct effect
   
   hist(onlyY_coefY, main = 'Z ~ Y', xlab = 'Effect X over Z')
   abline(v = b_yz, col = 'green')
   hist(both_coefY, main = 'Z ~ Y + X', xlab = 'Effect X over Z')
-  abline(v = b_yz, col = 'green') #total effect
+  abline(v = b_yz, col = 'green') 
   par(op)
 
  }
@@ -423,27 +425,34 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
 sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
 
+#In this case, Y, thus, MATP, has a significant p value in both models, in presence
+#and absence of the common cause X, UV radiation. This makes sense and was expected.
+
+#On blue it is shown the total effect of X over Z, as it takes into account the effect
+#of X over Y as well. On red, it is shown the direct effect of X over Z. On green, the effect of Y over 
+#Z. When the mediator Y is out of the model, the X estimates the total effect over Z,
+#including Y contribution. Only when Y is included it is possible to discern what is the
+#direct effect of X.
+#Depending on the case it would be more interesting to study the total or the direct
+#effect of X. For this case, we argue that to know the total effect would be better
+#because in the human body MATP expression is unavoidable.
+#In any case, when there are two covariates in the model the variance of the estimate increases
+####When X is not considered, the estimate for Y is biased. 
+
+#To condition on Y or not may give unexpected outcomes. In this case,
+#if MATP is not considered, it seems that the total effect is negative.
 when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
-                              N = samplesize)
+                            N = samplesize)
 scatterplot(Z~X, data = when_xz_4, main ='Original case', regLine=TRUE)
 
-#In this case, Y, thus, MATP, has a significant p value in both models, in presence
-#and absence of the common cause X, UV radiation.
-#On blue it is shown the direct effect of X over Z, as it takes into account the effect
-#of X over Y. On red, it is shown the total effect of X over Z. On green, the effect of Y over 
-#Z. 
-#In any case, when there are two covariates in the model the variance of the estimate increases
-#The estimate for Y is biased when X is in the model. Therefore, to know the real
-#effect of MATP on INK4a, the common cause UV radiation shouldn't be in the model
-#To condition on Y enables to know different types of effect of X. In this case,
-#if MATP is not considered, it seems that UV radiation has a negative effect over 
-#the expression of INK4a, as it is the total effect.
 #If we input a higher X->Z value
 sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
 when_xz_40 <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
                              N = samplesize)
 scatterplot(Z~X, data = when_xz_40, main = 'If UV radiation effect is stronger', regLine=TRUE)
+#This is because the X contribution has a higher impact over Z than Y in this second case.
+
 #The estimate for X in the simpler model isn't negative, it's total effect is lower
 #than the direct effect.
 #If the Y -> Z value wasn't negative:
@@ -452,10 +461,8 @@ sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
 when_xz_40andnegative <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
                              N = samplesize)
 #scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', regLine=TRUE)
-#Then the effect of X, UV radiation, over Z, INK4a, is overestimated.
-#In a healthy individual we would prefer to consider the total effect of UV radiation
-#on the INK4a expression because it is not possible to prevent also its effect over MATP.
-#But for other applications we may be interested on the direct effect.
+
+#Then the effect of X, UV radiation, over Z, INK4a, is increased, as it should be obvious.
 
 #The study goes on and we discovers that both the expression of MATP and INK4a
 #is also influenced by another key factor, the cortisol level. This leaves us 
