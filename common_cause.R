@@ -536,14 +536,15 @@ sc2.comm.extraoverY <- function(b_by, b_bz, b_xz, b_xy, b_yz, N, reps = 200, ...
 sc2.comm.extraoverY(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
                      b_xz = b_xz_m_uv_i_c, b_xy = b_xy_m_uv_i_c,
                      b_yz = b_yz_m_uv_i_c, N = samplesize)
-#The direct effect of cortisol, B, is well reflected when it is on its own in the model or 
+#The total effect of cortisol, B, is well reflected when it is on its own in the model or 
 #when UV radition, X, is considered, because they are independent from each other
 #as can be seen in
 impliedConditionalIndependencies(m_uv_i_c.DAG)
-
-prueba <- create.datasetv3(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
-                           b_xz = b_xz_m_uv_i_c, b_xy = b_xy_m_uv_i_c,
-                           b_yz = b_yz_m_uv_i_c, N = samplesize)
+#The variance of the coefficient when it is found along X is smaller than when B (cortisol)
+#is checked on its own or when it also considers the collider Y (MATP).
+#Therefore in this type of graph it would be prefered to consider both B and X on the model:
+#the variance of the estimates is smaller and the toal effect is calculated.
+#As in the previous case, condiotioning on Y may be counterproductive.
 
 
 ###Backdoor criterion
@@ -599,11 +600,9 @@ summary(Y.noin.condX)
 #Should we condition for the cause of the common cause?
 impliedConditionalIndependencies(i_uv_i_sun.DAG)
 
-
-
-
-
-
+prueba <- create.datasetv3(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
+                           b_xz = b_xz_m_uv_i_c, b_xy = b_xy_m_uv_i_c,
+                           b_yz = b_yz_m_uv_i_c, N = samplesize)
 #Let's focus first on the case in which Y doesn't has a causal relationship with Z
 #We will work on a toy example where X, or common cause is 'stress level', Z is
 #'cholesterol' and Y is 'Cognition'. The value of all of them is affected by unmeasured covariates.
