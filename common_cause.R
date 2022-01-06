@@ -64,6 +64,15 @@ create.datasetv2 <- function(b_ax, b_yz=0, N = 500, b_xy = 3, b_xz = 3,
   return(name_df)
 }
 
+create.datasetv3 <- function(b_by, b_bz, b_yz=(-3), N = 500, b_xy = 3, b_xz = 3,
+                             e_x = 1, e_y = 1, e_z = 1, e_b = 1) {
+  name_df <- data.frame(B = runif(N, 1, 100) + rnorm(N, sd = e_b))
+  name_df$X <- runif(N, 1, 100) + rnorm(N, sd = e_x)
+  name_df$Y <- name_df$X * b_xy + name_df$B * b_by +rnorm(N, sd = e_y)
+  name_df$Z <- name_df$X * b_xz + name_df$Y * b_yz + 
+    name_df$B * b_bz+ rnorm(N, sd = e_z)
+  return(name_df)
+}
 #We create a function that checks which is the scenario. We assume that X is in any
 #case a common cause of both Y and Z
 
@@ -189,6 +198,11 @@ impliedConditionalIndependencies(i_uv_i.DAG)
 
 #A variation would be to consider that uv raditaion depends on sun exposure, 
 #having the following DAG:
+b_ax_i_uv_i2 <- 2
+b_xy_i_uv_i2 <- 5
+b_xz_i_uv_i2 <- 10
+b_yz_i_uv_i2 <- 0
+
 i_uv_i_sun.DAG <- dagitty("dag {
 Sun -> UV.radiation
 UV.radiation -> Ice.cream.consumption
@@ -199,10 +213,6 @@ UV.radiation -> INK4a
                                 #y = c(Y = 3, X = 1, Z = 3))
 drawdag(i_uv_i_sun.DAG)
 
-b_ax_i_uv_i2 <- 2
-b_xy_i_uv_i2 <- 5
-b_xz_i_uv_i2 <- 10
-b_yz_i_uv_i2 <- 0
 #As the significance of ice cream, Y, was covered in the previous function, 
 #it will be skipped in this one. We are interested in knowing if the sun, A, plays a role 
 #in the value of INK4a, Z, and how important is it.
@@ -335,7 +345,7 @@ sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2,
 #This function also illustrates a key property of causal inference: same rules for
 #simple models (toy example in Z_X_Y_adjust.R) can be applied to more complex models
 #(as in this case).
-
+dev.off()
 ###
 
 #Let's move on to the scenario 2. We will illustrate with another example what to expect
@@ -343,6 +353,11 @@ sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2,
 #is caused by UV radiation. A recent study shows that there is also intervention of 
 #MATP in the French population in this process. It seems to follow the following
 #DAG.
+samplesize <- 100
+b_xz_m_uv_i <- 4
+b_yz_m_uv_i <- (-3)
+b_xy_m_uv_i <- 2
+
 m_uv_i.DAG <- dagitty("dag {
 UV.radiation -> MATP
 UV.radiation -> INK4a
@@ -353,14 +368,9 @@ MATP -> INK4a
 #y = c(Y = 3, X = 1, Z = 3))
 drawdag(m_uv_i.DAG)
 
-samplesize <- 100
-b_xz_m_uv_i <- 4
-b_yz_m_uv_i <- (-3)
-b_xy_m_uv_i <- 2
-
-
-sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 50, ...) {
-  #for simplicity, p value is not checked as in any model the covariates are causally related
+sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
+  onlyY_pvY <- rep(NA, reps)
+  both_pvY <- rep(NA, reps)
   onlyX_coefX <- rep(NA,reps)
   both_coefX <- rep(NA, reps)
   onlyY_coefY <- rep(NA,reps)
@@ -372,6 +382,8 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 50, ...) {
     onlyY <- lm(Z~Y, dataset)
     onlyX <- lm(Z~X, dataset)
     
+    onlyY_pvY[i] <- summary(onlyY)$coefficients['Y', 'Pr(>|t|)']
+    both_pvY[i] <- summary(both)$coefficients['Y', 'Pr(>|t|)']
     onlyX_coefX[i] <- summary(onlyX)$coefficients['X', 'Estimate']
     both_coefX[i] <- summary(both)$coefficients['X', 'Estimate']
     onlyY_coefY[i] <- summary(onlyY)$coefficients['Y', 'Estimate']
@@ -379,7 +391,9 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 50, ...) {
     
     rm(dataset)
   }
-  
+  cat('p value of Y')
+  cat('\nWhen Z~Y:', mean(onlyY_pvY))
+  cat('\nWhen Z~Y+X', mean(both_pvY),'\n')
   cat('___Changes in X\n')
   cat('When Z ~ X:\nX coefficient:', mean(onlyX_coefX), 's.d:', sd(onlyX_coefX))
   cat('\nWhen Z ~ X + Y:\nX coefficient:', mean(both_coefX), 's.d:', sd(both_coefX))
@@ -387,13 +401,47 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 50, ...) {
   cat('\n\n___Changes in Y\n')
   cat('When Z ~ Y:\nY coefficient:', mean(onlyY_coefY), 's.d:', sd(onlyY_coefY))
   cat('\nWhen Z ~ Y + X:\nY coefficient:', mean(both_coefY), 's.d:', sd(both_coefY))
-  ###histogramas y revisar los efectos directos e indirectos
+  ##legend: blue, total efffect X, red direct effect X, green effect Y
+  
+  op <- par(mfrow= c(2,2), mar = rep(3,4))
+  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
+  abline(v = b_xz, col = 'red')#direct effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
+  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
+  abline(v = b_xz, col = 'red')#direct effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
+  
+  hist(onlyY_coefY, main = 'Z ~ Y', xlab = 'Effect X over Z')
+  abline(v = b_yz, col = 'green')
+  hist(both_coefY, main = 'Z ~ Y + X', xlab = 'Effect X over Z')
+  abline(v = b_yz, col = 'green')
+  par(op)
  }
 
 sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
 #In this case, Y, thus, MATP, has a significant p value in both models, in presence
 #and absence of the common cause X, UV radiation.
+#On blue it is shown the total effect of X over Z, as it takes into account the effect
+#of X over Y. On red, it is shown the direct effect of X over Z. On green, the effect of Y over 
+#Z. In any case, when there are two covariates in the model the variance of the estimate increases
+#The estimate for Y is biased when X is in the model. Therefore, to know the real
+#effect of MATP on INK4a, the common cause UV radiation shouldn't be in the model
+#To condition on Y enables to know different types of effect of X. In this case,
+#if MATP is not considered, it seems that UV radiation has a negative effect over 
+#the expression of INK4a, as it is the total effect, when it actually enhances its expression.
+#If we input a higher X->Z value
+sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
+         N = samplesize)
+#The estimate for X in the simpler model isn't negative, but still underestimates
+#the effect of UV radiation over INK4a.
+#If the Y -> Z value wasn't negative:
+sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
+         N = samplesize)
+#Then the effect of X, UV radiation, over Z, INK4a, is overestimated.
+#In a healthy individual we would prefer to consider the total effect of UV radiation
+#on the INK4a expression because it is not possible to prevent also its effect over MATP.
+#But for other applications we may be interested on the direct effect.
 
 #The study goes on and we discovers that both the expression of MATP and INK4a
 #is also influenced by another key factor, which is the cortisol level of the 
@@ -412,12 +460,65 @@ MATP -> INK4a
 drawdag(m_uv_i_c.DAG)
 
 samplesize <- 100
-b_ay_m_uv_i_c <- 3
-b_az_m_uv_i_c <- 2
+b_by_m_uv_i_c <- 3
+b_bz_m_uv_i_c <- 2
 b_xz_m_uv_i_c <- 4
-b_yz_m_uv_i_c <- (-3)
 b_xy_m_uv_i_c <- 2
+b_yz_m_uv_i_c <- (-3)
 
+sc2.comm.extraoverY <- function(b_by, b_bz, b_xz, b_xy, b_yz, N, reps = 200, ...) {
+  #que variables quiero ver ahora
+  onlyX_coefX <- rep(NA,reps)
+  both_coefX <- rep(NA, reps)
+  onlyY_coefY <- rep(NA,reps)
+  both_coefY <- rep(NA,reps)
+  
+  for (i in 1:reps){
+    dataset <- create.datasetv3(N=N, b_xz = b_xz, b_yz = b_yz, b_xy = b_xy,
+                                b_by = b_by, b_bz = b_bz, ...)
+    both <- lm(Z~X + Y, dataset)
+    onlyY <- lm(Z~Y, dataset)
+    onlyX <- lm(Z~X, dataset)
+    
+    onlyX_coefX[i] <- summary(onlyX)$coefficients['X', 'Estimate']
+    both_coefX[i] <- summary(both)$coefficients['X', 'Estimate']
+    onlyY_coefY[i] <- summary(onlyY)$coefficients['Y', 'Estimate']
+    both_coefY[i] <- summary(both)$coefficients['Y', 'Estimate']
+    
+    rm(dataset)
+  }
+
+  cat('___Changes in X\n')
+  cat('When Z ~ X:\nX coefficient:', mean(onlyX_coefX), 's.d:', sd(onlyX_coefX))
+  cat('\nWhen Z ~ X + Y:\nX coefficient:', mean(both_coefX), 's.d:', sd(both_coefX))
+  
+  cat('\n\n___Changes in Y\n')
+  cat('When Z ~ Y:\nY coefficient:', mean(onlyY_coefY), 's.d:', sd(onlyY_coefY))
+  cat('\nWhen Z ~ Y + X:\nY coefficient:', mean(both_coefY), 's.d:', sd(both_coefY))
+  ##legend: blue, total efffect X, red direct effect X, green effect Y
+  
+  op <- par(mfrow= c(2,2), mar = rep(3,4))
+  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
+  abline(v = b_xz, col = 'red')#direct effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
+  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
+  abline(v = b_xz, col = 'red')#direct effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
+  
+  hist(onlyY_coefY, main = 'Z ~ Y', xlab = 'Effect X over Z')
+  abline(v = b_yz, col = 'green')
+  hist(both_coefY, main = 'Z ~ Y + X', xlab = 'Effect X over Z')
+  abline(v = b_yz, col = 'green')
+  par(op)
+}
+
+sc2.commm.extraoverY(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
+                     b_xz = b_xz_m_uv_i_c, b_xy = b_xy_m_uv_i_c,
+                     b_yz = b_yz_m_uv_i_c, N = samplesize)
+
+prueba <- create.datasetv3(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
+                           b_xz = b_xz_m_uv_i_c, b_xy = b_xy_m_uv_i_c,
+                           b_yz = b_yz_m_uv_i_c, N = samplesize)
 
 
 ###Backdoor criterion
