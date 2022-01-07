@@ -34,9 +34,12 @@ drawdag(comm.effect.DAG)
 # Let us generate the data according to the DAG:
 
 N <- 500 # Our sample size will be 500
-b_xz <- 3 # HDHRSHSTRHJTRSJTSRJTDJDJTDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
-b_yz <- 2
-sd_z <- 5
+b_xz <- 3 # The value of the relation between X and Z is 3
+b_yz <- 2 # The value of the relation between Y and Z is 2
+sd_z <- 5 # The standard deviation for Z will be 5
+
+# We will not be repeating this information description as we already know what
+# each variable represents.
 
 set.seed(11)
 
@@ -45,38 +48,86 @@ Y <- runif(N, 1.5, 12)
 Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 
 
-
 # Let's take a look at our data distribution:
 
 reg_line_ZX <- lm(Z ~ X)
-plot(Z ~ X)
+plot(Z ~ X, main = 'Var distribution X-Z')
 abline(reg_line_ZX)
 
+
 reg_line_ZY <- lm(Z ~ Y)
-plot(Z ~ Y)
+plot(Z ~ Y, main = 'Var distribution Y-Z')
 abline(reg_line_ZY)
 
 reg_line_XY <- lm(X ~ Y)
-plot(X ~ Y)
+plot(X ~ Y, main = 'Var distribution X-Y')
 abline(reg_line_XY)
 
-# As we can see, there is a positive correlation between Z and X and also
+# As we can see, there is, apparently, a positive correlation between Z and X and also
 # Z and Y. On the other hand, there is no visible correlation between X and Y 
 # (as should). We can check it by calculating the estimates and significance of
 # each pair:
 
+P.V.XZ <- summary(lm(X ~ Z))$coefficients['Z','Pr(>|t|)']
+E.XZ <- summary(lm(X ~ Z))$coefficients['Z','Estimate']
+
+cat('Your estimate value is', E.XZ, 'and your p value is', P.V.XZ)
+
+
+P.V.YZ <- summary(lm(Y ~ Z))$coefficients['Z','Pr(>|t|)']
+E.YZ <- summary(lm(Y ~ Z))$coefficients['Z','Estimate']
+
+cat('Your estimate value is', E.YZ, 'and your p value is', P.V.YZ)
+
+
+
+P.V.XY <- summary(lm(X ~ Y))$coefficients['Y','Pr(>|t|)']
+E.XY <- summary(lm(X ~ Y))$coefficients['Y','Estimate']
+
+cat('Your estimate value is', E.XY, 'and your p value is', P.V.XY)
+
+
+
+P.V.XY.Z <- summary(lm(X ~ Y + Z))$coefficients['Y','Pr(>|t|)']
+E.XY.Z <- summary(lm(X ~ Y + Z))$coefficients['Y','Estimate']
+
+cat('Your estimate value is', E.XY.Z, 'and your p value is', P.V.XY.Z)
+
+
+P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+assign('X_Y', P.V.XY, P.VAL.DICT)
+assign('X_Y_Z', P.V.XY.Z, P.VAL.DICT)
+assign('X_Z', P.V.XZ, P.VAL.DICT)
+assign('Y_Z', P.V.YZ, P.VAL.DICT)
+
+E.DICT <- new.env(hash = T, parent = emptyenv())
+assign('X_Y', E.XY, E.DICT)
+assign('X_Y_Z', E.XY.Z, E.DICT)
+assign('X_Z', E.XZ, E.DICT)
+assign('Y_Z', E.YZ, E.DICT)
+
+for (i in ls(P.VAL.DICT)) {
+  if (P.VAL.DICT[[i]] > 0.05)
+    cat('The variables', i, 'do not show a correlation with a p value of',  
+        P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+  else
+    cat('The variables', i, 'show a correlation with a p value of',  
+        P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+}
+
+
+    
 summary(lm(Z ~ X)) #we can see a strong correlation between Z and X
 summary(lm(Z ~ Y)) #we can see a strong correlation between Z and Y
 summary(lm(X ~ Y)) #we can't any correlation between X and Y
-
+summary(lm(X ~ Y + Z))
 # But the two independent variables (X and Y) when we adjust by Z 
 # raise a correlation that wasn't supposed to be there.
 
-summary(lm(X ~ Y + Z))
 
-summary(lm(X ~ Y + Z))$coefficients['Y','Pr(>|t|)']
 
-summary(model_with_Y)$coefficients['X','Pr(>|t|)']
+
+
 #______________________________________________________________________________
 
 
@@ -345,3 +396,4 @@ summary(lm(X4 ~ Y4 + Z4)) # We find a negative correlation between X3 and W3
 
 # In this case adjusting by Z4 and W4 (its descendant) resulted in a correlation
 # between the variables X4 and Y4. 
+
