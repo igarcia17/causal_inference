@@ -127,7 +127,9 @@ cholesterol <- runif(N2, 125, 200) #mg/dL
 speed <- leg_lenght * 0.5 + metabolism * (-0.05) + rnorm(N, mean = 0, sd = 0.1)
 heart <- cholesterol * 0.5 + metabolism * (-0.5) + rnorm(N2, mean = 0, sd = 0.1)
 
-data.frame(leg_lenght, metabolism, cholesterol, speed, heart)
+data.frame(leg_lenght, metabolism, cholesterol, speed, heart) #este dataframe
+# es solo para ver los datos en conjunto, no lo uso para nada así que probablemente
+# terminaré quitandolo
 
 
 summary(lm(leg_lenght ~ metabolism)) # no correlation
