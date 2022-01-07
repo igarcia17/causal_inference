@@ -54,7 +54,7 @@ create.dataset <- function(b_yz, N = 500, b_xy = 3, b_xz = 3,
 }
 
 
-#This function will be handy later
+#These functions will be handy later
 create.datasetv2 <- function(b_ax, b_yz=0, N = 500, b_xy = 3, b_xz = 3,
                              e_x = 1, e_y = 1, e_z = 1) {
   name_df <- data.frame(A = runif(N, 1, 100) + rnorm(N))
@@ -134,8 +134,9 @@ i_uv_i.DAG <- dagitty("dag {
 UV.radiation -> Ice.cream.consumption
 UV.radiation -> INK4a
 }")
-#coordinates(i_uv_i.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
-                                   #y = c(Y = 3, X = 1, Z = 3))
+coordinates(i_uv_i.DAG) <- list(x = c(Ice.cream.consumption = 1, UV.radiation = 2, INK4a = 3),
+ y = c(Ice.cream.consumption = 3, UV.radiation = 1, INK4a = 3))
+
 drawdag(i_uv_i.DAG)
 
 sc1.comm <- function(b_yz, N, b_xz, b_xy, reps = 100, ...){
@@ -209,8 +210,8 @@ UV.radiation -> Ice.cream.consumption
 UV.radiation -> INK4a
 }")
 
-#coordinates(i_uv_i_sun.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
-                                #y = c(Y = 3, X = 1, Z = 3))
+coordinates(i_uv_i_sun.DAG) <- list(x = c(Ice.cream.consumption = 1, UV.radiation = 2, Sun = 2, INK4a = 3),
+                                y = c(Ice.cream.consumption = 3, UV.radiation = 2, Sun = 1, INK4a = 3))
 drawdag(i_uv_i_sun.DAG)
 
 #As the significance of ice cream, Y, was covered in the previous function, 
@@ -345,7 +346,7 @@ sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2,
 #This function also illustrates a key property of causal inference: same rules for
 #simple models (toy example in Z_X_Y_adjust.R) can be applied to more complex models
 #(as in this case).
-dev.off()
+
 ###
 
 #Let's move on to the scenario 2. We will illustrate with another example what to expect
@@ -364,8 +365,8 @@ UV.radiation -> INK4a
 MATP -> INK4a
 }")
 
-#coordinates(i_uv_i_sun.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
-#y = c(Y = 3, X = 1, Z = 3))
+coordinates(m_uv_i.DAG) <- list(x = c(MATP = 1, UV.radiation = 2, INK4a = 3),
+                                y = c(MATP = 3, UV.radiation = 1, INK4a = 3))
 drawdag(m_uv_i.DAG)
 
 sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
@@ -471,13 +472,13 @@ when_xz_40andnegative <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_
 m_uv_i_c.DAG <- dagitty("dag {
 UV.radiation -> MATP
 UV.radiation -> INK4a
-Ccortisol -> MATP
+Cortisol -> MATP
 Cortisol -> INK4a
 MATP -> INK4a
 }")
 
-#coordinates(i_uv_i_sun.DAG) <- list(x = c(Y = 1, X = 2, Z = 3),
-#y = c(Y = 3, X = 1, Z = 3))
+coordinates(m_uv_i_c.DAG) <- list(x = c(UV.radiation = 1, MATP = 2, INK4a = 2, Cortisol = 3),
+                                y = c(UV.radiation = 1, MATP = 2, INK4a = 3, Cortisol = 1))
 drawdag(m_uv_i_c.DAG)
 
 samplesize <- 100
@@ -545,6 +546,7 @@ impliedConditionalIndependencies(m_uv_i_c.DAG)
 #Therefore in this type of graph it would be prefered to consider both B and X on the model:
 #the variance of the estimates is smaller and the toal effect is calculated.
 #As in the previous case, condiotioning on Y may be counterproductive.
+
 
 
 #_____________________________EXPERIMENTS
