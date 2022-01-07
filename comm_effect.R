@@ -1,21 +1,20 @@
 # Collider and selection bias, cases:
 
 # Import modules
-library(tidyverse) #ines: esta y la de car la usas?
 library(dagitty)
-library(car)
 library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
   drawdag <- plot
 }
-# library(rethinking) ## for drawdag  ## ines: esto viene de algun archivo de ramon no?
-# Installing rethinking can be complicated just for a few graphs
-# So have a fallback if rethinking not available
 
 
 
 # We are going to try two specific scenarios, one where we adjust for Z and
-# another where we don't. ## ines: yo aqui especificaria quÈ pregunta te quieres hacer con este experimento pq hasta la linea 124 no lo he entendido
+# another where we don't. The purpose of these two scenarios is to check whether
+# adjusting for a collider will induce a bias in our estimates and how exactly
+# this bias will change these estimates. 
+
+
 # Lets first generate our DAG according to a collider structure where X and Y
 # are independent:
 comm.effect.DAG <- dagitty("dag {
@@ -50,18 +49,16 @@ Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 
 # Let's take a look at our data distribution:
 
-reg_line_ZX <- lm(Z ~ X)
-plot(Z ~ X, main = 'Var distribution X-Z') #ines: todo esto lo vas a incluir en una funcion? o lo prefieres dejar como codigo suelto?
-abline(reg_line_ZX)
+PLOT.REG <- function(reg_line, plot.var) {
+  Regres.line <- lm(reg_line)
+  plot(reg_line, main = plot.var)
+  abline(Regres.line)
+}
 
+PLOT.REG(Z ~ X, 'Var distribution X-Z')
+PLOT.REG(Z ~ Y, 'Var distribution Y-Z')
+PLOT.REG(X ~ Y, 'Var distribution X-Y')
 
-reg_line_ZY <- lm(Z ~ Y)
-plot(Z ~ Y, main = 'Var distribution Y-Z')
-abline(reg_line_ZY)
-
-reg_line_XY <- lm(X ~ Y)
-plot(X ~ Y, main = 'Var distribution X-Y')
-abline(reg_line_XY)
 
 # As we can see, there is, apparently, a positive correlation between Z and X and also
 # Z and Y. On the other hand, there is no visible correlation between X and Y 
@@ -71,28 +68,14 @@ abline(reg_line_XY)
 P.V.XZ <- summary(lm(X ~ Z))$coefficients['Z','Pr(>|t|)']
 E.XZ <- summary(lm(X ~ Z))$coefficients['Z','Estimate']
 
-cat('Your estimate value is', E.XZ, 'and your p value is', P.V.XZ) #ines: yo aÒadiria q el estimate q miras es de Z para q no se confunda con el siguiente
-
-
 P.V.YZ <- summary(lm(Y ~ Z))$coefficients['Z','Pr(>|t|)']
 E.YZ <- summary(lm(Y ~ Z))$coefficients['Z','Estimate']
-
-cat('Your estimate value is', E.YZ, 'and your p value is', P.V.YZ)
-
-
 
 P.V.XY <- summary(lm(X ~ Y))$coefficients['Y','Pr(>|t|)']
 E.XY <- summary(lm(X ~ Y))$coefficients['Y','Estimate']
 
-cat('Your estimate value is', E.XY, 'and your p value is', P.V.XY)
-
-
-
 P.V.XY.Z <- summary(lm(X ~ Y + Z))$coefficients['Y','Pr(>|t|)']
 E.XY.Z <- summary(lm(X ~ Y + Z))$coefficients['Y','Estimate']
-
-cat('Your estimate value is', E.XY.Z, 'and your p value is', P.V.XY.Z)
-
 
 P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
 assign('X_Y', P.V.XY, P.VAL.DICT)
@@ -107,7 +90,7 @@ assign('X_Z', E.XZ, E.DICT)
 assign('Y_Z', E.YZ, E.DICT)
 
 for (i in ls(P.VAL.DICT)) {
-  if (P.VAL.DICT[[i]] > 0.05) #ines: muy ingenioso
+  if (P.VAL.DICT[[i]] > 0.05)
     cat('The variables', i, 'do not show a correlation with a p value of',  
         P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
   else
@@ -115,11 +98,9 @@ for (i in ls(P.VAL.DICT)) {
         P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
 }
 
+#we can see a strong correlation between Z and X we can see a strong correlation
+# between Z and Y we can't any correlation between X and Y
 
-    
-summary(lm(Z ~ X)) #we can see a strong correlation between Z and X
-summary(lm(Z ~ Y)) #we can see a strong correlation between Z and Y
-summary(lm(X ~ Y)) #we can't any correlation between X and Y
 summary(lm(X ~ Y + Z))
 # But the two independent variables (X and Y) when we adjust by Z 
 # raise a correlation that wasn't supposed to be there.
@@ -143,18 +124,60 @@ vir_load_COV19 -> lung_capacity
 
 coordinates(DAG.Lung) <- list(x = c(cigarettes_day = 1, vir_load_COV19 = 3, 
                                     lung_capacity = 2),
-                                     y = c(cigarettes_day = 1, vir_load_COV19 = 1,
-                                           lung_capacity = 3))
+                              y = c(cigarettes_day = 1, vir_load_COV19 = 1,
+                                     lung_capacity = 3))
 drawdag(DAG.Lung)
 
 set.seed(11)
 
+b_cd <- (-0.7) # Relation between lung capacity and cigarettes
+b_vlc <- (-0.8) # Relation between lung capacity and virus load
+
 cigarettes_day <- floor(runif(N, min = 0, max = 45))
 vir_load_COV19 <- floor(runif(N, min = 0, max = 40)) #Ct
-lung_capacity <- 100 - 0.7 * cigarettes_day - 0.8 * vir_load_COV19 + 
+lung_capacity <- 100 - b_cd * cigarettes_day - b_vlc * vir_load_COV19 + 
   rnorm(N, 0, sd = 0.01) # % of lung capacity
 
-data_frame(cigarettes_day, vir_load_COV19, lung_capacity) #ines: prueba con data.frame
+data.frame(cigarettes_day, vir_load_COV19, lung_capacity)
+
+P.V.C.L <- summary(lm(cigarettes_day ~ lung_capacity)
+                   )$coefficients['lung_capacity','Pr(>|t|)']
+E.C.L <- summary(lm(cigarettes_day ~ lung_capacity)
+                 )$coefficients['lung_capacity','Estimate']
+
+P.V.V.L <- summary(lm(vir_load_COV19 ~ lung_capacity)
+                   )$coefficients['lung_capacity','Pr(>|t|)']
+E.V.L <- summary(lm(vir_load_COV19 ~ lung_capacity)
+                 )$coefficients['lung_capacity','Estimate']
+
+P.V.C.V <- summary(lm(cigarettes_day ~ vir_load_COV19)
+                  )$coefficients['vir_load_COV19','Pr(>|t|)']
+E.C.V <- summary(lm(cigarettes_day ~ vir_load_COV19)
+                 )$coefficients['vir_load_COV19','Estimate']
+
+
+
+P.VAL.DICT.Lung <- new.env(hash = T, parent = emptyenv())
+assign('cig_lung', P.V.C.L, P.VAL.DICT.Lung)
+assign('vir_lung', P.V.V.L, P.VAL.DICT.Lung)
+assign('cig_vir', P.V.C.V, P.VAL.DICT.Lung)
+
+E.DICT.Lung <- new.env(hash = T, parent = emptyenv())
+assign('cig_lung', E.C.L, E.DICT.Lung)
+assign('vir_lung', E.V.L, E.DICT.Lung)
+assign('cig_vir', E.C.V, E.DICT.Lung)
+
+
+
+for (i in ls(P.VAL.DICT.Lung)) {
+  if (P.VAL.DICT.Lung[[i]] > 0.05)
+    cat('The variables', i, 'do not show a correlation with a p value of',  
+        P.VAL.DICT.Lung[[i]], 'and an estimate of', E.DICT.Lung[[i]], '\n')
+  else
+    cat('The variables', i, 'show a correlation with a p value of',  
+        P.VAL.DICT.Lung[[i]], 'and an estimate of', E.DICT.Lung[[i]], '\n')
+}
+
 
 summary(lm(cigarettes_day ~ vir_load_COV19)) # No correlation between n¬∫ of
 # cigarettes smoked a day and the viral load of COV19 infection
@@ -182,8 +205,8 @@ abline(reg_line_c_l)
 # the performance of a professional runner. We have a few variables to take into 
 # consideration, but we will focus on the following ones: leg length,
 # metabolism (which affects weight, meaning it also affects performance), heart
-# disease (MEASURED THROUGH ???????????????????????????????????????????), #ines: cantidad de troponina cardiaca TnTc https://www.revespcardiol.org/es-marcadores-biologicos-necrosis-miocardica-articulo-13049653
-# cholesterol (as a mesure of overall health); this last variable does not
+# disease (measured through the values of high-sensitivity cardiac troponin (hs-cTn)),
+# cholesterol (as a measure of overall health); this last variable does not
 # affect directly the performance of the runner (speed), but it might through
 # its health. 
 # Let's take a look at the DAG:
@@ -206,23 +229,62 @@ drawdag(DAG.Runner)
 
 # To represent the effect of conditioning on a collider in this case we will
 # be using data for every variable, but we will consider as if we could not 
-# measure the metabolism in order to control the counfounder. #ines: no entiendo por quÈ para controlar por el confounder metabolism es una unmeasured variable
+# measure the metabolism in order to control the counfounder. 
 
 
-# CORREGIR ALGUNOS DATOS PARA QUE TENGAN SENTIDO LOS VALORES DE HEART; AHORA
-# DEPENDIENDO DE QUE MIDAMOS NO TIENE SENTIDO (POR EJEMPLO SI NOS BASAMOS
-# EN LAS PULSACIONES EN REPOSO HAY UN COLEGA QUE TIENE 17, EST√Å A PUNTITO
-# DE PALMARLA ME DA A MI.)
 set.seed(11)
-N <- 500
+
+b_ll_s <- 1.2
+b_m_s <- 1
+b_ch_h <- 0.05
+b_m_h <- (-0.3)
+
 leg_lenght <- runif(N, max = 49.75, min = 42.09)
-metabolism <- runif(N, 1, 100) #corregir estos valores.
-cholesterol <- runif(N2, 125, 200) #mg/dL #ines: aqui quieres decir N ?
-speed <- leg_lenght * 1.2 + metabolism * 1 + rnorm(N, mean = 0, sd = 5) #mph
-heart <- cholesterol * 0.5 + metabolism * (-0.5) + rnorm(N2, mean = 0, sd = 0.1)
+metabolism <- runif(N, 1, 20) # Theoretically this variable is unmeasured
+cholesterol <- runif(N, 125, 200) #mg/dL
+speed <- leg_lenght * b_ll_s + metabolism * b_m_s + rnorm(N, mean = 0, sd = 5) #mph
+heart <- cholesterol * b_ch_h + metabolism * b_m_h + rnorm(N2, mean = 0, sd = 0.1) #ng/L
 
 data.frame(leg_lenght, metabolism, cholesterol, speed, heart)
 
+
+P.V.L.M <- summary(lm(leg_lenght ~ metabolism))$coefficients['metabolism','Pr(>|t|)']
+E.L.M <- summary(lm(leg_lenght ~ metabolism))$coefficients['metabolism','Estimate']
+
+P.V.L.Ch <- summary(lm(leg_lenght ~ cholesterol))$coefficients['cholesterol','Pr(>|t|)']
+E.L.Ch <- summary(lm(leg_lenght ~ cholesterol))$coefficients['cholesterol','Estimate']
+
+P.V.L.H <- summary(lm(leg_lenght ~ heart))$coefficients['heart','Pr(>|t|)']
+E.L.H <- summary(lm(leg_lenght ~ heart))$coefficients['heart','Estimate']
+
+P.V.L.H_Sp <- summary(lm(leg_lenght ~ heart + speed))$coefficients['heart','Pr(>|t|)']
+E.L.H_Sp <- summary(lm(leg_lenght ~ heart + speed))$coefficients['heart','Estimate']
+
+
+P.VAL.DICT.Speed <- new.env(hash = T, parent = emptyenv())
+assign('len_metab', P.V.L.M, P.VAL.DICT.Speed)
+assign('len_chol', P.V.L.Ch, P.VAL.DICT.Speed)
+assign('len_heart', P.V.L.H, P.VAL.DICT.Speed)
+assign('len_heart+Speed', P.V.L.H_Sp, P.VAL.DICT.Speed)
+
+
+
+E.DICT.Speed <- new.env(hash = T, parent = emptyenv())
+assign('len_metab', E.L.M, E.DICT.Speed)
+assign('len_chol', E.L.Ch, E.DICT.Speed)
+assign('len_heart', E.L.H, E.DICT.Speed)
+assign('len_heart+Speed', E.L.H_Sp, E.DICT.Speed)
+
+
+
+for (i in ls(P.VAL.DICT.Speed)) {
+  if (P.VAL.DICT.Speed[[i]] > 0.05)
+    cat('The variables', i, 'do not show a correlation with a p value of',  
+        P.VAL.DICT.Speed[[i]], 'and an estimate of', E.DICT.Speed[[i]], '\n')
+  else
+    cat('The variables', i, 'show a correlation with a p value of',  
+        P.VAL.DICT.Speed[[i]], 'and an estimate of', E.DICT.Speed[[i]], '\n')
+}
 
 summary(lm(leg_lenght ~ metabolism)) # no correlation
 summary(lm(leg_lenght ~ cholesterol)) # no correlation
@@ -233,29 +295,21 @@ summary(lm(leg_lenght ~ heart + speed)) # we find a correlation between heart
 
 #Let's look at our data and see whether this correlation we find when adjusting
 # by our collider (speed) is actually present:
-
-reg_line_Runner_ll_h <- lm(leg_lenght ~ heart)
-plot(leg_lenght ~ heart)
-abline(reg_line_Runner_ll_h)
+PLOT.REG(leg_lenght ~ heart, "LEG - HEART")
 
 # The following plot shows the correlation that actually exists between
 # the variables cholesterol and heart, as opposed to the previous ones.
-reg_line_Runner_ch_h <- lm(cholesterol ~ heart)
-plot(cholesterol ~ heart)
-abline(reg_line_Runner_ch_h)
+PLOT.REG(cholesterol ~ heart, "CHOLESTEROL - HEART")
+
 
 # SOLO LOS PONGO PARA VER MAS O MENOS LA DISTRIBUCI√ìN DE LOS DATOS
+PLOT.REG(speed ~ metabolism, "SPEED - METABOLISM")
+PLOT.REG(heart ~ metabolism, "HEART - METABOLISM")
 
-reg_line_Runner_s_m <- lm(speed ~ metabolism)
-plot(speed ~ metabolism)
-abline(reg_line_Runner_s_m)
 
-reg_line_Runner_h_m <- lm(heart ~ metabolism)
-plot(heart ~ metabolism)
-abline(reg_line_Runner_h_m)
 #_______________________________________________________________________________
 # We could also have cases in which our X and Y variables have some sort of
-# relation but the estimate changes when we condition on Z. #ines: este es el escenario 2?
+# relation but the estimate changes when we condition on Z.
 
 comm.effect.DAG_2 <- dagitty("dag {
 X -> Z
@@ -279,18 +333,38 @@ Z2 <- 1.5 * X2 + 2.5 * Y2 + rnorm(N2, mean = 0, sd = 0.1)
 
 ##Again, let's take a look at our data distribution:
 
-reg_line_ZX2 <- lm(Z2 ~ X2) #ines: a lo mejor con un 'par' puedes meter los tres a la vez y se ve mejor de una los cambios de estimate
-plot(Z2 ~ X2)
-abline(reg_line_ZX2)
+PLOT.REG(Z2 ~ X2, "Var distribution Z2 - X2")
+PLOT.REG(Z2 ~ Y2, "Var distribution Z2 - Y2")
+PLOT.REG(X2 ~ Y2, "Var distribution X2 - Y2")
 
-reg_line_ZY2 <- lm(Z2 ~ Y2)
-plot(Z2 ~ Y2)
-abline(reg_line_ZY2)
 
-reg_line_XY2 <- lm(X2 ~ Y2)
-plot(X2 ~ Y2)
-abline(reg_line_XY2)
+P.V.XY2 <- summary(lm(X2 ~ Y2))$coefficients['Y2','Pr(>|t|)']
+E.L.XY2 <- summary(lm(X2 ~ Y2))$coefficients['Y2','Estimate']
 
+P.V.XY2_Z2 <- summary(lm(X2 ~ Y2 + Z2))$coefficients['Y2','Pr(>|t|)']
+E.L.XY2_Z2 <- summary(lm(X2 ~ Y2 + Z2))$coefficients['Y2','Estimate']
+
+
+P.VAL.DICT.Scenario2 <- new.env(hash = T, parent = emptyenv())
+assign('X2_Y2', P.V.XY2, P.VAL.DICT.Scenario2)
+assign('X2_Y2+Z2', P.V.XY2_Z2, P.VAL.DICT.Scenario2)
+
+
+E.DICT.Scenario2 <- new.env(hash = T, parent = emptyenv())
+assign('X2_Y2', E.L.XY2, E.DICT.Scenario2)
+assign('X2_Y2+Z2', E.L.XY2_Z2, E.DICT.Scenario2)
+
+
+# AQUI ALGO NO VA BIEN PORQUE ME SACA UN P VALUE DE 0 EN X2_Y2 PERO COMO AHORA
+# MISMO NO LO VEO LO DEJO PARA MAS ADELANTE.
+for (i in ls(P.VAL.DICT.Scenario2)) {
+  if (P.VAL.DICT.Scenario2[[i]] > 0.05)
+    cat('The variables', i, 'do not show a correlation with a p value of',  
+        P.VAL.DICT.Scenario2[[i]], 'and an estimate of', E.DICT.Scenario2[[i]], '\n')
+  else
+    cat('The variables', i, 'show a correlation with a p value of',  
+        P.VAL.DICT.Scenario2[[i]], 'and an estimate of', E.DICT.Scenario2[[i]], '\n')
+}
 # As we can see, there is a positive correlation between Z2 and X2; Z2 and Y2; 
 # and X2 and Y2. In this case we are interested in the relationship between X2 
 # and Y2; we can check it: 
@@ -306,7 +380,8 @@ summary(lm(X2 ~ Y2 + Z2)) # Negative significant correlation
 ## of the estimate for the Y2 variable, as in Simpson's paradox
 
 
-# if the estimate of both 
+# Practical example:
+
 
 
 
