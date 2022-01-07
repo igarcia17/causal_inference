@@ -547,8 +547,6 @@ impliedConditionalIndependencies(m_uv_i_c.DAG)
 #As in the previous case, condiotioning on Y may be counterproductive.
 
 
-###Backdoor criterion
-
 #_____________________________EXPERIMENTS
 
 
