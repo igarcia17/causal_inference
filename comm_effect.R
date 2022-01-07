@@ -40,8 +40,8 @@ sd_z <- 5
 
 set.seed(11)
 
-X <- runif(N, 1, 5)
-Y <- runif(N, 2, 4)
+X <- runif(N, 1, 10)
+Y <- runif(N, 1.5, 12)
 Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 
 
@@ -69,17 +69,59 @@ summary(lm(Z ~ X)) #we can see a strong correlation between Z and X
 summary(lm(Z ~ Y)) #we can see a strong correlation between Z and Y
 summary(lm(X ~ Y)) #we can't any correlation between X and Y
 
-
+# But the two independent variables (X and Y) when we adjust by Z 
+# raise a correlation that wasn't supposed to be there.
 
 summary(lm(X ~ Y + Z))
 
+summary(lm(X ~ Y + Z))$coefficients['Y','Pr(>|t|)']
 
-# As we can see, two independent variables (X and Y) when we adjust by Z 
-# raise a correlation that wasn't supposed to be there.
+summary(model_with_Y)$coefficients['X','Pr(>|t|)']
+#______________________________________________________________________________
 
 
 # We can exemplify this with a more realistic dataset: 
+# Here we have a set of variables: cigarettes smoked in a day, COVID19 virus
+# load and % of lung capacity.
 
+
+DAG.Lung <- dagitty("dag {
+cigarettes_day -> lung_capacity
+vir_load_COV19 -> lung_capacity
+}")
+
+coordinates(DAG.Lung) <- list(x = c(cigarettes_day = 1, vir_load_COV19 = 3, 
+                                    lung_capacity = 2),
+                                     y = c(cigarettes_day = 1, vir_load_COV19 = 1,
+                                           lung_capacity = 3))
+drawdag(DAG.Lung)
+
+set.seed(11)
+
+cigarettes_day <- floor(runif(N, min = 0, max = 45))
+vir_load_COV19 <- floor(runif(N, min = 0, max = 40)) #Ct
+lung_capacity <- 100 - 0.7 * cigarettes_day - 0.8 * vir_load_COV19 + 
+  rnorm(N, 0, sd = 0.01) # % of lung capacity
+
+data_frame(cigarettes_day, vir_load_COV19, lung_capacity)
+
+summary(lm(cigarettes_day ~ vir_load_COV19)) # No correlation between nº of
+# cigarettes smoked a day and the viral load of COV19 infection
+summary(lm(cigarettes_day ~ vir_load_COV19 + lung_capacity)) # A correlation
+# between these two variables arises when ajusting for the collider 
+# (lung_capacity)
+
+
+# Here we have the plots showing the distribution of the variables cigarettes_day
+# and vir_load_COV19, where apparently there is no correlation.
+reg_line_c_v <- lm(cigarettes_day ~ vir_load_COV19)
+plot(cigarettes_day ~ vir_load_COV19)
+abline(reg_line_c_v)
+
+# A plot for comparison, cigarettes and lung capacity, a negative correlation:
+reg_line_c_l <- lm(cigarettes_day ~ lung_capacity)
+plot(cigarettes_day ~ lung_capacity)
+abline(reg_line_c_l)
 
 
 
@@ -88,26 +130,27 @@ summary(lm(X ~ Y + Z))
 # Let's take a look at a bit more complicated example: imagine we are studying 
 # the performance of a professional runner. We have a few variables to take into 
 # consideration, but we will focus on the following ones: leg length,
-# metabolism (which affects weight, meaning it also affects performance), 
+# metabolism (which affects weight, meaning it also affects performance), heart
+# disease (MEASURED THROUGH ???????????????????????????????????????????),
 # cholesterol (as a mesure of overall health); this last variable does not
 # affect directly the performance of the runner (speed), but it might through
 # its health. 
 # Let's take a look at the DAG:
 
-comm.effect.Runner <- dagitty("dag {
+DAG.Runner <- dagitty("dag {
 cholesterol -> heart
 metabolism -> heart
 metabolism -> speed
 leg_lenght -> speed
 }")
 
-coordinates(comm.effect.Runner) <- list(x = c(cholesterol = 1, heart = 3, 
+coordinates(DAG.Runner) <- list(x = c(cholesterol = 1, heart = 3, 
                                               metabolism = 1, speed = 3, 
                                               leg_lenght = 1),
                                        y = c(cholesterol = 5, heart = 4, 
                                              metabolism = 3, speed = 2, 
                                              leg_lenght = 1))
-drawdag(comm.effect.Runner)
+drawdag(DAG.Runner)
 
 
 # To represent the effect of conditioning on a collider in this case we will
@@ -124,12 +167,10 @@ N <- 500
 leg_lenght <- runif(N, max = 49.75, min = 42.09)
 metabolism <- runif(N, 1, 100) #corregir estos valores.
 cholesterol <- runif(N2, 125, 200) #mg/dL
-speed <- leg_lenght * 0.5 + metabolism * (-0.05) + rnorm(N, mean = 0, sd = 0.1)
+speed <- leg_lenght * 1.2 + metabolism * 1 + rnorm(N, mean = 0, sd = 5) #mph
 heart <- cholesterol * 0.5 + metabolism * (-0.5) + rnorm(N2, mean = 0, sd = 0.1)
 
-data.frame(leg_lenght, metabolism, cholesterol, speed, heart) #este dataframe
-# es solo para ver los datos en conjunto, no lo uso para nada así que probablemente
-# terminaré quitandolo
+data.frame(leg_lenght, metabolism, cholesterol, speed, heart)
 
 
 summary(lm(leg_lenght ~ metabolism)) # no correlation
@@ -137,7 +178,10 @@ summary(lm(leg_lenght ~ cholesterol)) # no correlation
 summary(lm(leg_lenght ~ heart)) # no correlation
 summary(lm(leg_lenght ~ heart + speed)) # we find a correlation between heart 
 # and leg length that should not be there, there is no correlation between 
-# how long your legs are and cardiac disease as we see on the following plot:
+# how long your legs are and cardiac disease.
+
+#Let's look at our data and see whether this correlation we find when adjusting
+# by our collider (speed) is actually present:
 
 reg_line_Runner_ll_h <- lm(leg_lenght ~ heart)
 plot(leg_lenght ~ heart)
@@ -149,6 +193,15 @@ reg_line_Runner_ch_h <- lm(cholesterol ~ heart)
 plot(cholesterol ~ heart)
 abline(reg_line_Runner_ch_h)
 
+# SOLO LOS PONGO PARA VER MAS O MENOS LA DISTRIBUCIÓN DE LOS DATOS
+
+reg_line_Runner_s_m <- lm(speed ~ metabolism)
+plot(speed ~ metabolism)
+abline(reg_line_Runner_s_m)
+
+reg_line_Runner_h_m <- lm(heart ~ metabolism)
+plot(heart ~ metabolism)
+abline(reg_line_Runner_h_m)
 #_______________________________________________________________________________
 # We could also have cases in which our X and Y variables have some sort of
 # relation but the estimate changes when we condition on Z.
@@ -187,9 +240,9 @@ reg_line_XY2 <- lm(X2 ~ Y2)
 plot(X2 ~ Y2)
 abline(reg_line_XY2)
 
-# As we can see, there is a positive correlation between Z2 and X2; Z2 and Y2; and X2
-# and Y2. In this case we are interested in the relationship between X2 and Y2; 
-# we can check it: 
+# As we can see, there is a positive correlation between Z2 and X2; Z2 and Y2; 
+# and X2 and Y2. In this case we are interested in the relationship between X2 
+# and Y2; we can check it: 
 
 summary(lm(X2 ~ Y2)) # Positive significant correlation
 
@@ -292,4 +345,3 @@ summary(lm(X4 ~ Y4 + Z4)) # We find a negative correlation between X3 and W3
 
 # In this case adjusting by Z4 and W4 (its descendant) resulted in a correlation
 # between the variables X4 and Y4. 
-
