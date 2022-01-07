@@ -78,7 +78,74 @@ summary(lm(X ~ Y + Z))
 # raise a correlation that wasn't supposed to be there.
 
 
+# We can exemplify this with a more realistic dataset: 
 
+
+
+
+#_____________________________________________________________________________
+
+# Let's take a look at a bit more complicated example: imagine we are studying 
+# the performance of a professional runner. We have a few variables to take into 
+# consideration, but we will focus on the following ones: leg length,
+# metabolism (which affects weight, meaning it also affects performance), 
+# cholesterol (as a mesure of overall health); this last variable does not
+# affect directly the performance of the runner (speed), but it might through
+# its health. 
+# Let's take a look at the DAG:
+
+comm.effect.Runner <- dagitty("dag {
+cholesterol -> heart
+metabolism -> heart
+metabolism -> speed
+leg_lenght -> speed
+}")
+
+coordinates(comm.effect.Runner) <- list(x = c(cholesterol = 1, heart = 3, 
+                                              metabolism = 1, speed = 3, 
+                                              leg_lenght = 1),
+                                       y = c(cholesterol = 5, heart = 4, 
+                                             metabolism = 3, speed = 2, 
+                                             leg_lenght = 1))
+drawdag(comm.effect.Runner)
+
+
+# To represent the effect of conditioning on a collider in this case we will
+# be using data for every variable, but we will consider as if we could not 
+# measure the metabolism in order to control the counfounder. 
+
+
+# CORREGIR ALGUNOS DATOS PARA QUE TENGAN SENTIDO LOS VALORES DE HEART; AHORA
+# DEPENDIENDO DE QUE MIDAMOS NO TIENE SENTIDO (POR EJEMPLO SI NOS BASAMOS
+# EN LAS PULSACIONES EN REPOSO HAY UN COLEGA QUE TIENE 17, ESTÁ A PUNTITO
+# DE PALMARLA ME DA A MI.)
+set.seed(11)
+N <- 500
+leg_lenght <- runif(N, max = 49.75, min = 42.09)
+metabolism <- runif(N, 1, 100) #corregir estos valores.
+cholesterol <- runif(N2, 125, 200) #mg/dL
+speed <- leg_lenght * 0.5 + metabolism * (-0.05) + rnorm(N, mean = 0, sd = 0.1)
+heart <- cholesterol * 0.5 + metabolism * (-0.5) + rnorm(N2, mean = 0, sd = 0.1)
+
+data.frame(leg_lenght, metabolism, cholesterol, speed, heart)
+
+
+summary(lm(leg_lenght ~ metabolism)) # no correlation
+summary(lm(leg_lenght ~ cholesterol)) # no correlation
+summary(lm(leg_lenght ~ heart)) # no correlation
+summary(lm(leg_lenght ~ heart + speed)) # we find a correlation between heart 
+# and leg length that should not be there, there is no correlation between 
+# how long your legs are and cardiac disease as we see on the following plot:
+
+reg_line_Runner_ll_h <- lm(leg_lenght ~ heart)
+plot(leg_lenght ~ heart)
+abline(reg_line_Runner_ll_h)
+
+# The following plot shows the correlation that actually exists between
+# the variables cholesterol and heart, as opposed to the previous ones.
+reg_line_Runner_ch_h <- lm(cholesterol ~ heart)
+plot(cholesterol ~ heart)
+abline(reg_line_Runner_ch_h)
 
 #_______________________________________________________________________________
 # We could also have cases in which our X and Y variables have some sort of
@@ -223,3 +290,4 @@ summary(lm(X4 ~ Y4 + Z4)) # We find a negative correlation between X3 and W3
 
 # In this case adjusting by Z4 and W4 (its descendant) resulted in a correlation
 # between the variables X4 and Y4. 
+
