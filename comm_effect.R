@@ -1,21 +1,21 @@
 # Collider and selection bias, cases:
 
 # Import modules
-library(tidyverse)
+library(tidyverse) #ines: esta y la de car la usas?
 library(dagitty)
 library(car)
 library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
   drawdag <- plot
 }
-# library(rethinking) ## for drawdag
+# library(rethinking) ## for drawdag  ## ines: esto viene de algun archivo de ramon no?
 # Installing rethinking can be complicated just for a few graphs
 # So have a fallback if rethinking not available
 
 
 
 # We are going to try two specific scenarios, one where we adjust for Z and
-# another where we don't.
+# another where we don't. ## ines: yo aqui especificaria qué pregunta te quieres hacer con este experimento pq hasta la linea 124 no lo he entendido
 # Lets first generate our DAG according to a collider structure where X and Y
 # are independent:
 comm.effect.DAG <- dagitty("dag {
@@ -51,7 +51,7 @@ Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 # Let's take a look at our data distribution:
 
 reg_line_ZX <- lm(Z ~ X)
-plot(Z ~ X, main = 'Var distribution X-Z')
+plot(Z ~ X, main = 'Var distribution X-Z') #ines: todo esto lo vas a incluir en una funcion? o lo prefieres dejar como codigo suelto?
 abline(reg_line_ZX)
 
 
@@ -71,7 +71,7 @@ abline(reg_line_XY)
 P.V.XZ <- summary(lm(X ~ Z))$coefficients['Z','Pr(>|t|)']
 E.XZ <- summary(lm(X ~ Z))$coefficients['Z','Estimate']
 
-cat('Your estimate value is', E.XZ, 'and your p value is', P.V.XZ)
+cat('Your estimate value is', E.XZ, 'and your p value is', P.V.XZ) #ines: yo añadiria q el estimate q miras es de Z para q no se confunda con el siguiente
 
 
 P.V.YZ <- summary(lm(Y ~ Z))$coefficients['Z','Pr(>|t|)']
@@ -107,7 +107,7 @@ assign('X_Z', E.XZ, E.DICT)
 assign('Y_Z', E.YZ, E.DICT)
 
 for (i in ls(P.VAL.DICT)) {
-  if (P.VAL.DICT[[i]] > 0.05)
+  if (P.VAL.DICT[[i]] > 0.05) #ines: muy ingenioso
     cat('The variables', i, 'do not show a correlation with a p value of',  
         P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
   else
@@ -154,7 +154,7 @@ vir_load_COV19 <- floor(runif(N, min = 0, max = 40)) #Ct
 lung_capacity <- 100 - 0.7 * cigarettes_day - 0.8 * vir_load_COV19 + 
   rnorm(N, 0, sd = 0.01) # % of lung capacity
 
-data_frame(cigarettes_day, vir_load_COV19, lung_capacity)
+data_frame(cigarettes_day, vir_load_COV19, lung_capacity) #ines: prueba con data.frame
 
 summary(lm(cigarettes_day ~ vir_load_COV19)) # No correlation between nÂº of
 # cigarettes smoked a day and the viral load of COV19 infection
@@ -182,7 +182,7 @@ abline(reg_line_c_l)
 # the performance of a professional runner. We have a few variables to take into 
 # consideration, but we will focus on the following ones: leg length,
 # metabolism (which affects weight, meaning it also affects performance), heart
-# disease (MEASURED THROUGH ???????????????????????????????????????????),
+# disease (MEASURED THROUGH ???????????????????????????????????????????), #ines: cantidad de troponina cardiaca TnTc https://www.revespcardiol.org/es-marcadores-biologicos-necrosis-miocardica-articulo-13049653
 # cholesterol (as a mesure of overall health); this last variable does not
 # affect directly the performance of the runner (speed), but it might through
 # its health. 
@@ -206,7 +206,7 @@ drawdag(DAG.Runner)
 
 # To represent the effect of conditioning on a collider in this case we will
 # be using data for every variable, but we will consider as if we could not 
-# measure the metabolism in order to control the counfounder. 
+# measure the metabolism in order to control the counfounder. #ines: no entiendo por qué para controlar por el confounder metabolism es una unmeasured variable
 
 
 # CORREGIR ALGUNOS DATOS PARA QUE TENGAN SENTIDO LOS VALORES DE HEART; AHORA
@@ -217,7 +217,7 @@ set.seed(11)
 N <- 500
 leg_lenght <- runif(N, max = 49.75, min = 42.09)
 metabolism <- runif(N, 1, 100) #corregir estos valores.
-cholesterol <- runif(N2, 125, 200) #mg/dL
+cholesterol <- runif(N2, 125, 200) #mg/dL #ines: aqui quieres decir N ?
 speed <- leg_lenght * 1.2 + metabolism * 1 + rnorm(N, mean = 0, sd = 5) #mph
 heart <- cholesterol * 0.5 + metabolism * (-0.5) + rnorm(N2, mean = 0, sd = 0.1)
 
@@ -255,7 +255,7 @@ plot(heart ~ metabolism)
 abline(reg_line_Runner_h_m)
 #_______________________________________________________________________________
 # We could also have cases in which our X and Y variables have some sort of
-# relation but the estimate changes when we condition on Z.
+# relation but the estimate changes when we condition on Z. #ines: este es el escenario 2?
 
 comm.effect.DAG_2 <- dagitty("dag {
 X -> Z
@@ -279,7 +279,7 @@ Z2 <- 1.5 * X2 + 2.5 * Y2 + rnorm(N2, mean = 0, sd = 0.1)
 
 ##Again, let's take a look at our data distribution:
 
-reg_line_ZX2 <- lm(Z2 ~ X2)
+reg_line_ZX2 <- lm(Z2 ~ X2) #ines: a lo mejor con un 'par' puedes meter los tres a la vez y se ve mejor de una los cambios de estimate
 plot(Z2 ~ X2)
 abline(reg_line_ZX2)
 
