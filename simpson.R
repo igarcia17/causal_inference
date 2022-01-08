@@ -45,7 +45,7 @@ drawdag(LBWsc2.DAG)
 #unmeasured causes of low birth weight and mortality, though the only cause that we are accounting for
 #is smoking. The questions are: does smoking cause mortality? Does LBW cause mortality?
 #Does smoking cause LBW? Let's simulate the data: we will increase the natural proba-
-#bilities to maximise the effect. Let's assume that U is genetic aberration, and
+#bilities to maximise the effect. Let's assume that U is an unkown health condition, and
 #can be 0 or 1 in the absence or presence.
 samplesize <- 10000
 
@@ -96,7 +96,83 @@ LBW.fun(LBWsc2.df)
 #that Smoking has a negative correlation with mortality, thus, protecting the baby
 #of dying. As in the previous cases, coditioning on Y, LBW, is a bad idea.
 
+#If U could be measured as birth defects, it would give the following DAG:
+LBWsc3.DAG <- dagitty("dag {
+Smoking -> LBW
+LBW -> Mortality
+Smoking -> Mortality
+Birth.defects -> LBW
+Birth.defects -> Mortality
+}")
 
+coordinates(LBWsc3.DAG) <- list(x = c(LBW = 1.5, Smoking = 1, Birth.defects = 1, Mortality = 3),
+                                y = c(LBW = 2, Smoking = 3, Birth.defects = 1, Mortality = 2))
+
+drawdag(LBWsc3.DAG)
+#It looks very alike the example with cortisol, UV radiation, INK4a and MATP.
+#To analyse a more challenging DAG, we need to set a criteria to avoid being 
+#fooled by paradoxes like this.
+
+#The backdoor criteria tries to block all the backdoor paths between the outcome
+#variable (X j) and the 'treatment' variable (X i). A backdoor path is a
+#a non causal path between X and Y that has an arrow pointing to X i. We will 
+#have to adjust for the set of variables Z when:
+#(1) All back door paths between X and Y are blocked after conditioning on Z -> that is,
+#as seen before, when Z is a mediator or a confounder or not a collider
+#(2) No variables in Z are descendants of X.
+#Given the DAG:
+complex.DAG <- dagitty('dag{
+X_1 -> X_3
+X_1 -> X_4
+X_2 -> X_4
+X_2 -> X_5
+X_3 -> X_i
+X_4 -> X_i
+X_4 -> X_j
+X_5 -> X_j
+X_i -> X_6
+X_6 -> X_j
+}')
+
+coordinates(complex.DAG) <- list(x = c(X_1 =1, X_3 = 1, X_i =1,
+                                       X_4 = 2, X_6 = 2,
+                                       X_2 = 3, X_5 = 3, X_j =3),
+                                 y = c(X_1=1, X_2 = 1,
+                                       X_3 =2, X_4 = 2, X_5 = 2,
+                                       X_i = 3, X_6 = 3, X_j =3))
+drawdag(complex.DAG)
+
+X_1 <- runif(100, 1, 100)
+X_2 <- runif(100, 3, 30)
+X_3 <- X_1 * 3
+X_4 <- X_1 * 2 + X_2 * 5
+X_5 <- 4 * X_2
+X_i <- 0.2 * X_3 + 1.5 * X_4
+X_6 <- 2 * X_i
+X_j <- X_6 * 2 + X_4 * 3 + X_5 * 5
+
+#First, it is necessary to identify all the non-causal paths between X i and X j.
+paths(complex.DAG, from = 'X_i', to = 'X_j')
+i -> 3 -> 1 -> 4 -> j
+i -> 3 -> 1 -> 4 -> 2 -> 5 -> j
+i -> 4 -> 2 -> 5 -> j
+i -> 4 -> j
+#Only X_4 is present in all the paths: conditioning on it will block all the backdoor
+#paths. But we have to take into account that X_4 is a collider. It will be 
+#necessary to condition on one of their ascendants, or a descendant of the ascendant.
+#It gives 4 options: X_4 with X_1, X_2, or X_5, X_3.
+
+identical(summary(lm(X_j ~ X_i + X_4))$coefficients['X_i'],summary(lm(X_j ~ X_i + X_4 + X_1))$coefficients['X_i'])
+#The results corresponds to:
+adjustmentSets(complex.DAG, "X_i", "X_j")
+
+
+summary(lm(X_j ~ X_i))
+summary(lm(X_j ~ X_i + X_4))
+summary(lm(X_j ~ X_i + X_4 + X_1))
+summary(lm(X_j ~ X_i + X_4 + X_2))
+summary(lm(X_j ~ X_i + X_4 + X_3))
+summary(lm(X_j ~ X_i + X_4 + X_5))
 #As the data analyst Motoharu Dei says,
 #When doing data analysis, you have to know the causal structure of the subject 
 #and use it properly. Otherwise, you may end up deriving a wrong insight. You 
@@ -150,4 +226,16 @@ set.seed(13)
 LBWsc3.df <- genData(samplesize, var.sc3)
 LBW.fun22(LBWsc3.df)
 
+var.sc3 <- defData(varname = 'Birth_defects', dist = 'binary', formula = 0.5)
+var.sc3 <- defData(var.sc3, varname = 'Smoking', dist = 'binary', formula = 0.5)
+var.sc3 <- defData(var.sc3, varname = 'LBW', dist = 'binary', formula = '0.5 * Birth_defects + 0.4 * Smoking', link = 'identity')
+var.sc3 <- defData(var.sc3, varname = 'Mortality', dist = 'binary', formula = '0.1 * Smoking + 0.7 * Birth_defects + 0.1 * LBW', link = 'identity')
+
+set.seed(13)
+LBWsc3.df <- genData(samplesize, var.sc3)
+
+summary(glm(Mortality ~ Smoking, data = LBWsc3.df, family = 'binomial'))
+summary(glm(Mortality ~ Birth_defects, data = LBWsc3.df, family = 'binomial'))
+summary(glm(Mortality ~ Smoking + Birth_defects, data = LBWsc3.df, family = 'binomial'))
+summary(glm(Mortality ~ Birth_defects + Smoking + LBW, data = LBWsc3.df, family = 'binomial'))
 

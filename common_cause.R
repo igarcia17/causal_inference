@@ -268,14 +268,14 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   #p valor de A en los modelos, es relevante o no
   cat('\n____Change in p value of A on Z\n')
   cat('\nWhen Z ~ A: \nThe p value of A is ', mean(onlyA_pvA),'\n')
-  cat('\nWhen Z ~ X +A: \nThe p value of A is ', mean(bothXA_pvA), '\n')
+  cat('\nWhen Z ~ X + A: \nThe p value of A is ', mean(bothXA_pvA), '\n')
   cat('\nWhen Z ~ Y + X + A: \nThe p value of A is ', mean(three_pvA), '\n')
   #estimate de A con y sin X
   cat('\n____Effect of A over Z\n')
   cat('Input A -> X: ', b_ax,'\nInput X -> Z:', b_xz,'\nTotal effect A -> Z', b_xz * b_ax, '\n')
   cat('\nWhen Z ~ A: \nCoefficient of A is ', mean(onlyA_coefA),'and its s.d. is',
       sd(onlyA_coefA),'\n')
-  cat('\nWhen Z ~ X +A: \nCoefficient of A is ', mean(bothXA_coefA),'and its s.d. is',
+  cat('\nWhen Z ~ X + A: \nCoefficient of A is ', mean(bothXA_coefA),'and its s.d. is',
       sd(bothXA_coefA),'\n')
   cat('\nWhen Z ~ Y + X + A: \nCoefficient of A is ', mean(three_coefA),'and its s.d. is',
       sd(three_coefA), '\nSee plots:\n')
@@ -290,7 +290,7 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   abline(v = b_xz*b_ax, col = 'red')
   hist(three_coefA, main='Z ~X + A + Y', xlab = 'Effect A over Z')
   abline(v = b_xz*b_ax, col = 'red')
-  
+  par(op)
   ###Changes in X
   #p value         ######it is very obvious
   #cat('\n____Change in p value of X on Z\n')
@@ -308,7 +308,7 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   cat('\nWhen Z ~ Y + X + A: \nCoefficient of X is ', mean(three_coefX),'and its s.d. is',
       sd(three_coefX),'\nSee plots:\n')
   
-  #p valor de X en los modelos, en histograma
+  op <- par(mfrow= c(2,3), mar = rep(2,4))
   
   hist(onlyX_pvX, main = 'Z ~ X', xlab = 'p value of X')
   hist(bothXA_pvX, main = 'Z ~ X + A', xlab = 'p value of X')
@@ -369,6 +369,9 @@ coordinates(m_uv_i.DAG) <- list(x = c(MATP = 1, UV.radiation = 2, INK4a = 3),
                                 y = c(MATP = 3, UV.radiation = 1, INK4a = 3))
 drawdag(m_uv_i.DAG)
 
+#In this case, we are not just asking the question how UV radiation (X) influences
+#INK4a (Z), but we may also be interested in how MATP (Y) affects INK4a.
+
 sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   onlyY_pvY <- rep(NA, reps)
   both_pvY <- rep(NA, reps)
@@ -395,7 +398,7 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   
   cat('p value of Y')
   cat('\nWhen Z~Y:', mean(onlyY_pvY))
-  cat('\nWhen Z~Y+X', mean(both_pvY),'\n')
+  cat('\nWhen Z~Y+X', mean(both_pvY),'\n\n')
   
   cat('___Changes in X\n')
   cat('When Z ~ X:\nX coefficient:', mean(onlyX_coefX), 's.d:', sd(onlyX_coefX))
@@ -431,17 +434,21 @@ sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
 
 #On blue it is shown the total effect of X over Z, as it takes into account the effect
 #of X over Y as well. On red, it is shown the direct effect of X over Z. On green, the effect of Y over 
-#Z. When the mediator Y is out of the model, the X estimates the total effect over Z,
+#Z. 
+#When the mediator Y is out of the model, the X estimates the total effect over Z,
 #including Y contribution. Only when Y is included it is possible to discern what is the
 #direct effect of X.
 #Depending on the case it would be more interesting to study the total or the direct
 #effect of X. For this case, we argue that to know the total effect would be better
 #because in the human body MATP expression is unavoidable.
 #In any case, when there are two covariates in the model the variance of the estimate increases
-####When X is not considered, the estimate for Y is biased. 
 
-#To condition on Y or not may give unexpected outcomes. In this case,
-#if MATP is not considered, it seems that the total effect is negative.
+#To know the effect of Y over Z, X has to be taken into account. When X is not 
+#considered, the estimate for Y is biased; for this reason in this kind of graphs 
+#X is called a confounder.
+
+#To condition on Y or not may give unexpected outcomes when looking at X over Z.
+#In this case, if MATP is not considered, it seems that the total effect is negative.
 when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
                             N = samplesize)
 scatterplot(Z~X, data = when_xz_4, main ='Original case', regLine=TRUE)
@@ -546,7 +553,10 @@ impliedConditionalIndependencies(m_uv_i_c.DAG)
 #Therefore in this type of graph it would be prefered to consider both B and X on the model:
 #the variance of the estimates is smaller and the toal effect is calculated.
 #As in the previous case, condiotioning on Y may be counterproductive.
-
+#The absence of unmeasured confounding for the influence of both the exposure 
+#and the intermediate variable on the outcome is required for estimating direct 
+#effects. If both of these requirements are not satisfied, no approach can offer
+#unbiased estimates of exposure's direct effects.
 
 
 #_____________________________EXPERIMENTS
