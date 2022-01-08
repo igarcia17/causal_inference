@@ -13,6 +13,8 @@ set.seed(11)
 # this bias will change these estimates. 
 
 
+
+
 #_________________________________SITUATION 1___________________________________
 
 # Lets first generate our DAG according to a collider structure where X and Y
@@ -239,6 +241,8 @@ PLOT.REG(cigarettes_day ~ lung_capacity, "Cigarettes - Lung_capacity")
 par(op)
 
 
+
+
 #___________________________MORE COMPLEX EXAMPLE________________________________
 
 # Let's take a look at a bit more complicated example: imagine we are studying 
@@ -314,7 +318,6 @@ par(op)
 
 
 
-
 #________________________________SITUATION 2___________________________________
 # We could also have a case in which our X and Y variables have some sort of
 # relation but the estimate (its correlation) changes from positive to negative
@@ -368,7 +371,6 @@ SUM.2VAR(X2 ~ Y2, "Y2", "X2_Y2", X2 ~ Y2 + Z2, "Y2", "X2_Y2_Z2")
 
 
 
-
 #____________________________PRACTICAL EXAMPLE SITUATION 2______________________
 
 # We want to study the effect of UV radiation (hours of exposure a day) and 
@@ -410,26 +412,33 @@ data.frame(UV_radiation, INK4a, mutatedp53)
 SUM.2VAR(UV.radiation ~ INK4a, "INK4a", "UV_INK4a", UV.radiation ~ INK4a
          + mutatedp53, "INK4a", "UV_INK4a_Mp53")
 
+# As shown in the Summary function, the correlation between the variables UV 
+# radiation is maintained after adjusting for the collider but the relation
+# that was once positive becomes negative when adjusting for Mp53 (collider)
+
+
+
+
 #___________________________ANCESTOR SITUATION__________________________________
 
-# Imagine we have now a variable (Z) that has a descendant (variable W),
-# does conditioning on any of those two affect the relation between
-# variable X and Y?
+# Imagine we have now a variable Z (a collider) that has an ancestor 
+# (variable W), does conditioning on any of those two affect the relation 
+# between variable X and Y?
 
-# ANCESTOR
+# Let's draw our DAG: 
 
-DAG_Situation3 <- dagitty("dag {
+DAG_Ancestor <- dagitty("dag {
 X -> Z
 Y -> Z
 W -> Z
 e_z -> Z
 }")
 
-coordinates(DAG_Situation3) <- list(x = c(X = 1, Y = 3, Z = 2, 
+coordinates(DAG_Ancestor) <- list(x = c(X = 1, Y = 3, Z = 2, 
                                              e_z = 1.75, W = 2),
                                        y = c(X = 1, Y = 1, Z = 2, 
                                              e_z = 2, W = 3))
-drawdag(DAG_Situation3)
+drawdag(DAG_Ancestor)
 
 
 b_xz <- 3 
@@ -437,28 +446,30 @@ b_yz <- 2
 b_wz <- 2.5
 sd_z <- 1
 
-set.seed(11)
 
 X3 <- runif(N, 1, 5)
 Y3 <- runif(N, 2, 4)
 W3 <- runif(N, 1.5, 3)
 Z3 <- b_xz * X3 + b_yz * Y3 + W3 * b_wz + rnorm(N, 0, sd = sd_z)
 
-SUM.3VAR(X3 ~ W3, "W3", "X3_W3", X3 ~ W3 + Z3, "W3", "X3_W3_Z3", X3 ~ Y3 + Z3, 
-         "Y3", "X3_Y3_Z3")
+SUM.4VAR(X3 ~ W3, "W3", "X3_W3", X3 ~ W3 + Z3, "W3", "X3_W3_Z3", X3 ~ Y3 + Z3, 
+         "Y3", "X3_Y3_Z3", X3 ~ Y3, "Y3", "X3_Y3")
+
+# There is no significant correlation between X3 and W3, but when conditioned
+# for Z3 a negative correlation arises. Same thing hapopens between the 
+# variables X3 and Y3.
+# Therefore, conditioning on Z3 modifies the independence between X3, Y3 and W3
+
+SUM.2VAR(X3 ~ Y3, "Y3", "X3_Y3", X3 ~ Y3 + W3, "Y3", "X3_Y3_W3")
+
+# No significant correlation found between X3 and Y3, nor can we find a 
+# correlation when adjusting for the ancestor (W3). 
+# So, conditioning on W3 does not change the independence between X3 and Y3.
 
 
 
-summary(lm(X3 ~ W3)) # No significant correlation found
-summary(lm(X3 ~ W3 + Z3)) # We find a negative correlation between X3 and W3
-summary(lm(X3 ~ Y3 + Z3)) # We find a negative correlation between X3 and Y3
 
-# Therefore, conditioning on Z3 modifies the independence between X3, Y3 and W3.
-
-summary(lm(X3 ~ Y3)) # No significant correlation found
-summary(lm(X3 ~ Y3 + W3)) # No significant correlation found
-
-# But conditioning on W3 does not change the independence between X3 and Y3.
+#__________________________PRACTICAL EXAMPLE ANCESTOR_________________________
 
 # Let's take a look at a more realistic example: we want to study the effect
 # of cortisol and cholesterol on diabetes, but we also have to take into 
@@ -481,68 +492,82 @@ drawdag(DAG.Diabetes.Ancestor)
 
 #X = cortisol, Y = colesterol, Z = diabetes, W = sugar consumption in gr
 
-b_co_d <- 0.8
-b_ch_d <- 2
-b_sc_d <- 2.5
+b_co_d <- 0.9
+b_ch_d <- 0.95
+b_sc_d <- 1.2
 sd_z <- 1
-sd_w <- 0.5
 
-set.seed(11)
 
-cortisol <- runif(N, 1, 5)
-cholesterol <- runif(N, 2, 4)
+cortisol <- runif(N, 1, 50)
+cholesterol <- runif(N, 10, 250)
 diabetes <- cortisol * b_co_d + cholesterol * b_ch_d + sug_consumption * 
   b_sc_d+ rnorm(N, 0, sd = sd_z)
 sug_consumption <- runif(N, 0, 150)
+
+SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cort_chol", cortisol 
+         ~ cholesterol + sug_consumption, "cholesterol", "cort_chol_sug")
+
+# Again we find no correlation between cortisol and cholesterol, even if we
+# adjust for the ancestor (sugar_consumption).
+
+SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cort_chol", cortisol 
+         ~ cholesterol + diabetes, "cholesterol", "cort_chol_diab")
+
+# But we do find a correlation between those two variables when adjusting
+# for diabetes (the collider)
+
 
 
 
 #___________________________DESCENDANT SITUATION________________________________
 
-#DESCENDANT
+# Let's take a look at our second possible scenario with the ancestor and 
+# descendant situations.
+# We now have a variable Z (a collider) that has a descendant (variable W),
+# does conditioning on any of those two affect the relation between
+# variable X and Y?
 
-comm.effect.DAG_4 <- dagitty("dag {
+# Starting with the DAG:
+
+DAG.Descendant <- dagitty("dag {
 X -> Z
 Y -> Z
 Z -> W
 e_z -> Z
 }")
 
-coordinates(comm.effect.DAG_4) <- list(x = c(X = 1, Y = 3, Z = 2, 
+coordinates(DAG.Descendant) <- list(x = c(X = 1, Y = 3, Z = 2, 
                                              e_z = 1.75, W = 2),
                                        y = c(X = 1, Y = 1, Z = 2, 
                                              e_z = 2, W = 3))
-drawdag(comm.effect.DAG_4)
+drawdag(DAG.Descendant)
 
 
-b_xz <- 3 
-b_yz <- 2
-b_zw <- 2.5
-sd_z <- 5
-sd_w <- 2
+b_xz <- 1.1
+b_yz <- 0.7
+b_zw <- 2
+sd_z <- 0.5
+sd_w <- 0.5
 
-set.seed(11)
-
-X4 <- runif(N, 1, 5)
-Y4 <- runif(N, 2, 4)
-Z4 <- b_xz * X3 + b_yz * Y3 +  rnorm(N, 0, sd = sd_z)
+X4 <- runif(N, 1, 10)
+Y4 <- runif(N, 2, 20)
+Z4 <- b_xz * X4 + b_yz * Y4 +  rnorm(N, 0, sd = sd_z)
 W4 <- b_zw * Z4 + rnorm(N, 0, sd = sd_w)
 
 
 SUM.3VAR(X4 ~ Y4, "Y4", "X4_Y4", X4 ~ Y4 + W4, "Y4", "X4_Y4_W4", X4 ~ Y4 + Z4,
          "Y4", "X4_Y4_Z4")
 
-
-summary(lm(X4 ~ Y4)) # No significant correlation found
-summary(lm(X4 ~ Y4 + W4)) # We find a negative correlation between X3 and W3
-summary(lm(X4 ~ Y4 + Z4)) # We find a negative correlation between X3 and W3
-
+# We find no correlation between X4 and Y4, but when we condition on the 
+# collider (Z) or its descendant (W4) we find a significantly negative 
+# correlation between the two variables. 
 # In this case adjusting by Z4 and W4 (its descendant) resulted in a correlation
 # between the variables X4 and Y4. 
 
 
 
 
+#________________________PRACTICAL EXAMPLE DESCENDANT___________________________
 
 #Practical example: we want to see how does diabetes affect heart disease
 # for that we will also measure cortisol and cholesterol, which affect 
@@ -573,11 +598,8 @@ b_zw <- 2.5
 sd_z <- 5
 sd_w <- 2
 
-set.seed(11)
 
 X4 <- runif(N, 1, 5)
 Y4 <- runif(N, 2, 4)
 Z4 <- b_xz * X3 + b_yz * Y3 +  rnorm(N, 0, sd = sd_z)
 W4 <- b_zw * Z4 + rnorm(N, 0, sd = sd_w)
-
-
