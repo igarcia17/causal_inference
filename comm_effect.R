@@ -1,4 +1,4 @@
-# Collider and selection bias, cases:
+#_____________________COLLIDER AND SELECTION BIAS, CASES_______________________
 
 # Import modules
 library(dagitty)
@@ -6,13 +6,14 @@ if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
   drawdag <- plot
 }
 
-
-
+set.seed(11)
 # We are going to try two specific scenarios, one where we adjust for Z and
 # another where we don't. The purpose of these two scenarios is to check whether
 # adjusting for a collider will induce a bias in our estimates and how exactly
 # this bias will change these estimates. 
 
+
+#_________________________________SITUATION 1___________________________________
 
 # Lets first generate our DAG according to a collider structure where X and Y
 # are independent:
@@ -31,7 +32,7 @@ drawdag(comm.effect.DAG)
 
 # Let us generate the data according to the DAG:
 
-N <- 500 # Our sample size will be 500
+N <- 500 # Our sample size throughout the whole code will be 500
 b_xz <- 3 # The value of the relation between X and Z is 3
 b_yz <- 2 # The value of the relation between Y and Z is 2
 sd_z <- 1 # The standard deviation for Z will be 5
@@ -63,7 +64,10 @@ par(op)
 # As we can see, there is, apparently, a positive correlation between Z and X and also
 # Z and Y. On the other hand, there is no visible correlation between X and Y 
 # (as should). We can check it by calculating the estimates and significance of
-# each pair:
+# each pair. For that we will create a function that accepts the following 
+# arguments: variables to check, dependent variable (to get the estimate and
+# p value), and the title of the variables; the last two ones should be text
+# input in order to make it work.
 
 SUM.2VAR <- function(variable1, v_dep1, title_var1, variable2, 
                      v_dep2, title_var2, ...){
@@ -88,7 +92,7 @@ SUM.2VAR <- function(variable1, v_dep1, title_var1, variable2,
     else
       cat('The variables', i, 'show a correlation with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
-}
+} # SUMMARY for 2 variables
 
 SUM.3VAR <- function(variable1, v_dep1, title_var1, variable2, 
                      v_dep2, title_var2, variable3, v_dep3, title_var3){
@@ -119,6 +123,7 @@ SUM.3VAR <- function(variable1, v_dep1, title_var1, variable2,
       cat('The variables', i, 'show a correlation with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
 }
+                      # SUMMARY for 3 variables
 
 SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2, 
                      v_dep2, title_var2, variable3, v_dep3, title_var3, 
@@ -156,30 +161,35 @@ SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2,
       cat('The variables', i, 'show a correlation with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
 }
+                      #SUMMARY for 4 variables
 
 
+#Let's check our variables:
 SUM.4VAR(X ~ Z, "Z", "X_Z", Y ~ Z, "Z", "Y_Z", X ~ Y, "Y", "X_Y", X ~ Y + Z, 
          "Y", "X_Y_Z")
 
 
-#we can see a strong correlation between Z and X we can see a strong correlation
-# between Z and Y we can't any correlation between X and Y
+# We can see a strong correlation between Z and X. There is also a positive
+# relation between Z and Y, but none between X and Y. But the two independent 
+# variables (X and Y) when we adjust by Z raise a correlation that wasn't 
+# supposed to be there.
 
-summary(lm(X ~ Y + Z))
-# But the two independent variables (X and Y) when we adjust by Z 
-# raise a correlation that wasn't supposed to be there.
-
-
-
+# When controling a collider, you can induce a bias in the estimate of the
+# parent variables when there is, actually, none.
 
 
-#______________________________________________________________________________
+
+
+#_______________________REALISTIC EXAMPLE SITUATION 1___________________________
 
 
 # We can exemplify this with a more realistic dataset: 
 # Here we have a set of variables: cigarettes smoked in a day, COVID19 virus
-# load and % of lung capacity.
+# load and % of lung capacity. Both cigarette consumption and virus load should
+# affect the lung capacity, but there should not be a relation between the 
+# number of cigarettes consumed daily and the COV19 virus load.
 
+#Let's take a look at the DAG:
 
 DAG.Lung <- dagitty("dag {
 cigarettes_day -> lung_capacity
@@ -192,29 +202,30 @@ coordinates(DAG.Lung) <- list(x = c(cigarettes_day = 1, vir_load_COV19 = 3,
                                      lung_capacity = 3))
 drawdag(DAG.Lung)
 
-set.seed(11)
 
-b_cd <- (-0.7) # Relation between lung capacity and cigarettes
-b_vlc <- (-0.8) # Relation between lung capacity and virus load
+b_cd <- (-0.7) # Relation between cigarettes and lung capacity
+b_vlc <- (-0.8) # Relation between virus load and lung capacity 
 
-cigarettes_day <- floor(runif(N, min = 0, max = 45))
+cigarettes_day <- floor(runif(N, min = 0, max = 45)) #number of cig a day
 vir_load_COV19 <- floor(runif(N, min = 0, max = 40)) #Ct
 lung_capacity <- 100 + b_cd * cigarettes_day + b_vlc * vir_load_COV19 + 
   rnorm(N, 0, sd = 0.01) # % of lung capacity
 
+
+#Checking the data: 
 data.frame(cigarettes_day, vir_load_COV19, lung_capacity)
 
-SUM.3VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cig_lung", 
-         vir_load_COV19 ~ lung_capacity, "lung_capacity", "vir_lung", 
-         cigarettes_day ~ vir_load_COV19, "vir_load_COV19", "cig_vir")
+#Let's see the relations between our variables.
+SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cig_lung",
+         vir_load_COV19 ~ lung_capacity, "lung_capacity", "vir_lung",
+         cigarettes_day ~ vir_load_COV19, "vir_load_COV19", "cig_vir",
+          cigarettes_day ~ vir_load_COV19 + lung_capacity, "vir_load_COV19",
+         "cig_vir_lung")
 
 
-
-summary(lm(cigarettes_day ~ vir_load_COV19)) # No correlation between nº of
-# cigarettes smoked a day and the viral load of COV19 infection
-summary(lm(cigarettes_day ~ vir_load_COV19 + lung_capacity)) # A correlation
-# between these two variables arises when ajusting for the collider 
-# (lung_capacity)
+# No correlation between nº of cigarettes smoked a day and the viral load of 
+# COV19 infection but a correlation between these two variables arises when 
+# adjusting for the collider (lung_capacity)
 
 
 # Here we have the plots showing the distribution of the variables cigarettes_day
@@ -228,16 +239,17 @@ PLOT.REG(cigarettes_day ~ lung_capacity, "Cigarettes - Lung_capacity")
 par(op)
 
 
-#_____________________________________________________________________________
+#___________________________MORE COMPLEX EXAMPLE________________________________
 
 # Let's take a look at a bit more complicated example: imagine we are studying 
 # the performance of a professional runner. We have a few variables to take into 
 # consideration, but we will focus on the following ones: leg length,
 # metabolism (which affects weight, meaning it also affects performance), heart
-# disease (measured through the values of high-sensitivity cardiac troponin (hs-cTn)),
-# cholesterol (as a measure of overall health); this last variable does not
-# affect directly the performance of the runner (speed), but it might through
-# its health. 
+# disease (measured through the values of high-sensitivity cardiac troponin 
+# (hs-cTn)), cholesterol (as a measure of overall health); this last variable 
+# does not affect directly the performance of the runner (speed), but it might 
+# through its health. 
+
 # Let's take a look at the DAG:
 
 DAG.Runner <- dagitty("dag {
@@ -261,32 +273,31 @@ drawdag(DAG.Runner)
 # measure the metabolism in order to control the counfounder. 
 
 
-set.seed(11)
-
 b_ll_s <- 1.2
 b_m_s <- 1
 b_ch_h <- 0.05
 b_m_h <- (-0.3)
 
-leg_lenght <- runif(N, max = 49.75, min = 42.09)
+leg_lenght <- runif(N, max = 49.75, min = 42.09) #cm
 metabolism <- runif(N, 1, 20) # Theoretically this variable is unmeasured
 cholesterol <- runif(N, 125, 200) #mg/dL
-speed <- leg_lenght * b_ll_s + metabolism * b_m_s + rnorm(N, mean = 0, sd = 5) #mph
-heart <- cholesterol * b_ch_h + metabolism * b_m_h + rnorm(N2, mean = 0, sd = 0.1) #ng/L
+speed <- leg_lenght * b_ll_s + metabolism * b_m_s + rnorm(N, mean = 0, 
+                                                          sd = 5) #mph
+heart <- cholesterol * b_ch_h + metabolism * b_m_h + rnorm(N2, mean = 0, 
+                                                           sd = 0.1) #ng/L
 
+#Checking the data:
 data.frame(leg_lenght, metabolism, cholesterol, speed, heart)
 
+#Let's, one more time, check the relations:
 SUM.4VAR(leg_lenght ~ metabolism, "metabolism", "len_metab", leg_lenght ~ cholesterol,
          "cholesterol", "len_chol", leg_lenght ~ heart, "heart", "len_heart", 
          leg_lenght ~ heart + speed, "heart", "len_heart_speed")
 
-
-
-summary(lm(leg_lenght ~ metabolism)) # no correlation
-summary(lm(leg_lenght ~ cholesterol)) # no correlation
-summary(lm(leg_lenght ~ heart)) # no correlation
-summary(lm(leg_lenght ~ heart + speed)) # we find a correlation between heart 
-# and leg length that should not be there, there is no correlation between 
+# There is no correlation between leg lenght and metabolism, leg lenght and 
+# cholesterol and leg lenght and heart disease; but when we adjust for the 
+# collider speed, we open a path between leg lenght and heart disease. We 
+# do find  a correlation between heart when there is no correlation between 
 # how long your legs are and cardiac disease.
 
 #Let's look at our data and see whether this correlation we find when adjusting
@@ -298,16 +309,18 @@ PLOT.REG(leg_lenght ~ heart, "LEG - HEART")
 # the variables cholesterol and heart, as opposed to the previous ones.
 PLOT.REG(cholesterol ~ heart, "CHOLESTEROL - HEART")
 
-
-# SOLO LOS PONGO PARA VER MAS O MENOS LA DISTRIBUCIÓN DE LOS DATOS
-PLOT.REG(speed ~ metabolism, "SPEED - METABOLISM")
-PLOT.REG(heart ~ metabolism, "HEART - METABOLISM")
-
 par(op)
 
-#_______________________________________________________________________________
-# We could also have cases in which our X and Y variables have some sort of
-# relation but the estimate changes when we condition on Z.
+
+
+
+
+#________________________________SITUATION 2___________________________________
+# We could also have a case in which our X and Y variables have some sort of
+# relation but the estimate (its correlation) changes from positive to negative
+# when we condition on Z.
+
+#Let's take a look at the DAG:
 
 DAG_Situation2 <- dagitty("dag {
 X -> Z
@@ -331,7 +344,7 @@ Y2 <- X2 * b_xz2 + rnorm(N, mean = 0, sd = 1)
 Z2 <- X2 * b_xz2 + Y2 * b_yz2 + rnorm(N, mean = 0, sd = 1)
 
 
-##Again, let's take a look at our data distribution:
+# Again, let's take a look at our data distribution:
 op <- par(mfrow= c(3, 1))
 
 PLOT.REG(Z2 ~ X2, "Var distribution Z2 - X2")
@@ -345,9 +358,6 @@ par(op)
 # between X2 and Y2; we can check it: 
 
 SUM.2VAR(X2 ~ Y2, "Y2", "X2_Y2", X2 ~ Y2 + Z2, "Y2", "X2_Y2_Z2")
-# AQUI ALGO NO VA BIEN PORQUE ME SACA UN P VALUE DE 0 EN X2_Y2 PERO COMO AHORA
-# MISMO NO LO VEO LO DEJO PARA MAS ADELANTE.
-
 
 # The positive correlation we find between X2 and Y2 switches to
 # a negative correlation when we adjust for Z2
@@ -356,7 +366,15 @@ SUM.2VAR(X2 ~ Y2, "Y2", "X2_Y2", X2 ~ Y2 + Z2, "Y2", "X2_Y2_Z2")
 ## of the estimate for the Y2 variable, as in Simpson's paradox
 
 
-# Practical example:
+
+
+
+#____________________________PRACTICAL EXAMPLE SITUATION 2______________________
+
+# We want to study the effect of UV radiation (hours of exposure a day) and 
+# INK4a on the mutation of gen p53. 
+
+#First of all we create our DAG:
 
 DAG.p53 <- dagitty("dag {
 UV_radiation -> mutated_p53
@@ -372,27 +390,27 @@ coordinates(DAG.p53) <- list(x = c(UV_radiation = 1, INK4a = 3,
 drawdag(DAG.p53)
 
 
-
-
 #X = UV.radiation (minutes of exposure/day), Y = INK4a, Z= mutatedp53
+# Let's generate our data for this particular case:
 
-b_UV.INK4a <- (0.2)
-b_INK4a.mp53 <- 2
-b_UV.mp53 <- 0.7
+b_UV_INK4a <- (0.2)
+b_INK4a_mp53 <- 2
+b_UV_mp53 <- 0.7
 
 
-UV.radiation <- runif(N, 0, 9)
-INK4a <- UV.radiation * b_UV.INK4a + rnorm(N, mean = 0, sd = 0.5)
-mutatedp53 <- UV.radiation * b_UV.mp53 + INK4a * b_INK4a.mp53 + 
+UV_radiation <- runif(N, 0, 9)
+INK4a <- UV_radiation * b_UV_INK4a + rnorm(N, mean = 0, sd = 0.5)
+mutatedp53 <- UV_radiation * b_UV_mp53 + INK4a * b_INK4a_mp53 + 
   rnorm(N, mean = 0, sd = 0.1)
-data.frame(UV.radiation, INK4a, mutatedp53)
+
+# Again lets gather our data in a dataframe to check it:
+data.frame(UV_radiation, INK4a, mutatedp53)
+
 
 SUM.2VAR(UV.radiation ~ INK4a, "INK4a", "UV_INK4a", UV.radiation ~ INK4a
          + mutatedp53, "INK4a", "UV_INK4a_Mp53")
 
-#_______________________________________________________________________________
-
-# Collider with ancestor and descendant:
+#___________________________ANCESTOR SITUATION__________________________________
 
 # Imagine we have now a variable (Z) that has a descendant (variable W),
 # does conditioning on any of those two affect the relation between
@@ -479,14 +497,7 @@ sug_consumption <- runif(N, 0, 150)
 
 
 
-
-
-
-
-
-
-
-
+#___________________________DESCENDANT SITUATION________________________________
 
 #DESCENDANT
 
@@ -554,4 +565,19 @@ coordinates(DAG.Diabetes.Descendant) <- list(x = c(cortisol = 1,
 drawdag(DAG.Diabetes.Descendant)
 
 #X = cortisol, Y = colesterol, Z = diabetes, W = heart disease
+
+
+b_xz <- 3 
+b_yz <- 2
+b_zw <- 2.5
+sd_z <- 5
+sd_w <- 2
+
+set.seed(11)
+
+X4 <- runif(N, 1, 5)
+Y4 <- runif(N, 2, 4)
+Z4 <- b_xz * X3 + b_yz * Y3 +  rnorm(N, 0, sd = sd_z)
+W4 <- b_zw * Z4 + rnorm(N, 0, sd = sd_w)
+
 
