@@ -2,7 +2,6 @@
 
 # Import modules
 library(dagitty)
-library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
   drawdag <- plot
 }
@@ -35,7 +34,7 @@ drawdag(comm.effect.DAG)
 N <- 500 # Our sample size will be 500
 b_xz <- 3 # The value of the relation between X and Z is 3
 b_yz <- 2 # The value of the relation between Y and Z is 2
-sd_z <- 5 # The standard deviation for Z will be 5
+sd_z <- 1 # The standard deviation for Z will be 5
 
 # We will not be repeating this information description as we already know what
 # each variable represents.
@@ -47,56 +46,121 @@ Y <- runif(N, 1.5, 12)
 Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 
 
-# Let's take a look at our data distribution:
-
+# Let's take a look at our data distribution, for that we will create a 
+# function that plots our variables with a regression line:
 PLOT.REG <- function(reg_line, plot.var) {
   Regres.line <- lm(reg_line)
   plot(reg_line, main = plot.var)
   abline(Regres.line)
 }
 
+op <- par(mfrow= c(3, 1))
 PLOT.REG(Z ~ X, 'Var distribution X-Z')
 PLOT.REG(Z ~ Y, 'Var distribution Y-Z')
 PLOT.REG(X ~ Y, 'Var distribution X-Y')
-
+par(op)
 
 # As we can see, there is, apparently, a positive correlation between Z and X and also
 # Z and Y. On the other hand, there is no visible correlation between X and Y 
 # (as should). We can check it by calculating the estimates and significance of
 # each pair:
 
-P.V.XZ <- summary(lm(X ~ Z))$coefficients['Z','Pr(>|t|)']
-E.XZ <- summary(lm(X ~ Z))$coefficients['Z','Estimate']
-
-P.V.YZ <- summary(lm(Y ~ Z))$coefficients['Z','Pr(>|t|)']
-E.YZ <- summary(lm(Y ~ Z))$coefficients['Z','Estimate']
-
-P.V.XY <- summary(lm(X ~ Y))$coefficients['Y','Pr(>|t|)']
-E.XY <- summary(lm(X ~ Y))$coefficients['Y','Estimate']
-
-P.V.XY.Z <- summary(lm(X ~ Y + Z))$coefficients['Y','Pr(>|t|)']
-E.XY.Z <- summary(lm(X ~ Y + Z))$coefficients['Y','Estimate']
-
-P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
-assign('X_Y', P.V.XY, P.VAL.DICT)
-assign('X_Y_Z', P.V.XY.Z, P.VAL.DICT)
-assign('X_Z', P.V.XZ, P.VAL.DICT)
-assign('Y_Z', P.V.YZ, P.VAL.DICT)
-
-E.DICT <- new.env(hash = T, parent = emptyenv())
-assign('X_Y', E.XY, E.DICT)
-assign('X_Y_Z', E.XY.Z, E.DICT)
-assign('X_Z', E.XZ, E.DICT)
-assign('Y_Z', E.YZ, E.DICT)
-
-for (i in ls(P.VAL.DICT)) {
-  if (P.VAL.DICT[[i]] > 0.05)
-    cat('The variables', i, 'do not show a correlation with a p value of',  
-        P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
-  else
-    cat('The variables', i, 'show a correlation with a p value of',  
-        P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+SUM.2VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, ...){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show a correlation with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show a correlation with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
 }
+
+SUM.3VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, variable3, v_dep3, title_var3){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  PV3 <- summary(lm(variable3))$coefficients[v_dep3, 'Pr(>|t|)']
+  E3 <- summary(lm(variable3))$coefficients[v_dep3, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  assign(title_var3, PV3, P.VAL.DICT)
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  assign(title_var3, E3, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show a correlation with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show a correlation with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
+}
+
+SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, variable3, v_dep3, title_var3, 
+                     variable4, v_dep4, title_var4){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  PV3 <- summary(lm(variable3))$coefficients[v_dep3, 'Pr(>|t|)']
+  E3 <- summary(lm(variable3))$coefficients[v_dep3, 'Estimate']
+  
+  PV4 <- summary(lm(variable4))$coefficients[v_dep4, 'Pr(>|t|)']
+  E4 <- summary(lm(variable4))$coefficients[v_dep4, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  assign(title_var3, PV3, P.VAL.DICT)
+  assign(title_var4, PV4, P.VAL.DICT)
+  
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  assign(title_var3, E3, E.DICT)
+  assign(title_var4, E4, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show a correlation with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show a correlation with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
+}
+
+
+SUM.4VAR(X ~ Z, "Z", "X_Z", Y ~ Z, "Z", "Y_Z", X ~ Y, "Y", "X_Y", X ~ Y + Z, 
+         "Y", "X_Y_Z")
+
 
 #we can see a strong correlation between Z and X we can see a strong correlation
 # between Z and Y we can't any correlation between X and Y
@@ -135,48 +199,15 @@ b_vlc <- (-0.8) # Relation between lung capacity and virus load
 
 cigarettes_day <- floor(runif(N, min = 0, max = 45))
 vir_load_COV19 <- floor(runif(N, min = 0, max = 40)) #Ct
-lung_capacity <- 100 - b_cd * cigarettes_day - b_vlc * vir_load_COV19 + 
+lung_capacity <- 100 + b_cd * cigarettes_day + b_vlc * vir_load_COV19 + 
   rnorm(N, 0, sd = 0.01) # % of lung capacity
 
 data.frame(cigarettes_day, vir_load_COV19, lung_capacity)
 
-P.V.C.L <- summary(lm(cigarettes_day ~ lung_capacity)
-                   )$coefficients['lung_capacity','Pr(>|t|)']
-E.C.L <- summary(lm(cigarettes_day ~ lung_capacity)
-                 )$coefficients['lung_capacity','Estimate']
+SUM.3VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cig_lung", 
+         vir_load_COV19 ~ lung_capacity, "lung_capacity", "vir_lung", 
+         cigarettes_day ~ vir_load_COV19, "vir_load_COV19", "cig_vir")
 
-P.V.V.L <- summary(lm(vir_load_COV19 ~ lung_capacity)
-                   )$coefficients['lung_capacity','Pr(>|t|)']
-E.V.L <- summary(lm(vir_load_COV19 ~ lung_capacity)
-                 )$coefficients['lung_capacity','Estimate']
-
-P.V.C.V <- summary(lm(cigarettes_day ~ vir_load_COV19)
-                  )$coefficients['vir_load_COV19','Pr(>|t|)']
-E.C.V <- summary(lm(cigarettes_day ~ vir_load_COV19)
-                 )$coefficients['vir_load_COV19','Estimate']
-
-
-
-P.VAL.DICT.Lung <- new.env(hash = T, parent = emptyenv())
-assign('cig_lung', P.V.C.L, P.VAL.DICT.Lung)
-assign('vir_lung', P.V.V.L, P.VAL.DICT.Lung)
-assign('cig_vir', P.V.C.V, P.VAL.DICT.Lung)
-
-E.DICT.Lung <- new.env(hash = T, parent = emptyenv())
-assign('cig_lung', E.C.L, E.DICT.Lung)
-assign('vir_lung', E.V.L, E.DICT.Lung)
-assign('cig_vir', E.C.V, E.DICT.Lung)
-
-
-
-for (i in ls(P.VAL.DICT.Lung)) {
-  if (P.VAL.DICT.Lung[[i]] > 0.05)
-    cat('The variables', i, 'do not show a correlation with a p value of',  
-        P.VAL.DICT.Lung[[i]], 'and an estimate of', E.DICT.Lung[[i]], '\n')
-  else
-    cat('The variables', i, 'show a correlation with a p value of',  
-        P.VAL.DICT.Lung[[i]], 'and an estimate of', E.DICT.Lung[[i]], '\n')
-}
 
 
 summary(lm(cigarettes_day ~ vir_load_COV19)) # No correlation between nº of
@@ -188,15 +219,13 @@ summary(lm(cigarettes_day ~ vir_load_COV19 + lung_capacity)) # A correlation
 
 # Here we have the plots showing the distribution of the variables cigarettes_day
 # and vir_load_COV19, where apparently there is no correlation.
-reg_line_c_v <- lm(cigarettes_day ~ vir_load_COV19)
-plot(cigarettes_day ~ vir_load_COV19)
-abline(reg_line_c_v)
+op <- par(mfrow= c(2, 1))
+PLOT.REG(cigarettes_day ~ vir_load_COV19, "Cigarettes - Virus_load")
 
 # A plot for comparison, cigarettes and lung capacity, a negative correlation:
-reg_line_c_l <- lm(cigarettes_day ~ lung_capacity)
-plot(cigarettes_day ~ lung_capacity)
-abline(reg_line_c_l)
+PLOT.REG(cigarettes_day ~ lung_capacity, "Cigarettes - Lung_capacity")
 
+par(op)
 
 
 #_____________________________________________________________________________
@@ -247,44 +276,11 @@ heart <- cholesterol * b_ch_h + metabolism * b_m_h + rnorm(N2, mean = 0, sd = 0.
 
 data.frame(leg_lenght, metabolism, cholesterol, speed, heart)
 
-
-P.V.L.M <- summary(lm(leg_lenght ~ metabolism))$coefficients['metabolism','Pr(>|t|)']
-E.L.M <- summary(lm(leg_lenght ~ metabolism))$coefficients['metabolism','Estimate']
-
-P.V.L.Ch <- summary(lm(leg_lenght ~ cholesterol))$coefficients['cholesterol','Pr(>|t|)']
-E.L.Ch <- summary(lm(leg_lenght ~ cholesterol))$coefficients['cholesterol','Estimate']
-
-P.V.L.H <- summary(lm(leg_lenght ~ heart))$coefficients['heart','Pr(>|t|)']
-E.L.H <- summary(lm(leg_lenght ~ heart))$coefficients['heart','Estimate']
-
-P.V.L.H_Sp <- summary(lm(leg_lenght ~ heart + speed))$coefficients['heart','Pr(>|t|)']
-E.L.H_Sp <- summary(lm(leg_lenght ~ heart + speed))$coefficients['heart','Estimate']
+SUM.4VAR(leg_lenght ~ metabolism, "metabolism", "len_metab", leg_lenght ~ cholesterol,
+         "cholesterol", "len_chol", leg_lenght ~ heart, "heart", "len_heart", 
+         leg_lenght ~ heart + speed, "heart", "len_heart_speed")
 
 
-P.VAL.DICT.Speed <- new.env(hash = T, parent = emptyenv())
-assign('len_metab', P.V.L.M, P.VAL.DICT.Speed)
-assign('len_chol', P.V.L.Ch, P.VAL.DICT.Speed)
-assign('len_heart', P.V.L.H, P.VAL.DICT.Speed)
-assign('len_heart+Speed', P.V.L.H_Sp, P.VAL.DICT.Speed)
-
-
-
-E.DICT.Speed <- new.env(hash = T, parent = emptyenv())
-assign('len_metab', E.L.M, E.DICT.Speed)
-assign('len_chol', E.L.Ch, E.DICT.Speed)
-assign('len_heart', E.L.H, E.DICT.Speed)
-assign('len_heart+Speed', E.L.H_Sp, E.DICT.Speed)
-
-
-
-for (i in ls(P.VAL.DICT.Speed)) {
-  if (P.VAL.DICT.Speed[[i]] > 0.05)
-    cat('The variables', i, 'do not show a correlation with a p value of',  
-        P.VAL.DICT.Speed[[i]], 'and an estimate of', E.DICT.Speed[[i]], '\n')
-  else
-    cat('The variables', i, 'show a correlation with a p value of',  
-        P.VAL.DICT.Speed[[i]], 'and an estimate of', E.DICT.Speed[[i]], '\n')
-}
 
 summary(lm(leg_lenght ~ metabolism)) # no correlation
 summary(lm(leg_lenght ~ cholesterol)) # no correlation
@@ -295,6 +291,7 @@ summary(lm(leg_lenght ~ heart + speed)) # we find a correlation between heart
 
 #Let's look at our data and see whether this correlation we find when adjusting
 # by our collider (speed) is actually present:
+op <- par(mfrow= c(2, 1))
 PLOT.REG(leg_lenght ~ heart, "LEG - HEART")
 
 # The following plot shows the correlation that actually exists between
@@ -306,75 +303,54 @@ PLOT.REG(cholesterol ~ heart, "CHOLESTEROL - HEART")
 PLOT.REG(speed ~ metabolism, "SPEED - METABOLISM")
 PLOT.REG(heart ~ metabolism, "HEART - METABOLISM")
 
+par(op)
 
 #_______________________________________________________________________________
 # We could also have cases in which our X and Y variables have some sort of
 # relation but the estimate changes when we condition on Z.
 
-comm.effect.DAG_2 <- dagitty("dag {
+DAG_Situation2 <- dagitty("dag {
 X -> Z
 Y -> Z
 X -> Y
 e_z -> Z
 }")
 
-coordinates(comm.effect.DAG_2) <- list(x = c(X = 1, Y = 3, Z = 2, 
+coordinates(DAG_Situation2) <- list(x = c(X = 1, Y = 3, Z = 2, 
                                              e_z = 1.75),
                                        y = c(X = 1, Y = 1, Z = 3, 
                                              e_z = 3))
-drawdag(comm.effect.DAG_2)
+drawdag(DAG_Situation2)
 
+b_xy2 <- 1.7 
+b_xz2 <- 1.5
+b_yz2 <- 2.5
 
-N2 <- 500
-X2 <- runif(N2, 1, 10)
-Y2 <- X2 * 1.7 + rnorm(N, mean = 0, sd = 0.1)
-Z2 <- 1.5 * X2 + 2.5 * Y2 + rnorm(N2, mean = 0, sd = 0.1)
+X2 <- runif(N, 1, 10)
+Y2 <- X2 * b_xz2 + rnorm(N, mean = 0, sd = 1)
+Z2 <- X2 * b_xz2 + Y2 * b_yz2 + rnorm(N, mean = 0, sd = 1)
 
 
 ##Again, let's take a look at our data distribution:
+op <- par(mfrow= c(3, 1))
 
 PLOT.REG(Z2 ~ X2, "Var distribution Z2 - X2")
 PLOT.REG(Z2 ~ Y2, "Var distribution Z2 - Y2")
 PLOT.REG(X2 ~ Y2, "Var distribution X2 - Y2")
 
+par(op)
 
-P.V.XY2 <- summary(lm(X2 ~ Y2))$coefficients['Y2','Pr(>|t|)']
-E.L.XY2 <- summary(lm(X2 ~ Y2))$coefficients['Y2','Estimate']
+# As we can see, there is, apparently a positive correlation between Z2 and X2;  
+# Z2 and Y2; and X2 and Y2. In this case we are interested in the relationship  
+# between X2 and Y2; we can check it: 
 
-P.V.XY2_Z2 <- summary(lm(X2 ~ Y2 + Z2))$coefficients['Y2','Pr(>|t|)']
-E.L.XY2_Z2 <- summary(lm(X2 ~ Y2 + Z2))$coefficients['Y2','Estimate']
-
-
-P.VAL.DICT.Scenario2 <- new.env(hash = T, parent = emptyenv())
-assign('X2_Y2', P.V.XY2, P.VAL.DICT.Scenario2)
-assign('X2_Y2+Z2', P.V.XY2_Z2, P.VAL.DICT.Scenario2)
-
-
-E.DICT.Scenario2 <- new.env(hash = T, parent = emptyenv())
-assign('X2_Y2', E.L.XY2, E.DICT.Scenario2)
-assign('X2_Y2+Z2', E.L.XY2_Z2, E.DICT.Scenario2)
-
-
+SUM.2VAR(X2 ~ Y2, "Y2", "X2_Y2", X2 ~ Y2 + Z2, "Y2", "X2_Y2_Z2")
 # AQUI ALGO NO VA BIEN PORQUE ME SACA UN P VALUE DE 0 EN X2_Y2 PERO COMO AHORA
 # MISMO NO LO VEO LO DEJO PARA MAS ADELANTE.
-for (i in ls(P.VAL.DICT.Scenario2)) {
-  if (P.VAL.DICT.Scenario2[[i]] > 0.05)
-    cat('The variables', i, 'do not show a correlation with a p value of',  
-        P.VAL.DICT.Scenario2[[i]], 'and an estimate of', E.DICT.Scenario2[[i]], '\n')
-  else
-    cat('The variables', i, 'show a correlation with a p value of',  
-        P.VAL.DICT.Scenario2[[i]], 'and an estimate of', E.DICT.Scenario2[[i]], '\n')
-}
-# As we can see, there is a positive correlation between Z2 and X2; Z2 and Y2; 
-# and X2 and Y2. In this case we are interested in the relationship between X2 
-# and Y2; we can check it: 
 
-summary(lm(X2 ~ Y2)) # Positive significant correlation
 
-# But if we adjust for Z2 the estimate of the X2-Y2 correlation switches to
-# a negative correlation. 
-
-summary(lm(X2 ~ Y2 + Z2)) # Negative significant correlation
+# The positive correlation we find between X2 and Y2 switches to
+# a negative correlation when we adjust for Z2
 
 ## As we can see, in this particular case, conditioning on Z changes the sign 
 ## of the estimate for the Y2 variable, as in Simpson's paradox
@@ -382,8 +358,37 @@ summary(lm(X2 ~ Y2 + Z2)) # Negative significant correlation
 
 # Practical example:
 
+DAG.p53 <- dagitty("dag {
+UV_radiation -> mutated_p53
+INK4a -> mutated_p53
+UV_radiation -> INK4a
+e_z -> mutated_p53
+}")
+
+coordinates(DAG.p53) <- list(x = c(UV_radiation = 1, INK4a = 3, 
+                                   mutated_p53 = 2,  e_z = 1.5),
+                            y = c(UV_radiation = 1, INK4a = 1, 
+                                  mutated_p53 = 3, e_z = 3))
+drawdag(DAG.p53)
 
 
+
+
+#X = UV.radiation (minutes of exposure/day), Y = INK4a, Z= mutatedp53
+
+b_UV.INK4a <- (0.2)
+b_INK4a.mp53 <- 2
+b_UV.mp53 <- 0.7
+
+
+UV.radiation <- runif(N, 0, 9)
+INK4a <- UV.radiation * b_UV.INK4a + rnorm(N, mean = 0, sd = 0.5)
+mutatedp53 <- UV.radiation * b_UV.mp53 + INK4a * b_INK4a.mp53 + 
+  rnorm(N, mean = 0, sd = 0.1)
+data.frame(UV.radiation, INK4a, mutatedp53)
+
+SUM.2VAR(UV.radiation ~ INK4a, "INK4a", "UV_INK4a", UV.radiation ~ INK4a
+         + mutatedp53, "INK4a", "UV_INK4a_Mp53")
 
 #_______________________________________________________________________________
 
@@ -395,24 +400,24 @@ summary(lm(X2 ~ Y2 + Z2)) # Negative significant correlation
 
 # ANCESTOR
 
-comm.effect.DAG_3 <- dagitty("dag {
+DAG_Situation3 <- dagitty("dag {
 X -> Z
 Y -> Z
 W -> Z
 e_z -> Z
 }")
 
-coordinates(comm.effect.DAG_3) <- list(x = c(X = 1, Y = 3, Z = 2, 
+coordinates(DAG_Situation3) <- list(x = c(X = 1, Y = 3, Z = 2, 
                                              e_z = 1.75, W = 2),
                                        y = c(X = 1, Y = 1, Z = 2, 
                                              e_z = 2, W = 3))
-drawdag(comm.effect.DAG_3)
+drawdag(DAG_Situation3)
 
-N <- 500 
+
 b_xz <- 3 
 b_yz <- 2
 b_wz <- 2.5
-sd_z <- 5
+sd_z <- 1
 
 set.seed(11)
 
@@ -420,6 +425,11 @@ X3 <- runif(N, 1, 5)
 Y3 <- runif(N, 2, 4)
 W3 <- runif(N, 1.5, 3)
 Z3 <- b_xz * X3 + b_yz * Y3 + W3 * b_wz + rnorm(N, 0, sd = sd_z)
+
+SUM.3VAR(X3 ~ W3, "W3", "X3_W3", X3 ~ W3 + Z3, "W3", "X3_W3_Z3", X3 ~ Y3 + Z3, 
+         "Y3", "X3_Y3_Z3")
+
+
 
 summary(lm(X3 ~ W3)) # No significant correlation found
 summary(lm(X3 ~ W3 + Z3)) # We find a negative correlation between X3 and W3
@@ -431,6 +441,49 @@ summary(lm(X3 ~ Y3)) # No significant correlation found
 summary(lm(X3 ~ Y3 + W3)) # No significant correlation found
 
 # But conditioning on W3 does not change the independence between X3 and Y3.
+
+# Let's take a look at a more realistic example: we want to study the effect
+# of cortisol and cholesterol on diabetes, but we also have to take into 
+# consideration the variable "sugar consumption in gr". Here is the DAG:
+
+DAG.Diabetes.Ancestor <- dagitty("dag {
+cortisol -> diabetes
+cholesterol -> diabetes
+sugar_consumpt -> diabetes
+e_z -> diabetes
+}")
+
+coordinates(DAG.Diabetes.Ancestor) <- list(x = c(cortisol = 1, cholesterol = 3,
+                                           diabetes = 2, e_z = 1.5, 
+                                            sugar_consumpt = 2),
+                                       y = c(cortisol = 1, cholesterol = 1, 
+                                             diabetes = 2, e_z = 2, 
+                                             sugar_consumpt = 3))
+drawdag(DAG.Diabetes.Ancestor)
+
+#X = cortisol, Y = colesterol, Z = diabetes, W = sugar consumption in gr
+
+b_co_d <- 0.8
+b_ch_d <- 2
+b_sc_d <- 2.5
+sd_z <- 1
+sd_w <- 0.5
+
+set.seed(11)
+
+cortisol <- runif(N, 1, 5)
+cholesterol <- runif(N, 2, 4)
+diabetes <- cortisol * b_co_d + cholesterol * b_ch_d + sug_consumption * 
+  b_sc_d+ rnorm(N, 0, sd = sd_z)
+sug_consumption <- runif(N, 0, 150)
+
+
+
+
+
+
+
+
 
 
 
@@ -451,7 +504,6 @@ coordinates(comm.effect.DAG_4) <- list(x = c(X = 1, Y = 3, Z = 2,
 drawdag(comm.effect.DAG_4)
 
 
-N <- 500 
 b_xz <- 3 
 b_yz <- 2
 b_zw <- 2.5
@@ -465,10 +517,41 @@ Y4 <- runif(N, 2, 4)
 Z4 <- b_xz * X3 + b_yz * Y3 +  rnorm(N, 0, sd = sd_z)
 W4 <- b_zw * Z4 + rnorm(N, 0, sd = sd_w)
 
+
+SUM.3VAR(X4 ~ Y4, "Y4", "X4_Y4", X4 ~ Y4 + W4, "Y4", "X4_Y4_W4", X4 ~ Y4 + Z4,
+         "Y4", "X4_Y4_Z4")
+
+
 summary(lm(X4 ~ Y4)) # No significant correlation found
 summary(lm(X4 ~ Y4 + W4)) # We find a negative correlation between X3 and W3
 summary(lm(X4 ~ Y4 + Z4)) # We find a negative correlation between X3 and W3
 
 # In this case adjusting by Z4 and W4 (its descendant) resulted in a correlation
 # between the variables X4 and Y4. 
+
+
+
+
+
+#Practical example: we want to see how does diabetes affect heart disease
+# for that we will also measure cortisol and cholesterol, which affect 
+# diabetes. Let's see what happens when we condition the collider or its
+# descendant in this particular case. First we create the DAG:
+
+DAG.Diabetes.Descendant <- dagitty("dag {
+cortisol -> diabetes
+cholesterol -> diabetes
+diabetes -> heart_disease
+e_z -> diabetes
+}")
+
+coordinates(DAG.Diabetes.Descendant) <- list(x = c(cortisol = 1, 
+                                        cholesterol = 3, diabetes = 2, 
+                                        e_z = 1.5, heart_disease = 2),
+                                       y = c(cortisol = 1, cholesterol = 1, 
+                                             diabetes = 2, e_z = 2, 
+                                             heart_disease = 3))
+drawdag(DAG.Diabetes.Descendant)
+
+#X = cortisol, Y = colesterol, Z = diabetes, W = heart disease
 
