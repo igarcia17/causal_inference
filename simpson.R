@@ -144,12 +144,12 @@ drawdag(complex.DAG)
 
 X_1 <- runif(100, 1, 100)
 X_2 <- runif(100, 3, 30)
-X_3 <- X_1 * 3
-X_4 <- X_1 * 2 + X_2 * 5
-X_5 <- 4 * X_2
-X_i <- 0.2 * X_3 + 1.5 * X_4
-X_6 <- 2 * X_i
-X_j <- X_6 * 2 + X_4 * 3 + X_5 * 5
+X_3 <- X_1 * 5
+X_4 <- X_1 * 2 + X_2 * 3
+X_5 <- 11 * X_2
+X_i <- 7 * X_3 + 13 * X_4
+X_6 <- 17 * X_i
+X_j <- X_6 * 23 + X_4 * 31 + X_5 * 19
 
 #First, it is necessary to identify all the non-causal paths between X i and X j.
 paths(complex.DAG, from = 'X_i', to = 'X_j')
@@ -163,12 +163,15 @@ i -> 4 -> j
 #It gives 4 options: X_4 with X_1, X_2, or X_5, X_3.
 
 identical(summary(lm(X_j ~ X_i + X_4))$coefficients['X_i'],summary(lm(X_j ~ X_i + X_4 + X_1))$coefficients['X_i'])
-#The results corresponds to:
+identical(summary(lm(X_j ~ X_i + X_4))$coefficients['X_i'],summary(lm(X_j ~ X_i + X_1))$coefficients['X_i'])
+
+#This corresponds to:
 adjustmentSets(complex.DAG, "X_i", "X_j")
 
 
 summary(lm(X_j ~ X_i))
 summary(lm(X_j ~ X_i + X_4))
+summary(lm(X_j ~ X_i + X_1))
 summary(lm(X_j ~ X_i + X_4 + X_1))
 summary(lm(X_j ~ X_i + X_4 + X_2))
 summary(lm(X_j ~ X_i + X_4 + X_3))
@@ -176,7 +179,8 @@ summary(lm(X_j ~ X_i + X_4 + X_5))
 #As the data analyst Motoharu Dei says,
 #When doing data analysis, you have to know the causal structure of the subject 
 #and use it properly. Otherwise, you may end up deriving a wrong insight. You 
-#can't forget the causal context and reduce all the variables to statistical terms
+#can't forget the causal context and reduce all the variables to statistical terms.
+#Backdoor criteria cannot apply when subyacent DAG is not known.
 
 
 
