@@ -153,10 +153,10 @@ X_j <- X_6 * 23 + X_4 * 31 + X_5 * 19
 
 #First, it is necessary to identify all the non-causal paths between X i and X j.
 paths(complex.DAG, from = 'X_i', to = 'X_j')
-i -> 3 -> 1 -> 4 -> j
-i -> 3 -> 1 -> 4 -> 2 -> 5 -> j
-i -> 4 -> 2 -> 5 -> j
-i -> 4 -> j
+# i -> 3 -> 1 -> 4 -> j
+# i -> 3 -> 1 -> 4 -> 2 -> 5 -> j
+# i -> 4 -> 2 -> 5 -> j
+# i -> 4 -> j
 #Only X_4 is present in all the paths: conditioning on it will block all the backdoor
 #paths. But we have to take into account that X_4 is a collider. It will be 
 #necessary to condition on one of their ascendants, or a descendant of the ascendant.
@@ -176,6 +176,7 @@ summary(lm(X_j ~ X_i + X_4 + X_1))
 summary(lm(X_j ~ X_i + X_4 + X_2))
 summary(lm(X_j ~ X_i + X_4 + X_3))
 summary(lm(X_j ~ X_i + X_4 + X_5))
+
 #As the data analyst Motoharu Dei says,
 #When doing data analysis, you have to know the causal structure of the subject 
 #and use it properly. Otherwise, you may end up deriving a wrong insight. You 
