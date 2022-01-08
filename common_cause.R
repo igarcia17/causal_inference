@@ -1,7 +1,6 @@
 #Confounders, common cause and mediators
 
 #import modules
-#library(tidyverse)
 library(dagitty)
 library(car)
 library(rethinking)
@@ -73,6 +72,11 @@ create.datasetv3 <- function(b_by, b_bz, b_yz=(-3), N = 500, b_xy = 3, b_xz = 3,
     name_df$B * b_bz+ rnorm(N, sd = e_z)
   return(name_df)
 }
+
+Ynoinfluences <- create.dataset(0)
+Yinfluences <- create.dataset(-2)
+non.influences <- create.dataset(0, b_xz = 0)
+
 #We create a function that checks which is the scenario. We assume that X is in any
 #case a common cause of both Y and Z
 
@@ -88,6 +92,16 @@ Y_check <- function (dataset, conflevel = 0.01) {
   if ((p.v.X <= conflevel)&(p.v.Y > conflevel))
   {cat("The variable of analysis is not influenced by Y\n")
     cat('See plot\n')
+    scenario1.DAG <- dagitty("dag {
+    X -> Y
+    X -> Z
+    e_y -> Y
+    e_z -> Z
+    }")
+    
+    coordinates(scenario1.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
+                                       y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+    
     drawdag(scenario1.DAG)
     return(invisible(1))
     }
@@ -95,6 +109,17 @@ Y_check <- function (dataset, conflevel = 0.01) {
   if ((p.v.X <= conflevel)&(p.v.Y <= conflevel))
   {cat("The variable of analysis is influenced by both X and Y\n")
     cat('See plot\n')
+    scenario2.DAG <- dagitty("dag {
+    X -> Y
+    X -> Z
+    Y -> Z
+    e_y -> Y
+    e_z -> Z
+    }")
+    
+    coordinates(scenario2.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
+                                       y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+    
     drawdag(scenario2.DAG)
     return(invisible(2))}
 
@@ -564,9 +589,6 @@ impliedConditionalIndependencies(m_uv_i_c.DAG)
 
 
 
-Ynoinfluences <- create.dataset(0)
-Yinfluences <- create.dataset(-2)
-non.influences <- create.dataset(0, b_xz = 0)
 #wrongcommoncause <- create.dataset(5, b_xz = 0)
 
 #there are three possibilities to analyze the causal relations
