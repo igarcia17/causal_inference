@@ -51,7 +51,7 @@ Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 
 # Let's take a look at our data distribution, for that we will create a 
 # function that plots our variables with a regression line:
-PLOT.REG <- function(reg_line, plot.var) {
+PLOT.REG <- function(reg_line, plot.var = '') {
   Regres.line <- lm(reg_line)
   plot(reg_line, main = plot.var)
   abline(Regres.line)
@@ -362,6 +362,7 @@ par(op)
 
 SUM.2VAR(X2 ~ Y2, "Y2", "X2_Y2", X2 ~ Y2 + Z2, "Y2", "X2_Y2_Z2")
 
+
 # The positive correlation we find between X2 and Y2 switches to
 # a negative correlation when we adjust for Z2
 
@@ -495,13 +496,13 @@ drawdag(DAG.Diabetes.Ancestor)
 b_co_d <- 0.9
 b_ch_d <- 0.95
 b_sc_d <- 1.2
-sd_z <- 1
+sd_d <- 1
 
 
 cortisol <- runif(N, 1, 50)
 cholesterol <- runif(N, 10, 250)
 diabetes <- cortisol * b_co_d + cholesterol * b_ch_d + sug_consumption * 
-  b_sc_d+ rnorm(N, 0, sd = sd_z)
+  b_sc_d+ rnorm(N, 0, sd = sd_d)
 sug_consumption <- runif(N, 0, 150)
 
 SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cort_chol", cortisol 
@@ -591,15 +592,45 @@ drawdag(DAG.Diabetes.Descendant)
 
 #X = cortisol, Y = colesterol, Z = diabetes, W = heart disease
 
+# As the example is very simmilar to the previous one, we well be using the
+# same values for the data, excepting the heart disease variable.
+ 
+b_co_d_d <- 1.5
+b_ch_d_d <- 0.95
+b_d_hd <- 2.5
+sd_d_d <- 5
+sd_hd <- 2
 
-b_xz <- 3 
-b_yz <- 2
-b_zw <- 2.5
-sd_z <- 5
-sd_w <- 2
+
+cortisol_desc <- runif(N, 1, 50)
+cholesterol_desc <- runif(N, 10, 250)
+diabetes_desc <- cortisol_desc * b_co_d_d + cholesterol_desc * b_ch_d_d + 
+  rnorm(N, 0, sd = sd_d_d)
+heart_disease <- diabetes_desc * b_d_hd + rnorm(N, 0, sd = sd_hd)
 
 
-X4 <- runif(N, 1, 5)
-Y4 <- runif(N, 2, 4)
-Z4 <- b_xz * X3 + b_yz * Y3 +  rnorm(N, 0, sd = sd_z)
-W4 <- b_zw * Z4 + rnorm(N, 0, sd = sd_w)
+data.frame(cortisol_desc, cholesterol_desc, diabetes_desc, heart_disease)
+
+SUM.3VAR(cortisol_desc ~ cholesterol_desc, "cholesterol_desc", "cort_chol", 
+         cortisol_desc ~ cholesterol_desc + diabetes_desc, "cholesterol_desc",
+         "cort_chol_diab", cortisol_desc ~ cholesterol_desc + heart_disease,
+         "cholesterol_desc", "cort_chol_hdisease")
+
+# Just like in our previous simple example, in this case there should not be
+# any relation between cortisol and cholesterol (as we did intend with our data)
+# and when we see our summary we can confirm there is no relation. But when we 
+# condition on our collider or its descendant (heart disease) a correlation 
+# between the variables cortisol and cholesterol arises. 
+
+op <- par(mfrow= c(2, 1))
+
+PLOT.REG(cortisol_desc ~ cholesterol_desc)
+
+# To better visualize this non existent correlation between our two variables
+# we can check the plot for the regression of both of them and it's pretty clear
+# that there is no apparent positive or negative correlation.
+
+PLOT.REG(cortisol_desc ~ heart_disease)
+
+# To reinforce this data, we can also check and compare the plot for the 
+# variables cortisol and heart disease, where we see a positive correlation.
