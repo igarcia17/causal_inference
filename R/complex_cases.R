@@ -67,6 +67,8 @@ LBWsc2.df <- genData(samplesize, var.sc2)
 
 
 LBW.fun <- function(dataset, reps = 100){
+  #it doesn't check the p value of LBW because it is not the main issue of this type of
+  #paradox; we want to focus on how the effect of Smoking changes in presence or absence of LBW
   onlyS_coefS <- rep(NA, reps)
   both_coefS <- rep(NA, reps)
   
