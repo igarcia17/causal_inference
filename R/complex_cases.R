@@ -246,3 +246,71 @@ summary(glm(Mortality ~ Birth_defects, data = LBWsc3.df, family = 'binomial'))
 summary(glm(Mortality ~ Smoking + Birth_defects, data = LBWsc3.df, family = 'binomial'))
 summary(glm(Mortality ~ Birth_defects + Smoking + LBW, data = LBWsc3.df, family = 'binomial'))
 
+
+
+#Berkson's paradox: 
+
+
+library(tidyverse) # not sure si lo necesito, la vd.
+
+
+DAG.Berkson <- dagitty("dag {
+diabetes -> hosp_patient
+cholecystitis -> hosp_patient
+e_z -> hosp_patient
+}")
+
+coordinates(DAG.Berkson) <- list(x = c(diabetes = 1,  cholecystitis = 3, 
+                                       hosp_patient = 2, e_z = 1.25),
+                                 y = c(diabetes = 1, cholecystitis = 1, 
+                                       hosp_patient = 3, e_z = 3))
+drawdag(DAG.Berkson)
+
+
+set.seed(11)
+
+
+N=100
+
+diabetes <- rbinom(n=100, size=1, prob=0.7)
+cholecystitis <- rbinom(n=100, size=1, prob=0.3) 
+hosp_patients <- diabetes*0.6 + cholecystitis*0.4 + rnorm(N, mean = 0, sd = 0.2)
+
+dataset_d_ch <- data.frame(diabetes,cholecystitis)
+
+
+dataset_d_ch_hP <- data.frame(diabetes,cholecystitis,hosp_patients)
+
+
+est_d_ch <- summary(glm(diabetes~cholecystitis, data = dataset_d_ch, family = 'binomial')
+        )$coefficients['cholecystitis', 'Estimate']
+pval_d_ch <- summary(glm(diabetes~cholecystitis, data = dataset_d_ch, family = 'binomial')
+        )$coefficients['cholecystitis', 'Pr(>|z|)']
+
+
+est_d_ch_hP <- summary(glm(diabetes~cholecystitis+hosp_patients, data=dataset_d_ch_hP, 
+            family = 'binomial'))$coefficients['cholecystitis', 'Estimate']
+pval_d_ch_hP <-summary(glm(diabetes~cholecystitis+hosp_patients, data=dataset_d_ch_hP, 
+            family = 'binomial'))$coefficients['cholecystitis', 'Pr(>|z|)']
+
+df_diab_chol <- data.frame('values_of' = c('Estimates', 'P_values'), 'diab_chol' = 
+                             c(est_d_ch, pval_d_ch), 'diab_chol_HP' = 
+                             c(est_d_ch_hP, pval_d_ch_hP))
+
+df_diab_chol
+
+
+{if (pval_d_ch > 0.05)
+  cat('The variables diabetes and cholecystitis do not show a association with a p value of',  
+      pval_d_ch, 'and an estimate of',est_d_ch, '\n')
+else
+  cat('The variables diabetes and cholecystitis show a association with a p value of',  
+      pval_d_ch, 'and an estimate of', est_d_ch, '\n')}
+
+{if (pval_d_ch_hP > 0.05)
+  cat('The variables diabetes and cholecystitis, adjusting by hospital patients 
+      (a collider) do not show a association with a p value of',  
+      pval_d_ch_hP, 'and an estimate of',est_d_ch_hP, '\n')
+  else
+    cat('The variables diabetes and cholecystitis show a association with a p value of',  
+        pval_d_ch_hP, 'and an estimate of', est_d_ch_hP, '\n')}
