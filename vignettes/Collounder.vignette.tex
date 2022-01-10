@@ -190,6 +190,93 @@ b <- Y_check(Yinfluences)
 
 This function could be optimized in multiple ways, but it shows that the p value of the linear model can be used to classify a data set in one scenario or another. It is necessary to have an idea beforehand of which variable may be the common cause. If by mistake Y is actually the common cause, and X is the mediator (scenario 2, but X and Y switched), the function wouldn't notice it because \textbf{this couldn't be done by p-values}. This concept, of knowing the 'structure of the DAG' or how variables are related, is crucial in causal inference, and has to be based in real facts. It is similar to which came first, the hen or the egg? Which came first, the melanoma or the exposure to UV radiation?
 
+We will now present a example to illustrate the problems of a bad modeling of scenario 1. We will study the expression of gene INK4a, key for melanoma development. It will be the outcome variable, Z. It is directly affected by UV radiation, X. UV radiation can come from sunbathing, which increases the appetite for ice cream consumption (measured in ml of consumed ice cream), Y. You collect data of potentially cancerous tissue from 100 people, from which you know the hours they have spent in the sun the last year, the amount of consumed ice cream and the expression of INK4a.
+
+\begin{lstlisting}
+# Theoretical coefficeints between variables
+b_xy_i_uv_i <- 5
+b_xz_i_uv_i <- 10
+b_yz_i_uv_i <- 0
+samplesize <- 100
+
+i_uv_i.DAG <- dagitty("dag {
+UV.radiation -> Ice.cream.consumption
+UV.radiation -> INK4a}")
+coordinates(i_uv_i.DAG) <- list(x = c(Ice.cream.consumption = 1, UV.radiation = 2, INK4a = 3),y = c(Ice.cream.consumption = 3, UV.radiation = 1, INK4a = 3))
+
+drawdag(i_uv_i.DAG)
+\end{lstlisting}
+\begin{figure}[h]
+\includegraphics[width=5cm]{i_uv_i.DAG.png}
+\centering
+\end{figure}
+\begin{lstlisting}
+sc1.comm <- function(b_yz, N, b_xz, b_xy, reps = 100, ...){
+  onlyY_pv <- rep(NA, reps)
+  both_pv <- rep(NA,reps)
+  onlyX_coefX <- rep(NA,reps)
+  both_coefX <- rep(NA, reps)
+  
+  for (i in 1:reps) {
+    dataset <- create.dataset(b_yz, N = N, b_xz = b_xz, b_xy = b_xy, ...)
+    
+    both <- lm(Z~X+Y, data = dataset)
+    onlyY <- lm(Z~Y, data = dataset)
+    onlyX <- lm(Z~X, data = dataset)
+    
+    onlyY_pv[i] <- summary(onlyY)$coefficients["Y", "Pr(>|t|)"]
+    both_pv[i] <- summary(both)$coefficients["Y", "Pr(>|t|)"]
+    
+    onlyX_coefX[i] <- summary(onlyX)$coefficients["X", "Estimate"]
+    both_coefX[i] <- summary(both)$coefficients["X", "Estimate"]
+    rm(dataset)}
+  cat('\n Change in relevance of Y on Z\n')
+  cat('\nWhen Z ~ Y: \nThe p value of Y is ', mean(onlyY_pv),'\n')
+  cat('\nWhen Z ~Y + X: \nThe p value of Y is ', mean(both_pv), '\n')
+  cat('\n Change in effect of X over Z')
+  cat('\nWhen Z ~ X: \nThe estimate for X is ', mean(onlyX_coefX),'and its s.d. is',
+      sd(onlyX_coefX),'\n')
+  cat('\nWhen Z ~Y + X: \nThe estimate for X is ', mean(both_coefX), 
+      'and its s.d. is', sd(both_coefX),'\n')
+  cat('\nBeing input x -> z: ', b_xz)
+  #This illustrates how, even if the estimate of the coefficient for X is similar in both cases, the variance is higher in the presence of Y
+  op <- par(mfrow= c(2,1), mar = rep(3,4))
+  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
+  abline(v = b_xz, col = 'red')
+  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
+  abline(v = b_xz, col = 'red')
+  par(op)}
+\end{lstlisting}
+
+If we call this function with the data for this particular case, this is the output:
+
+\begin{lstlisting}
+sc1.comm(b_yz = b_yz_i_uv_i, N = samplesize, b_xz = b_xz_i_uv_i, b_xy = b_xy_i_uv_i)
+
+## Change in relevance of Y on Z
+
+## When Z ~ Y: 
+## The p value of Y is  1.888825e-202 
+
+## When Z ~Y + X: 
+## The p value of Y is  0.5211384 
+
+## Change in effect of X over Z
+## When Z ~ X: 
+## The estimate for X is  10.00005 and its s.d. is 0.003373088 
+
+## When Z ~Y + X: 
+## The estimate for X is  9.982808 and its s.d. is 0.444773 
+
+## Being input x -> z:  10
+\end{lstlistings}
+\begin{figure}[h]
+\includegraphics[width=5cm]{i_uv_i1.png}
+\centering
+\end{figure}
+
+
+
 \section{What to do when there is a common effect}
 
 \section{Complex cases and backdoor criteria}

@@ -1,8 +1,4 @@
 
-#Let's create a function that creates the different datasets that we need.
-
-
-
 #These functions will be handy later
 create.datasetv2 <- function(b_ax, b_yz=0, N = 500, b_xy = 3, b_xz = 3,
                              e_x = 1, e_y = 1, e_z = 1) {
@@ -22,84 +18,6 @@ create.datasetv3 <- function(b_by, b_bz, b_yz=(-3), N = 500, b_xy = 3, b_xz = 3,
     name_df$B * b_bz+ rnorm(N, sd = e_z)
   return(name_df)
 }
-
-
-
-#Another sensitive question that may arise before the analysis is if we have identified
-#the common cause correctly: the objective of the analysis is to 
-
-#We will now create a toy example to illustrate the problems of a bad modeling of 
-#scenario 1.
-#We will study the expression of gene INK4a, key for melanoma development. It will be
-#the outcome variable of Z.
-#It is directly affected by UV radiation. UV radiation can come from sunbathing, which
-#increases the appetite for ice cream consumption (measured in ml of consumed ice cream)
-#You collect data of potentially cancerous tissue from 100 people, from which you know the
-#hours they have spent in the sun the last year, the amount of consumed ice cream and
-#the expression of INK4a.
-
-b_xy_i_uv_i <- 5
-b_xz_i_uv_i <- 10
-b_yz_i_uv_i <- 0
-samplesize <- 100
-
-i_uv_i.DAG <- dagitty("dag {
-UV.radiation -> Ice.cream.consumption
-UV.radiation -> INK4a
-}")
-coordinates(i_uv_i.DAG) <- list(x = c(Ice.cream.consumption = 1, UV.radiation = 2, INK4a = 3),
- y = c(Ice.cream.consumption = 3, UV.radiation = 1, INK4a = 3))
-
-drawdag(i_uv_i.DAG)
-
-sc1.comm <- function(b_yz, N, b_xz, b_xy, reps = 100, ...){
-  onlyY_pv <- rep(NA, reps)
-  both_pv <- rep(NA,reps)
-  
-  onlyX_coefX <- rep(NA,reps)
-  both_coefX <- rep(NA, reps)
-  
-  for (i in 1:reps) {
-    
-    dataset <- create.dataset(b_yz, N = N, b_xz = b_xz, b_xy = b_xy, ...)
-    
-    both <- lm(Z~X+Y, data = dataset)
-    onlyY <- lm(Z~Y, data = dataset)
-    onlyX <- lm(Z~X, data = dataset)
-    
-    onlyY_pv[i] <- summary(onlyY)$coefficients["Y", "Pr(>|t|)"]
-    both_pv[i] <- summary(both)$coefficients["Y", "Pr(>|t|)"]
-    
-    onlyX_coefX[i] <- summary(onlyX)$coefficients["X", "Estimate"]
-    both_coefX[i] <- summary(both)$coefficients["X", "Estimate"]
-    
-    rm(dataset)
-  }
-  cat('\n Change in relevance of Y on Z\n')
-  cat('\nWhen Z ~ Y: \nThe p value of Y is ', mean(onlyY_pv),'\n')
-  cat('\nWhen Z ~Y + X: \nThe p value of Y is ', mean(both_pv), '\n')
-  
-  cat('\n Change in effect of X over Z')
-
-  cat('\nWhen Z ~ X: \nThe estimate for X is ', mean(onlyX_coefX),'and its s.d. is',
-      sd(onlyX_coefX),'\n')
-  cat('\nWhen Z ~Y + X: \nThe estimate for X is ', mean(both_coefX), 
-      'and its s.d. is', sd(both_coefX),'\n')
-  cat('\nBeing input x -> z: ', b_xz)
-  #This illustrates how, even if the estimate of the coefficient for X is similar in both cases, the variance is higher in the presence of Y
-  op <- par(mfrow= c(2,1), mar = rep(3,4))
-  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
-  abline(v = b_xz, col = 'red')
-  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
-  abline(v = b_xz, col = 'red')
-  par(op)
-  
-  list <- list('onlyY_pv' = onlyY_pv, 'both_pv' = both_pv, 
-               'onlyX_coefX' = onlyX_coefX, 'both_coefX' = both_coefX)
-  invisible(list)
-  }
-
-sc1.comm(b_yz = b_yz_i_uv_i, N = samplesize, b_xz = b_xz_i_uv_i, b_xy = b_xy_i_uv_i)
 
 #The ice cream consumption is not significant relevant to INK4a expression
 #when Uv radiation is present in the model. UV radiation is a confounder.

@@ -205,10 +205,7 @@ sc1.comm <- function(b_yz, N, b_xz, b_xy, reps = 100, ...){
   hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
   abline(v = b_xz, col = 'red')
   par(op)
-  
-  list <- list('onlyY_pv' = onlyY_pv, 'both_pv' = both_pv, 
-               'onlyX_coefX' = onlyX_coefX, 'both_coefX' = both_coefX)
-  invisible(list)
+
   }
 
 sc1.comm(b_yz = b_yz_i_uv_i, N = samplesize, b_xz = b_xz_i_uv_i, b_xy = b_xy_i_uv_i)
