@@ -2,6 +2,8 @@
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
 \usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{Sweave}
 %preambulo
 
 \title{Causal inference: how to analyse causal scenarios correctly, and repercusions of a wrong analysis}
@@ -10,24 +12,26 @@
       Universidad Autónoma de Madrid\\
       2021 - 2022}
 \date{January 2022}
-\usepackage{Sweave}
-\begin{document}
-<<<<<<< HEAD
 
-=======
->>>>>>> 437e7d0f709ad70a1d523e4035d7c00ac4f007ba
+\begin{document}
 % cuerpo del documento
 \maketitle
+\tableofcontents
+\newpage
+\section{Objective}
 
+Causal inference is a key element in statistics. It help us reach valuable conclusions about how do variables relate to one another, and help us make decisions in order to mantain our health, combat disease, adjust habits, etc. The problem comes when data is misinterpreted, and correlation is mistaken by causalty. It is very different to say 'ice cream causes cancer' rather than 'in the same season of the year, both ice cream sales and number of melanoma diagnosis increase'. A wrong conclusion can have serious repercusions, that may go from administrating a wrong treatment to ruining the ice cream economy. Even if our field of study is not statistics, it is interesting to understand some basic concepts to prevent us from being fooled by sensational news and develop the so called 'critical thinking'. 
+The objective of this project is to show what changes when data is modelled in the wrong way and how to interpret it correctly. The code can be accessed from the GitHub repository \href{https://github.com/igarcia17/causal_inference}{Causalinference - GitHub repository} .
 
-\section*{What to do when there is a common cause}
+\section{What to do when there is a common cause}
 Mi primer documento en \LaTeX{}.
 
+\section{What to do when there is a common effect}
 
-\section*{What to do when there is a common effect}
+\section{Complex cases and backdoor criteria}
 
+\section{Conclusion}
 
-\section*{Complex cases and backdoor criteria}
-
+\section{References}
 
 \end{document}
