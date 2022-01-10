@@ -84,7 +84,7 @@ non.influences <- create.dataset(0, b_xz = 0)
 #Y and X, the common cause.
 
 Y_check <- function (dataset, conflevel = 0.01) {
-  
+  colnames(dataset) <- c('X','Y','Z')
   model_with_Y <- lm(Z~X+Y, data = dataset)
   p.v.X <-(summary(model_with_Y)$coefficients['X','Pr(>|t|)'])
   p.v.Y <- (summary(model_with_Y)$coefficients['Y', 'Pr(>|t|)'])

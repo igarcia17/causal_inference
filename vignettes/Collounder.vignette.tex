@@ -5,6 +5,7 @@
 \usepackage{mathtools}
 \usepackage{hyperref}
 \usepackage{Sweave}
+%\usepackage{amsmath}
 \usepackage[svgnames]{xcolor}
 \usepackage{listings}
 %\usepackage{verbatim}
@@ -87,7 +88,6 @@ drawdag(scenario1.DAG)
 \centering
 \end{figure}
 
-
 In this first case, Y is not related to Z.
 The second scenario would be:
 
@@ -110,11 +110,85 @@ drawdag(scenario2.DAG)
 \centering
 \end{figure}
 
-
 In this second case, Y does have an effect over Z.
-It is important to tell the difference between both of them, as the correct model to apply will be different. How can we tell if our data corresponds to one scenario or another? We have created the following function to do so:
+It is important to tell the difference between both of them, as the correct model to apply will be different. How can we tell if our data corresponds to one scenario or another?
+First of all, we have to address one key problem: \textbf{how do we simulate data?}
+To simulate data in different scenarios, we have used two options: vectors and a function to create datsets. To use vectors is a quick method and very versatile, but if you need to change the coefficients that relate one variable to another it is necessary to create new vectors. Meanwhile, to have a function that creates data frames is useful to make different trials in which the relation between variables is maintained and the coefficients change: the main disadvantage of this method is that anytime the structure of the DAG changes, the function is no longer valid. Both methods are valuable, and each has its advantages and disadvantages. We will use data frames in this chapter and vectors in the next one to show different ways to simulate the data.
+This first function to create dataframes creates three columns: X, Y and Z. We can change the parameters that relate one varaible to another: if the estimate that multiplies Y for Z is 0, we are representing the scenario 1.
 
- 
+\begin{lstlisting}
+
+create.dataset <- function(b_yz, N = 500, b_xy = 3, b_xz = 3,
+                           e_x = 1, e_y = 1, e_z = 1) {
+  name_df <- data.frame(X = runif(N, 1, 100) + rnorm(N, sd = e_x))
+  name_df$Y <- name_df$X * b_xy + rnorm(N, sd = e_y)
+  name_df$Z <- name_df$X * b_xz + name_df$Y * b_yz + rnorm(N, sd = e_z)
+  return(name_df)}
+Ynoinfluences <- create.dataset(0)
+Yinfluences <- create.dataset(-2)
+non.influences <- create.dataset(0, b_xz = 0)
+
+\end{lstlisting}
+
+Once this is introduce, we can go over the issue that matters. How do we know if our data belongs to scenario 1 or scenario 2?
+
+\begin{lstlisting}
+Y_check <- function (dataset, conflevel = 0.01) {
+  colnames(dataset) <- c('X','Y','Z')
+  model_with_Y <- lm(Z~X+Y, data = dataset)
+  p.v.X <-(summary(model_with_Y)$coefficients['X','Pr(>|t|)'])
+  p.v.Y <- (summary(model_with_Y)$coefficients['Y', 'Pr(>|t|)'])
+  
+  if ((p.v.X <= conflevel)&(p.v.Y > conflevel))
+  {cat("The variable of analysis is not influenced by Y\n")
+    cat('See plot\n')
+    scenario1.DAG <- dagitty("dag {
+    X -> Y
+    X -> Z
+    e_y -> Y
+    e_z -> Z}")
+    coordinates(scenario1.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+    drawdag(scenario1.DAG)
+    return(invisible(1))}
+  
+  if ((p.v.X <= conflevel)&(p.v.Y <= conflevel))
+  {cat("The variable of analysis is influenced by both X and Y\n")
+    cat('See plot\n')
+    scenario2.DAG <- dagitty("dag {
+    X -> Y
+    X -> Z
+    Y -> Z
+    e_y -> Y
+    e_z -> Z}")
+    coordinates(scenario2.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+    drawdag(scenario2.DAG)
+    return(invisible(2))}
+
+  if ((p.v.X > conflevel)&(p.v.Y > conflevel))
+  {cat("It seems that neither X or Y affect Z\nYou may want to review your working model\n")
+  return(invisible(0))}
+  
+  if ((p.v.Y <= conflevel)&(p.v.X > conflevel))
+  {cat('It looks like Y is related to Z, but not Z\nYou may want to revisit the hypothesis \'X = common cause of Y and Z\'')
+  return(invisible(0))}
+  }
+\end{lstlisting}
+
+An example of its use is:
+
+\begin{lstlisting}
+a <- Y_check(non.influences)
+
+## It seems that neither X or Y affect Z
+## You may want to review your working model
+
+b <- Y_check(Yinfluences)
+
+##The variable of analysis is influenced by both X and Y
+##See plot (scenario2 DAG)
+\end{lstlisting}
+
+This function could be optimized in multiple ways, but it shows that the p value of the linear model can be used to classify a data set in one scenario or another. It is necessary to have an idea beforehand of which variable may be the common cause. If by mistake Y is actually the common cause, and X is the mediator (scenario 2, but X and Y switched), the function wouldn't notice it because \textbf{this couldn't be done by p-values}. This concept, of knowing the 'structure of the DAG' or how variables are related, is crucial in causal inference, and has to be based in real facts. It is similar to which came first, the hen or the egg? Which came first, the melanoma or the exposure to UV radiation?
 
 \section{What to do when there is a common effect}
 

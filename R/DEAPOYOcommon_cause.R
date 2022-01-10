@@ -1,12 +1,6 @@
 
 #Let's create a function that creates the different datasets that we need.
-create.dataset <- function(b_yz, N = 500, b_xy = 3, b_xz = 3,
-                           e_x = 1, e_y = 1, e_z = 1) {
-  name_df <- data.frame(X = runif(N, 1, 100) + rnorm(N, sd = e_x))
-  name_df$Y <- name_df$X * b_xy + rnorm(N, sd = e_y)
-  name_df$Z <- name_df$X * b_xz + name_df$Y * b_yz + rnorm(N, sd = e_z)
-  return(name_df)
-}
+
 
 
 #These functions will be handy later
@@ -29,69 +23,7 @@ create.datasetv3 <- function(b_by, b_bz, b_yz=(-3), N = 500, b_xy = 3, b_xz = 3,
   return(name_df)
 }
 
-Ynoinfluences <- create.dataset(0)
-Yinfluences <- create.dataset(-2)
-non.influences <- create.dataset(0, b_xz = 0)
 
-#We create a function that checks which is the scenario. We assume that X is in any
-#case a common cause of both Y and Z
-
-#The argument must be a data frame, which column names are Z (the variable of study)
-#Y and X, the common cause.
-
-Y_check <- function (dataset, conflevel = 0.01) {
-  
-  model_with_Y <- lm(Z~X+Y, data = dataset)
-  p.v.X <-(summary(model_with_Y)$coefficients['X','Pr(>|t|)'])
-  p.v.Y <- (summary(model_with_Y)$coefficients['Y', 'Pr(>|t|)'])
-  
-  if ((p.v.X <= conflevel)&(p.v.Y > conflevel))
-  {cat("The variable of analysis is not influenced by Y\n")
-    cat('See plot\n')
-    scenario1.DAG <- dagitty("dag {
-    X -> Y
-    X -> Z
-    e_y -> Y
-    e_z -> Z
-    }")
-    
-    coordinates(scenario1.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
-                                       y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
-    
-    drawdag(scenario1.DAG)
-    return(invisible(1))
-    }
-  
-  if ((p.v.X <= conflevel)&(p.v.Y <= conflevel))
-  {cat("The variable of analysis is influenced by both X and Y\n")
-    cat('See plot\n')
-    scenario2.DAG <- dagitty("dag {
-    X -> Y
-    X -> Z
-    Y -> Z
-    e_y -> Y
-    e_z -> Z
-    }")
-    
-    coordinates(scenario2.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
-                                       y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
-    
-    drawdag(scenario2.DAG)
-    return(invisible(2))}
-
-  if ((p.v.X > conflevel)&(p.v.Y > conflevel))
-  {cat("It seems that neither X or Y affect Z\nYou may want to review your working model\n")
-  return(invisible(0))}
-  
-  if ((p.v.Y <= conflevel)&(p.v.X > conflevel))
-  {cat('It looks like Y is related to Z, but not Z\nYou may want to revisit the hypothesis \'X = common cause of Y and Z\'')
-  return(invisible(0))}
-  }
-
-a <- Y_check(non.influences)
-b <- Y_check(Yinfluences)
-c <- Y_check(Ynoinfluences)
-#d <- Y_check(wrongcommoncause)
 
 #Another sensitive question that may arise before the analysis is if we have identified
 #the common cause correctly: the objective of the analysis is to 
