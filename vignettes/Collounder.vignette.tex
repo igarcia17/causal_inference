@@ -1,12 +1,13 @@
 \documentclass{article}
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
+\usepackage{array}
 \usepackage{mathtools}
 \usepackage{hyperref}
 \usepackage{Sweave}
 \usepackage[svgnames]{xcolor}
 \usepackage{listings}
-\usepackage{xcolor}
+%\usepackage{verbatim}
 \lstset{ 
   language=R,
   numberstyle=\tiny\color{pink}
@@ -24,6 +25,9 @@
   stringstyle=\color{orange}      % string literal style
 } 
 
+\usepackage{xcolor}
+\usepackage{graphicx,subfig}
+\graphicspath{ {images/} } 
 %preambulo
 
 \title{Causal inference: how to analyse causal scenarios correctly, and repercusions of a wrong analysis}
@@ -56,8 +60,8 @@ We have used the following modules to make the analysis:
 library(dagitty)
 library(car)
 library(rethinking)
-if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
-  drawdag <- plot}
+if(!suppressWarnings(require("rethinking", 
+quietly = TRUE))) {drawdag <- plot}
   
 \end{lstlisting}
 
@@ -78,6 +82,12 @@ drawdag(scenario1.DAG)
 
 \end{lstlisting}
 
+\begin{figure}[h]
+\includegraphics[width=5cm]{scenario1.DAG.png}
+\centering
+\end{figure}
+
+
 In this first case, Y is not related to Z.
 The second scenario would be:
 
@@ -94,6 +104,12 @@ coordinates(scenario2.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 
 drawdag(scenario2.DAG)
 
 \end{lstlisting}
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{scenario2.DAG.png}
+\centering
+\end{figure}
+
 
 In this second case, Y does have an effect over Z.
 It is important to tell the difference between both of them, as the correct model to apply will be different. How can we tell if our data corresponds to one scenario or another? We have created the following function to do so:
