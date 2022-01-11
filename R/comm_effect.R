@@ -22,34 +22,31 @@ set.seed(11)
 comm.effect.DAG <- dagitty("dag {
 X -> Z
 Y -> Z
-e_z -> Z
 }")
 
-coordinates(comm.effect.DAG) <- list(x = c(X = 1, Y = 3, Z = 2, 
-                                           e_z = 1.25),
-                                     y = c(X = 1, Y = 1, Z = 3, 
-                                           e_z = 3))
+coordinates(comm.effect.DAG) <- list(x = c(X = 1, Y = 3, Z = 2),
+                                     y = c(X = 1, Y = 1, Z = 3))
 drawdag(comm.effect.DAG)
 
 
 # Let us generate the data according to the DAG:
+
+set.seed(11)
 
 N <- 500 # Our sample size throughout the whole code will be 500
 b_xz <- 3 # The value of the relation between X and Z is 3
 b_yz <- 2 # The value of the relation between Y and Z is 2
 sd_z <- 1 # The standard deviation for Z will be 5
 
-# We will not be repeating this information description as we already know what
+# We will try not to repeat this information description as we already know what
 # each variable represents.
-
-set.seed(11)
 
 X <- runif(N, 1, 10)
 Y <- runif(N, 1.5, 12)
 Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 
 
-# Let's take a look at our data distribution, for that we will create a 
+# Let's take a look at our data distribution, for that we will use a 
 # function that plots our variables with a regression line:
 PLOT.REG <- function(reg_line, plot.var = '') {
   Regres.line <- lm(reg_line)
@@ -89,10 +86,10 @@ SUM.2VAR <- function(variable1, v_dep1, title_var1, variable2,
   
   for (i in ls(P.VAL.DICT)) {
     if (P.VAL.DICT[[i]] > 0.05)
-      cat('The variables', i, 'do not show a correlation with a p value of',  
+      cat('The variables', i, 'do not show an association with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
     else
-      cat('The variables', i, 'show a correlation with a p value of',  
+      cat('The variables', i, 'show an association with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
 } # SUMMARY for 2 variables
 
@@ -119,13 +116,12 @@ SUM.3VAR <- function(variable1, v_dep1, title_var1, variable2,
   
   for (i in ls(P.VAL.DICT)) {
     if (P.VAL.DICT[[i]] > 0.05)
-      cat('The variables', i, 'do not show a correlation with a p value of',  
+      cat('The variables', i, 'do not show an association with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
     else
-      cat('The variables', i, 'show a correlation with a p value of',  
+      cat('The variables', i, 'show an association with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
-}
-                      # SUMMARY for 3 variables
+} # SUMMARY for 3 variables
 
 SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2, 
                      v_dep2, title_var2, variable3, v_dep3, title_var3, 
@@ -157,18 +153,17 @@ SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2,
   
   for (i in ls(P.VAL.DICT)) {
     if (P.VAL.DICT[[i]] > 0.05)
-      cat('The variables', i, 'do not show a correlation with a p value of',  
+      cat('The variables', i, 'do not show an association with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
     else
-      cat('The variables', i, 'show a correlation with a p value of',  
+      cat('The variables', i, 'show an association with a p value of',  
           P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
-}
-                      #SUMMARY for 4 variables
+} #SUMMARY for 4 variables
 
 
 #Let's check our variables:
-SUM.4VAR(X ~ Z, "Z", "X_Z", Y ~ Z, "Z", "Y_Z", X ~ Y, "Y", "X_Y", X ~ Y + Z, 
-         "Y", "X_Y_Z")
+SUM.4VAR(X ~ Z, "Z", "X and Z", Y ~ Z, "Z", "Y and Z", X ~ Y, "Y", "X and Y", X ~ Y + Z, 
+         "Y", "X and Y (when Z)")
 
 
 # We can see a strong correlation between Z and X. There is also a positive
@@ -218,11 +213,11 @@ lung_capacity <- 100 + b_cd * cigarettes_day + b_vlc * vir_load_COV19 +
 data.frame(cigarettes_day, vir_load_COV19, lung_capacity)
 
 #Let's see the relations between our variables.
-SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cig_lung",
-         vir_load_COV19 ~ lung_capacity, "lung_capacity", "vir_lung",
-         cigarettes_day ~ vir_load_COV19, "vir_load_COV19", "cig_vir",
+SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cigarettes and lung capacity",
+         vir_load_COV19 ~ lung_capacity, "lung_capacity", "vir_load_COV19 and lung capacity",
+         cigarettes_day ~ vir_load_COV19, "vir_load_COV19", "cigarettes and vir_load_COV19",
           cigarettes_day ~ vir_load_COV19 + lung_capacity, "vir_load_COV19",
-         "cig_vir_lung")
+         "cigarettes and vir_load_COV19 (when lung capacity)")
 
 
 # No correlation between nº of cigarettes smoked a day and the viral load of 
@@ -233,10 +228,10 @@ SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cig_lung",
 # Here we have the plots showing the distribution of the variables cigarettes_day
 # and vir_load_COV19, where apparently there is no correlation.
 op <- par(mfrow= c(2, 1))
-PLOT.REG(cigarettes_day ~ vir_load_COV19, "Cigarettes - Virus_load")
+PLOT.REG(cigarettes_day ~ vir_load_COV19, "Cigarettes ~ Virus_load")
 
 # A plot for comparison, cigarettes and lung capacity, a negative correlation:
-PLOT.REG(cigarettes_day ~ lung_capacity, "Cigarettes - Lung_capacity")
+PLOT.REG(cigarettes_day ~ lung_capacity, "Cigarettes ~ Lung_capacity")
 
 par(op)
 
@@ -287,16 +282,18 @@ metabolism <- runif(N, 1, 20) # Theoretically this variable is unmeasured
 cholesterol <- runif(N, 125, 200) #mg/dL
 speed <- leg_lenght * b_ll_s + metabolism * b_m_s + rnorm(N, mean = 0, 
                                                           sd = 5) #mph
-heart <- cholesterol * b_ch_h + metabolism * b_m_h + rnorm(N2, mean = 0, 
+heart <- cholesterol * b_ch_h + metabolism * b_m_h + rnorm(N, mean = 0, 
                                                            sd = 0.1) #ng/L
 
 #Checking the data:
 data.frame(leg_lenght, metabolism, cholesterol, speed, heart)
 
+PLOT.REG(leg_lenght ~ heart, "LEG_LEN ~ HEART")
+
 #Let's, one more time, check the relations:
-SUM.4VAR(leg_lenght ~ metabolism, "metabolism", "len_metab", leg_lenght ~ cholesterol,
-         "cholesterol", "len_chol", leg_lenght ~ heart, "heart", "len_heart", 
-         leg_lenght ~ heart + speed, "heart", "len_heart_speed")
+SUM.4VAR(leg_lenght ~ metabolism, "metabolism", "leg_len and metabolism", leg_lenght ~ cholesterol,
+         "cholesterol", "leg_len and cholesterol", leg_lenght ~ heart, "heart", "leg_len and heart", 
+         leg_lenght ~ heart + speed, "heart", "leg_len and heart (when speed)")
 
 # There is no correlation between leg lenght and metabolism, leg lenght and 
 # cholesterol and leg lenght and heart disease; but when we adjust for the 
@@ -307,11 +304,11 @@ SUM.4VAR(leg_lenght ~ metabolism, "metabolism", "len_metab", leg_lenght ~ choles
 #Let's look at our data and see whether this correlation we find when adjusting
 # by our collider (speed) is actually present:
 op <- par(mfrow= c(2, 1))
-PLOT.REG(leg_lenght ~ heart, "LEG - HEART")
+PLOT.REG(leg_lenght ~ heart, "LEG ~ HEART")
 
 # The following plot shows the correlation that actually exists between
 # the variables cholesterol and heart, as opposed to the previous ones.
-PLOT.REG(cholesterol ~ heart, "CHOLESTEROL - HEART")
+PLOT.REG(cholesterol ~ heart, "CHOLESTEROL ~ HEART")
 
 par(op)
 
@@ -329,13 +326,10 @@ DAG_Situation2 <- dagitty("dag {
 X -> Z
 Y -> Z
 X -> Y
-e_z -> Z
 }")
 
-coordinates(DAG_Situation2) <- list(x = c(X = 1, Y = 3, Z = 2, 
-                                             e_z = 1.75),
-                                       y = c(X = 1, Y = 1, Z = 3, 
-                                             e_z = 3))
+coordinates(DAG_Situation2) <- list(x = c(X = 1, Y = 3, Z = 2),
+                                       y = c(X = 1, Y = 1, Z = 3))
 drawdag(DAG_Situation2)
 
 b_xy2 <- 1.7 
@@ -350,9 +344,9 @@ Z2 <- X2 * b_xz2 + Y2 * b_yz2 + rnorm(N, mean = 0, sd = 1)
 # Again, let's take a look at our data distribution:
 op <- par(mfrow= c(3, 1))
 
-PLOT.REG(Z2 ~ X2, "Var distribution Z2 - X2")
-PLOT.REG(Z2 ~ Y2, "Var distribution Z2 - Y2")
-PLOT.REG(X2 ~ Y2, "Var distribution X2 - Y2")
+PLOT.REG(Z2 ~ X2, "Var distribution Z2 ~ X2")
+PLOT.REG(Z2 ~ Y2, "Var distribution Z2 ~ Y2")
+PLOT.REG(X2 ~ Y2, "Var distribution X2 ~ Y2")
 
 par(op)
 
@@ -360,7 +354,15 @@ par(op)
 # Z2 and Y2; and X2 and Y2. In this case we are interested in the relationship  
 # between X2 and Y2; we can check it: 
 
-SUM.2VAR(X2 ~ Y2, "Y2", "X2_Y2", X2 ~ Y2 + Z2, "Y2", "X2_Y2_Z2")
+SUM.2VAR(X2 ~ Y2, "Y2", "X2 and Y2", X2 ~ Y2 + Z2, "Y2", "X2 and Y2 (when Z2)"){
+if (P.VAL.DICT[[i]] > 0)
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0)
+      cat('The variables', i, 'have a positive correlation',
+          'with an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'have a negative correlation',
+          'with an estimate of', E.DICT[[i]], '\n')}}
 
 
 # The positive correlation we find between X2 and Y2 switches to
@@ -383,13 +385,12 @@ DAG.p53 <- dagitty("dag {
 UV_radiation -> mutated_p53
 INK4a -> mutated_p53
 UV_radiation -> INK4a
-e_z -> mutated_p53
 }")
 
 coordinates(DAG.p53) <- list(x = c(UV_radiation = 1, INK4a = 3, 
-                                   mutated_p53 = 2,  e_z = 1.5),
+                                   mutated_p53 = 2),
                             y = c(UV_radiation = 1, INK4a = 1, 
-                                  mutated_p53 = 3, e_z = 3))
+                                  mutated_p53 = 3))
 drawdag(DAG.p53)
 
 
@@ -409,9 +410,11 @@ mutatedp53 <- UV_radiation * b_UV_mp53 + INK4a * b_INK4a_mp53 +
 # Again lets gather our data in a dataframe to check it:
 data.frame(UV_radiation, INK4a, mutatedp53)
 
+PLOT.REG(UV_radiation ~ INK4a, 'UV ~ INK4a')
 
-SUM.2VAR(UV.radiation ~ INK4a, "INK4a", "UV_INK4a", UV.radiation ~ INK4a
-         + mutatedp53, "INK4a", "UV_INK4a_Mp53")
+
+SUM.2VAR(UV_radiation ~ INK4a, "INK4a", "UV and INK4a", UV_radiation ~ INK4a
+         + mutatedp53, "INK4a", "UV and INK4a (when Mp53)")
 
 # As shown in the Summary function, the correlation between the variables UV 
 # radiation is maintained after adjusting for the collider but the relation
@@ -432,13 +435,10 @@ DAG_Ancestor <- dagitty("dag {
 X -> Z
 Y -> Z
 W -> Z
-e_z -> Z
 }")
 
-coordinates(DAG_Ancestor) <- list(x = c(X = 1, Y = 3, Z = 2, 
-                                             e_z = 1.75, W = 2),
-                                       y = c(X = 1, Y = 1, Z = 2, 
-                                             e_z = 2, W = 3))
+coordinates(DAG_Ancestor) <- list(x = c(X = 1, Y = 3, Z = 2, W = 2),
+                                       y = c(X = 1, Y = 1, Z = 2, W = 3))
 drawdag(DAG_Ancestor)
 
 
@@ -453,15 +453,15 @@ Y3 <- runif(N, 2, 4)
 W3 <- runif(N, 1.5, 3)
 Z3 <- b_xz * X3 + b_yz * Y3 + W3 * b_wz + rnorm(N, 0, sd = sd_z)
 
-SUM.4VAR(X3 ~ W3, "W3", "X3_W3", X3 ~ W3 + Z3, "W3", "X3_W3_Z3", X3 ~ Y3 + Z3, 
-         "Y3", "X3_Y3_Z3", X3 ~ Y3, "Y3", "X3_Y3")
+SUM.4VAR(X3 ~ W3, "W3", "X3 and W3", X3 ~ W3 + Z3, "W3", "X3 and W3 (when Z3)", X3 ~ Y3 + Z3, 
+         "Y3", "X3 and Y3 (when Z3)", X3 ~ Y3, "Y3", "X3 and Y3")
 
 # There is no significant correlation between X3 and W3, but when conditioned
 # for Z3 a negative correlation arises. Same thing hapopens between the 
 # variables X3 and Y3.
 # Therefore, conditioning on Z3 modifies the independence between X3, Y3 and W3
 
-SUM.2VAR(X3 ~ Y3, "Y3", "X3_Y3", X3 ~ Y3 + W3, "Y3", "X3_Y3_W3")
+SUM.2VAR(X3 ~ Y3, "Y3", "X3 and Y3", X3 ~ Y3 + W3, "Y3", "X3 and Y3 (when W3)")
 
 # No significant correlation found between X3 and Y3, nor can we find a 
 # correlation when adjusting for the ancestor (W3). 
@@ -480,14 +480,13 @@ DAG.Diabetes.Ancestor <- dagitty("dag {
 cortisol -> diabetes
 cholesterol -> diabetes
 sugar_consumpt -> diabetes
-e_z -> diabetes
 }")
 
 coordinates(DAG.Diabetes.Ancestor) <- list(x = c(cortisol = 1, cholesterol = 3,
-                                           diabetes = 2, e_z = 1.5, 
+                                           diabetes = 2, 
                                             sugar_consumpt = 2),
                                        y = c(cortisol = 1, cholesterol = 1, 
-                                             diabetes = 2, e_z = 2, 
+                                             diabetes = 2, 
                                              sugar_consumpt = 3))
 drawdag(DAG.Diabetes.Ancestor)
 
@@ -505,14 +504,16 @@ diabetes <- cortisol * b_co_d + cholesterol * b_ch_d + sug_consumption *
   b_sc_d+ rnorm(N, 0, sd = sd_d)
 sug_consumption <- runif(N, 0, 150)
 
-SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cort_chol", cortisol 
-         ~ cholesterol + sug_consumption, "cholesterol", "cort_chol_sug")
+PLOT.REG(cortisol ~ cholesterol, 'cortisol ~ cholesterol')
+
+SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cortisol 
+         ~ cholesterol + sug_consumption, "cholesterol", "colesterol and cortisol (when sugar)")
 
 # Again we find no correlation between cortisol and cholesterol, even if we
 # adjust for the ancestor (sugar_consumption).
 
-SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cort_chol", cortisol 
-         ~ cholesterol + diabetes, "cholesterol", "cort_chol_diab")
+SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cortisol 
+         ~ cholesterol + diabetes, "cholesterol", "colesterol and cortisol (when diabetes)")
 
 # But we do find a correlation between those two variables when adjusting
 # for diabetes (the collider)
@@ -556,8 +557,8 @@ Z4 <- b_xz * X4 + b_yz * Y4 +  rnorm(N, 0, sd = sd_z)
 W4 <- b_zw * Z4 + rnorm(N, 0, sd = sd_w)
 
 
-SUM.3VAR(X4 ~ Y4, "Y4", "X4_Y4", X4 ~ Y4 + W4, "Y4", "X4_Y4_W4", X4 ~ Y4 + Z4,
-         "Y4", "X4_Y4_Z4")
+SUM.3VAR(X4 ~ Y4, "Y4", "X4 and Y4", X4 ~ Y4 + W4, "Y4", "X4 and Y4 (when W4)", X4 ~ Y4 + Z4,
+         "Y4", "X4 and Y4 (when Z4)")
 
 # We find no correlation between X4 and Y4, but when we condition on the 
 # collider (Z) or its descendant (W4) we find a significantly negative 
@@ -579,14 +580,13 @@ DAG.Diabetes.Descendant <- dagitty("dag {
 cortisol -> diabetes
 cholesterol -> diabetes
 diabetes -> heart_disease
-e_z -> diabetes
 }")
 
 coordinates(DAG.Diabetes.Descendant) <- list(x = c(cortisol = 1, 
-                                        cholesterol = 3, diabetes = 2, 
-                                        e_z = 1.5, heart_disease = 2),
+                                        cholesterol = 3, diabetes = 2,
+                                        heart_disease = 2),
                                        y = c(cortisol = 1, cholesterol = 1, 
-                                             diabetes = 2, e_z = 2, 
+                                             diabetes = 2,  
                                              heart_disease = 3))
 drawdag(DAG.Diabetes.Descendant)
 
@@ -611,10 +611,10 @@ heart_disease <- diabetes_desc * b_d_hd + rnorm(N, 0, sd = sd_hd)
 
 data.frame(cortisol_desc, cholesterol_desc, diabetes_desc, heart_disease)
 
-SUM.3VAR(cortisol_desc ~ cholesterol_desc, "cholesterol_desc", "cort_chol", 
+SUM.3VAR(cortisol_desc ~ cholesterol_desc, "cholesterol_desc", "cortisol and cholesterol", 
          cortisol_desc ~ cholesterol_desc + diabetes_desc, "cholesterol_desc",
-         "cort_chol_diab", cortisol_desc ~ cholesterol_desc + heart_disease,
-         "cholesterol_desc", "cort_chol_hdisease")
+         "cortisol and cholesterol (when diabetes)", cortisol_desc ~ cholesterol_desc + heart_disease,
+         "cholesterol_desc", "cortisol and cholesterol (when heart disease)")
 
 # Just like in our previous simple example, in this case there should not be
 # any relation between cortisol and cholesterol (as we did intend with our data)
@@ -624,13 +624,13 @@ SUM.3VAR(cortisol_desc ~ cholesterol_desc, "cholesterol_desc", "cort_chol",
 
 op <- par(mfrow= c(2, 1))
 
-PLOT.REG(cortisol_desc ~ cholesterol_desc)
+PLOT.REG(cortisol_desc ~ cholesterol_desc, 'cortisol ~ cholesterol')
 
 # To better visualize this non existent correlation between our two variables
 # we can check the plot for the regression of both of them and it's pretty clear
 # that there is no apparent positive or negative correlation.
 
-PLOT.REG(cortisol_desc ~ heart_disease)
+PLOT.REG(cortisol_desc ~ heart_disease, 'cortisol ~ heart_disease')
 
 # To reinforce this data, we can also check and compare the plot for the 
 # variables cortisol and heart disease, where we see a positive correlation.
