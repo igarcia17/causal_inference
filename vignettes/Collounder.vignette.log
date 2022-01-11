@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.8)  11 JAN 2022 11:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.8)  11 JAN 2022 15:38
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1170,23 +1170,30 @@ File: images//histextraoverY.png Graphic file (type png)
 <use images//histextraoverY.png>
 Package pdftex.def Info: images//histextraoverY.png  used on input line 695.
 (pdftex.def)             Requested size: 227.62204pt x 142.65819pt.
-[25 <./images//histextraoverY.png>] [26] [27] (./Collounder.vignette.aux)
+[25 <./images//histextraoverY.png>] [26]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 716.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 716.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 716.
+[27] (./Collounder.vignette.aux)
 Package rerunfilecheck Info: File `Collounder.vignette.out' has not changed.
 (rerunfilecheck)             Checksum: D2B557C25FC9667875FC6B27D197C399;1033.
  ) 
 Here is how much of TeX's memory you used:
- 15262 strings out of 480313
- 242771 string characters out of 5895781
- 1122941 words of memory out of 5000000
- 32375 multiletter control sequences out of 15000+600000
- 434200 words of font info for 67 fonts, out of 8000000 for 9000
+ 15286 strings out of 480313
+ 243020 string characters out of 5895781
+ 1122949 words of memory out of 5000000
+ 32389 multiletter control sequences out of 15000+600000
+ 447978 words of font info for 78 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  70i,6n,79p,909b,1857s stack positions out of 5000i,500n,10000p,200000b,80000s
- <c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on Collounder.vignette.pdf (27 pages, 230902 bytes).
+{c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc} <c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb>
+Output written on Collounder.vignette.pdf (27 pages, 262217 bytes).
 PDF statistics:
- 826 PDF objects out of 1000 (max. 8388607)
- 743 compressed objects within 8 object streams
+ 846 PDF objects out of 1000 (max. 8388607)
+ 759 compressed objects within 8 object streams
  525 named destinations out of 1000 (max. 500000)
  129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
