@@ -279,8 +279,6 @@ On the other hand, we see that the calculated coefficient for X, thus, UV radiat
 In this type of situation, it is not advised to condition on Y, ice cream, because it won't give more information about melanoma and INK4a and will affect negatively to our estimate of UV radiation, that is a more interesting variable to study. It is important to condition on UV radiation, which is called a \textbf{confounder}.
 One interesting variation of scenario 1, among all variations that can be done, is if there is a variable, A, that is the cause of the confounder. Should we condition on it? Let's see it with the example:
 \begin{lstlisting}
-#A variation would be to consider that uv raditaion depends on sun exposure, 
-#having the following DAG:
 b_ax_i_uv_i2 <- 2
 b_xy_i_uv_i2 <- 5
 b_xz_i_uv_i2 <- 10
@@ -354,7 +352,6 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
     three_pvX[i] <- summary(three)$coefficients["X", "Pr(>|t|)"]
     rm(dataset)}
   
-  ###Changes in A
   cat('\n____Change in p value of A on Z\n')
   cat('\nWhen Z ~ A: \nThe p value of A is ', mean(onlyA_pvA),'\n')
   cat('\nWhen Z ~ X + A: \nThe p value of A is ', mean(bothXA_pvA), '\n')
@@ -378,12 +375,8 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   abline(v = b_xz*b_ax, col = 'red')
   par(op)
   
-  ###Changes in X
-  #p value         ######it is very obvious that it will always have a significant value
-  #cat('\n____Change in p value of X on Z\n')
-  #cat('\nWhen Z ~ A: \nThe p value of A is ', mean(onlyX_pvX),'\n')
-  #cat('\nWhen Z ~ X +A: \nThe p value of A is ', mean(bothXA_pvX), '\n')
-  #cat('\nWhen Z ~ Y + X + A: \nThe p value of A is ', mean(three_pvX), '\n')
+  #p value of X    ######it is very obvious that it will always have a significant value
+  #cat('\n____Change in p value of X on Z\n\nWhen Z ~ A: \nThe p value of X is ', mean(onlyX_pvX),'\n\nWhen Z ~ X +A: \nThe p value of X is ', mean(bothXA_pvX), '\n\nWhen Z ~ Y + X + A: \nThe p value of X is ', mean(three_pvX), '\n')
   
   cat('\n____Effect of X over Z\n\n')
   cat('Input X -> Z: ', b_xz,'\n')
@@ -444,7 +437,7 @@ sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2, b_
 \includegraphics[width=9cm]{histX.sun.png}
 \centering
 \end{figure} 
-
+\newpage
 Let's first talk about A. It only has a significant p value when it is alone in the model, so the coefficients when Z ~ X + A or Z ~ X + A + Y are not relevant. The effect of A on Z can only be appreciated when Z ~ A. This is supported by:
 
 \begin{lstlisting}
@@ -454,7 +447,7 @@ impliedConditionalIndependencies(i_uv_i_sun.DAG)
 #Ic.. _||_ Sun | UV.r
 \end{lstlisting}
 
-The p value of X increases with the complexity of the model, but in any case is less significant. The estimate of X is around the expected even if complexity is increased, but its standard error gets higher. In other words, if the cause of study is UV radiation, conditioning on sun is detrimental as the standard error of the coefficient increases.
+The p value of X increases with the complexity of the model, but in any case is less significant. The estimate of X is around the expected even if complexity is increased, but its standard error gets higher. In other words, if the cause of study is UV radiation, conditioning on sun is detrimental as the variance of the coefficient increases.
 As seen in the cause of the cause previous work from Ramon Diaz Uriarte, when the standard error of X increases, the variance of its coefficient when Z ~ X + A is reduced.
 
 \begin{lstlisting}
@@ -462,6 +455,11 @@ sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2, b_
 
 ## When Z ~ X + A: Coefficient of X is  9.999956 and its s.d. is 0.004412072
 \end{lstlisting}
+\begin{figure}[h]
+\includegraphics[width=9cm]{sdXdecreased.png}
+\centering
+\end{figure} 
+\newpage
 
 This function also illustrates a key property of causal inference: \textbf{same rules for simple models can be applied to more complex models}.
 
@@ -519,8 +517,7 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   cat('\n\n___Changes in Y\n')
   cat('When Z ~ Y:\nY coefficient:', mean(onlyY_coefY), 's.d:', sd(onlyY_coefY))
   cat('\nWhen Z ~ Y + X:\nY coefficient:', mean(both_coefY), 's.d:', sd(both_coefY))
-  ##legend: blue, direct effect X, red total effect X, green effect Y
-  
+  ##legend: red, direct effect X, blue total effect X, green effect Y
   op <- par(mfrow= c(2,2))
   hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
   abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect, it takes into account both sources of effect
@@ -613,10 +610,10 @@ scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', 
 \end{lstlisting}
 
 \begin{figure}[h]
-\includegraphics[width=6cm]{hist40neg.png}
+\includegraphics[width=9cm]{hist40neg.png}
 \centering
 \end{figure}
-
+\newpage
 Then the effect of X, UV radiation, over Z, INK4a, is increased, as it should be obvious. 
 The study goes on and we discovers that both the expression of MATP and INK4a is also influenced by another key factor, the cortisol level. This leaves us with the following DAG:
 
@@ -706,6 +703,7 @@ impliedConditionalIndependencies(m_uv_i_c.DAG)
 The variance of the coefficient when it is found along X is smaller than when B, cortisol, is checked on its own or when it also considers the collider Y, MATP.
 Therefore in this type of graph it would be prefered to consider both B and X on the model: the variance of the estimates is smaller and the total effect is calculated. As in the previous case, condiotioning on Y may be counterproductive. 
 The absence of unmeasured confounding for the influence of both the exposure and the intermediate variable on the outcome is required for estimating direct effects. If both of these requirements are not satisfied, no approach can offer unbiased estimates of exposure's direct effects.
+This last causal structure introduce us to the next issue: colliders and common effect cases.
 \newpage
 \section{What to do when there is a common effect}
 

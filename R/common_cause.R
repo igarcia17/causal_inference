@@ -316,9 +316,9 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   ###Changes in X
   #p value         ######it is very obvious
   #cat('\n____Change in p value of X on Z\n')
-  #cat('\nWhen Z ~ A: \nThe p value of A is ', mean(onlyX_pvX),'\n')
-  #cat('\nWhen Z ~ X +A: \nThe p value of A is ', mean(bothXA_pvX), '\n')
-  #cat('\nWhen Z ~ Y + X + A: \nThe p value of A is ', mean(three_pvX), '\n')
+  #cat('\nWhen Z ~ A: \nThe p value of X is ', mean(onlyX_pvX),'\n')
+  #cat('\nWhen Z ~ X +A: \nThe p value of X is ', mean(bothXA_pvX), '\n')
+  #cat('\nWhen Z ~ Y + X + A: \nThe p value of X is ', mean(three_pvX), '\n')
   
   #estimate de X en los modelos y error estandar
   cat('\n____Effect of X over Z\n\n')
@@ -428,7 +428,7 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   cat('\n\n___Changes in Y\n')
   cat('When Z ~ Y:\nY coefficient:', mean(onlyY_coefY), 's.d:', sd(onlyY_coefY))
   cat('\nWhen Z ~ Y + X:\nY coefficient:', mean(both_coefY), 's.d:', sd(both_coefY))
-  ##legend: blue, direct effect X, red total effect X, green effect Y
+  ##legend: red, direct effect X, blue total effect X, green effect Y
   
   op <- par(mfrow= c(2,2), mar = rep(4,4))
   hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
@@ -472,13 +472,15 @@ sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
 #In this case, if MATP is not considered, it seems that the total effect is negative.
 when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
                             N = samplesize)
-scatterplot(Z ~ X, data = when_xz_4, main ='Original case', regLine=TRUE)
+scatterplot(Z ~ X, data = when_xz_4, main ='Original case', regLine=TRUE, xlab = 'X', 
+            ylab = 'Y', boxplots = FALSE)
 #If we input a higher X->Z value
 sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
 when_xz_40 <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
                              N = samplesize)
-scatterplot(Z~X, data = when_xz_40, main = 'If UV radiation effect is stronger', regLine=TRUE)
+scatterplot(Z~X, data = when_xz_40, main = 'If UV radiation effect is stronger', regLine=TRUE,
+            xlab = 'X', ylab = 'Y', boxplots = FALSE)
 #This is because the X contribution has a higher impact over Z than Y in this second case.
 
 #The estimate for X in the simpler model isn't negative, it's total effect is lower
@@ -488,7 +490,8 @@ sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
          N = samplesize)
 when_xz_40andnegative <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
                              N = samplesize)
-scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', regLine=TRUE)
+scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', regLine=TRUE,
+            xlab = 'X', ylab = 'Y', boxplots = FALSE)
 
 #Then the effect of X, UV radiation, over Z, INK4a, is increased, as it should be obvious.
 

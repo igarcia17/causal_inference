@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.8)  11 JAN 2022 01:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.8)  11 JAN 2022 11:12
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -698,40 +698,46 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [8]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 282.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 283.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 284.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 285.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 286.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 287.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 288.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 289.
-[9 <./images//i_uv_i1.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 290.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 291.
+[9 <./images//i_uv_i1.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 292.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 294.
-<images//i_uv_i_s.DAG.png, id=261, 386.19281pt x 312.41719pt>
+<images//i_uv_i_s.DAG.png, id=262, 386.19281pt x 312.41719pt>
 File: images//i_uv_i_s.DAG.png Graphic file (type png)
 <use images//i_uv_i_s.DAG.png>
-Package pdftex.def Info: images//i_uv_i_s.DAG.png  used on input line 299.
+Package pdftex.def Info: images//i_uv_i_s.DAG.png  used on input line 297.
 (pdftex.def)             Requested size: 142.26378pt x 115.08723pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 304.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 306.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 307.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 308.
@@ -740,10 +746,10 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 309.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 310.
+(textcomp)             Default family used instead on input line 312.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 311.
+(textcomp)             Default family used instead on input line 313.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 314.
@@ -752,41 +758,41 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 315.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 316.
+(textcomp)             Default family used instead on input line 317.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 317.
+(textcomp)             Default family used instead on input line 318.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 319.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 320.
+(textcomp)             Default family used instead on input line 321.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 321.
-[10 <./images//i_uv_i_s.DAG.png>]
+(textcomp)             Default family used instead on input line 322.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 323.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 324.
+[10 <./images//i_uv_i_s.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 325.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 326.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 327.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 328.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 329.
+(textcomp)             Default family used instead on input line 331.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 333.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 334.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 335.
@@ -795,94 +801,105 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 336.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 337.
+(textcomp)             Default family used instead on input line 338.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 338.
+(textcomp)             Default family used instead on input line 339.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 340.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 341.
+(textcomp)             Default family used instead on input line 342.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 342.
+(textcomp)             Default family used instead on input line 343.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 344.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 345.
+(textcomp)             Default family used instead on input line 346.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 346.
+(textcomp)             Default family used instead on input line 347.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 348.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 349.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 350.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 351.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 352.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 353.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 354.
 [11]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 364.
+(textcomp)             Default family used instead on input line 361.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 364.
+(textcomp)             Default family used instead on input line 361.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 364.
+(textcomp)             Default family used instead on input line 361.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 368.
+(textcomp)             Default family used instead on input line 365.
 [12]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 389.
+(textcomp)             Default family used instead on input line 382.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 394.
+(textcomp)             Default family used instead on input line 387.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 409.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 414.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 415.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 416.
 [13]
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 421.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 422.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 423.
 <images//histA.sun.png, id=399, 390.70969pt x 416.30531pt>
 File: images//histA.sun.png Graphic file (type png)
 <use images//histA.sun.png>
-Package pdftex.def Info: images//histA.sun.png  used on input line 431.
+Package pdftex.def Info: images//histA.sun.png  used on input line 424.
 (pdftex.def)             Requested size: 256.0748pt x 272.863pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 437.
-[14 <./images//histA.sun.png>]
-<images//histX.sun.png, id=422, 390.70969pt x 416.30531pt>
+(textcomp)             Default family used instead on input line 430.
+<images//histX.sun.png, id=400, 390.70969pt x 416.30531pt>
 File: images//histX.sun.png Graphic file (type png)
 <use images//histX.sun.png>
-Package pdftex.def Info: images//histX.sun.png  used on input line 444.
+Package pdftex.def Info: images//histX.sun.png  used on input line 437.
 (pdftex.def)             Requested size: 256.0748pt x 272.863pt.
-[15 <./images//histX.sun.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[14 <./images//histA.sun.png>]
+<images//sdXdecreased.png, id=416, 433.62pt x 392.96812pt>
+File: images//sdXdecreased.png Graphic file (type png)
+<use images//sdXdecreased.png>
+Package pdftex.def Info: images//sdXdecreased.png  used on input line 459.
+(pdftex.def)             Requested size: 256.0748pt x 232.07703pt.
+[15 <./images//histX.sun.png>] [16 <./images//sdXdecreased.png>]
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 469.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 470.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 471.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 471.
@@ -891,13 +908,10 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 472.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 473.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 473.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 474.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 475.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 476.
@@ -906,18 +920,18 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 477.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 478.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 479.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 481.
-<images//m.uv.i.DAG.png, id=437, 390.70969pt x 293.59688pt>
+<images//m.uv.i.DAG.png, id=438, 390.70969pt x 293.59688pt>
 File: images//m.uv.i.DAG.png Graphic file (type png)
 <use images//m.uv.i.DAG.png>
-Package pdftex.def Info: images//m.uv.i.DAG.png  used on input line 485.
+Package pdftex.def Info: images//m.uv.i.DAG.png  used on input line 483.
 (pdftex.def)             Requested size: 142.26378pt x 106.90436pt.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 489.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 490.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 491.
@@ -933,13 +947,13 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 495.
+[17 <./images//m.uv.i.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 496.
+(textcomp)             Default family used instead on input line 498.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 497.
-[16 <./images//m.uv.i.DAG.png>]
+(textcomp)             Default family used instead on input line 499.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 500.
@@ -948,10 +962,10 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 501.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 502.
+(textcomp)             Default family used instead on input line 503.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 503.
+(textcomp)             Default family used instead on input line 504.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 505.
@@ -966,87 +980,91 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 508.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 509.
+(textcomp)             Default family used instead on input line 521.
+[18]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 510.
+(textcomp)             Default family used instead on input line 540.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 524.
-[17]
+(textcomp)             Default family used instead on input line 541.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 543.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 544.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 546.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 549.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 550.
-<images//histsc2.png, id=502, 390.70969pt x 416.30531pt>
+(textcomp)             Default family used instead on input line 547.
+<images//histsc2.png, id=504, 390.70969pt x 416.30531pt>
 File: images//histsc2.png Graphic file (type png)
 <use images//histsc2.png>
-Package pdftex.def Info: images//histsc2.png  used on input line 553.
+Package pdftex.def Info: images//histsc2.png  used on input line 550.
 (pdftex.def)             Requested size: 170.71652pt x 181.89809pt.
-[18 <./images//histsc2.png>]
+[19 <./images//histsc2.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 564.
-<images//scatterplotOriginal.png, id=532, 359.84438pt x 239.39438pt>
+(textcomp)             Default family used instead on input line 561.
+<images//scatterplotOriginal.png, id=532, 433.62pt x 392.96812pt>
 File: images//scatterplotOriginal.png Graphic file (type png)
 <use images//scatterplotOriginal.png>
-Package pdftex.def Info: images//scatterplotOriginal.png  used on input line 568.
-(pdftex.def)             Requested size: 199.16928pt x 132.50381pt.
+Package pdftex.def Info: images//scatterplotOriginal.png  used on input line 565.
+(pdftex.def)             Requested size: 199.16928pt x 180.4977pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 573.
+(textcomp)             Default family used instead on input line 570.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 577.
+(textcomp)             Default family used instead on input line 574.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 578.
-[19 <./images//scatterplotOriginal.png>]
+(textcomp)             Default family used instead on input line 575.
+[20 <./images//scatterplotOriginal.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 584.
-<images//hist40.png, id=552, 359.84438pt x 350.81062pt>
+(textcomp)             Default family used instead on input line 581.
+<images//hist40.png, id=551, 359.84438pt x 350.81062pt>
 File: images//hist40.png Graphic file (type png)
 <use images//hist40.png>
-Package pdftex.def Info: images//hist40.png  used on input line 588.
+Package pdftex.def Info: images//hist40.png  used on input line 585.
 (pdftex.def)             Requested size: 170.71652pt x 166.43335pt.
-<images//scatterplot40.png, id=553, 359.84438pt x 261.22594pt>
+<images//scatterplot40.png, id=552, 433.62pt x 392.96812pt>
 File: images//scatterplot40.png Graphic file (type png)
 <use images//scatterplot40.png>
-Package pdftex.def Info: images//scatterplot40.png  used on input line 593.
-(pdftex.def)             Requested size: 170.71652pt x 123.93213pt.
+Package pdftex.def Info: images//scatterplot40.png  used on input line 590.
+(pdftex.def)             Requested size: 170.71652pt x 154.71402pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 600.
+(textcomp)             Default family used instead on input line 597.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 598.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 598.
+[21 <./images//hist40.png> <./images//scatterplot40.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 601.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 601.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 604.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 605.
-[20 <./images//hist40.png> <./images//scatterplot40.png>]
-<images//hist40neg.png, id=574, 359.84438pt x 350.81062pt>
+(textcomp)             Default family used instead on input line 602.
+<images//hist40neg.png, id=570, 359.84438pt x 350.81062pt>
 File: images//hist40neg.png Graphic file (type png)
 <use images//hist40neg.png>
-Package pdftex.def Info: images//hist40neg.png  used on input line 616.
-(pdftex.def)             Requested size: 170.71652pt x 166.43335pt.
+Package pdftex.def Info: images//hist40neg.png  used on input line 613.
+(pdftex.def)             Requested size: 256.0748pt x 249.66609pt.
+[22 <./images//hist40neg.png>]
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 621.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 622.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 623.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 624.
@@ -1058,7 +1076,7 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 626.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 627.
+(textcomp)             Default family used instead on input line 626.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 628.
@@ -1067,7 +1085,7 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 629.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 629.
+(textcomp)             Default family used instead on input line 630.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 631.
@@ -1079,58 +1097,55 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 633.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 634.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 635.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 636.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 638.
-[21 <./images//hist40neg.png>]
-<images//mUVicor.png, id=605, 359.84438pt x 303.38344pt>
+<images//mUVicor.png, id=588, 359.84438pt x 303.38344pt>
 File: images//mUVicor.png Graphic file (type png)
 <use images//mUVicor.png>
-Package pdftex.def Info: images//mUVicor.png  used on input line 642.
+Package pdftex.def Info: images//mUVicor.png  used on input line 639.
 (pdftex.def)             Requested size: 142.26378pt x 119.94392pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 649.
+(textcomp)             Default family used instead on input line 646.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 646.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 647.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 648.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 649.
+[23 <./images//mUVicor.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 650.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 651.
+(textcomp)             Default family used instead on input line 654.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 652.
+(textcomp)             Default family used instead on input line 654.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 653.
+(textcomp)             Default family used instead on input line 655.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 657.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 657.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 658.
+(textcomp)             Default family used instead on input line 656.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 659.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 662.
+(textcomp)             Default family used instead on input line 660.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 663.
+(textcomp)             Default family used instead on input line 661.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 662.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 664.
@@ -1139,48 +1154,39 @@ Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             Default family used instead on input line 665.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 667.
+(textcomp)             Default family used instead on input line 666.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 668.
-[22 <./images//mUVicor.png>]
+(textcomp)             Default family used instead on input line 674.
+[24]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 669.
+(textcomp)             Default family used instead on input line 690.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 677.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 693.
-Package textcomp Info: Symbol \textminus not provided by
-(textcomp)             font family aer in TS1 encoding.
-(textcomp)             Default family used instead on input line 694.
-<images//histextraoverY.png, id=633, 433.62pt x 271.76532pt>
+(textcomp)             Default family used instead on input line 691.
+<images//histextraoverY.png, id=652, 433.62pt x 271.76532pt>
 File: images//histextraoverY.png Graphic file (type png)
 <use images//histextraoverY.png>
-Package pdftex.def Info: images//histextraoverY.png  used on input line 698.
-(pdftex.def)             Requested size: 170.71652pt x 106.99571pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[23] [24 <./images//histextraoverY.png>] (./Collounder.vignette.aux)
+Package pdftex.def Info: images//histextraoverY.png  used on input line 695.
+(pdftex.def)             Requested size: 227.62204pt x 142.65819pt.
+[25 <./images//histextraoverY.png>] [26] [27] (./Collounder.vignette.aux)
 Package rerunfilecheck Info: File `Collounder.vignette.out' has not changed.
 (rerunfilecheck)             Checksum: D2B557C25FC9667875FC6B27D197C399;1033.
  ) 
 Here is how much of TeX's memory you used:
- 15258 strings out of 480313
- 242645 string characters out of 5895781
- 1093941 words of memory out of 5000000
- 32368 multiletter control sequences out of 15000+600000
+ 15262 strings out of 480313
+ 242771 string characters out of 5895781
+ 1122941 words of memory out of 5000000
+ 32375 multiletter control sequences out of 15000+600000
  434200 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  70i,6n,79p,909b,1857s stack positions out of 5000i,500n,10000p,200000b,80000s
  <c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on Collounder.vignette.pdf (24 pages, 220429 bytes).
+Output written on Collounder.vignette.pdf (27 pages, 230902 bytes).
 PDF statistics:
- 819 PDF objects out of 1000 (max. 8388607)
- 741 compressed objects within 8 object streams
- 529 named destinations out of 1000 (max. 500000)
- 124 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 826 PDF objects out of 1000 (max. 8388607)
+ 743 compressed objects within 8 object streams
+ 525 named destinations out of 1000 (max. 500000)
+ 129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
