@@ -31,7 +31,8 @@ LBW.fun(LBWsc2.df)
 #Because low birth weight can be caused by other variables rather than smoking,
 #that can be more dangerous to the child's health, when conditioning on LBW it is seen
 #that Smoking has a negative correlation with mortality, thus, protecting the baby
-#of dying. As in the previous cases, coditioning on Y, LBW, is a bad idea.
+#of dying. This non-measured variables are unknown confounders. As in the previous 
+#cases, coditioning on Y, LBW, is a bad idea.
 
 #If U could be measured as birth defects, it would give the following DAG:
 LBWsc3.DAG <- dagitty("dag {

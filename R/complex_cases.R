@@ -53,7 +53,7 @@ var.sc1 <- defData(varname = 'U', dist = 'binary', formula = 0.5)
 var.sc1 <- defData(var.sc1, varname = 'Smoking', dist = 'binary', formula = 0.5)
 var.sc1 <- defData(var.sc1, varname = 'LBW', dist = 'binary', formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
 var.sc1 <- defData(var.sc1, varname = 'Mortality', dist = 'binary', formula = '0.05 * Smoking + 0.95 * U', link = 'identity')
-
+#two seed to have the data on both dataframes as similar as possible
 set.seed(13)
 LBWsc1.df <- genData(samplesize, var.sc1)
 
@@ -86,8 +86,11 @@ LBW.fun <- function(dataset, reps = 100){
       '\nWhen Mortality ~ Smoking + LBW:', mean(both_coefS), '\n')
   ##poner scatterplots en una sola imagen, y que la leyenda del seguno sea mas descriptiva o no aparezca
   op <- par(mfrow= c(2,1), mar = rep(3,4))
-  scatterplot(Mortality ~ Smoking, data = dataset, main = 'Mortality ~ Smoking', smooth = FALSE, regline = FALSE)
-  scatterplot(Mortality ~ Smoking + LBW, data = dataset, main = 'Mortality ~ Smoking + LBW', smooth = FALSE, regline = FALSE)
+  scatterplot(Mortality ~ Smoking, data = dataset, main = 'Mortality ~ Smoking', 
+              smooth = FALSE, reset.par = FALSE)
+  scatterplot(Mortality ~ Smoking + LBW, data = dataset, main = 'Mortality ~ Smoking + LBW', 
+              smooth = FALSE, legend = FALSE,
+              ylab = 'Mortality', xlab = 'Mortality / Smoking', reset.par = FALSE)
   par(op)
   }
   
