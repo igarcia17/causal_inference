@@ -2,7 +2,6 @@
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
 \usepackage{array}
-\usepackage{mathtools}
 \usepackage{hyperref}
 \usepackage{Sweave}
 %\usepackage{amsmath}
@@ -718,7 +717,6 @@ We have used the following modules to make the analysis:
 \begin{lstlisting}
 
 library(dagitty)
-library(car)
 if(!suppressWarnings(require("rethinking", 
 quietly = TRUE))) {drawdag <- plot}
   
@@ -852,15 +850,211 @@ PLOT.REG(Z ~ Y, 'Var distribution Y-Z')
 PLOT.REG(X ~ Y, 'Var distribution X-Y')
 par(op)
 
-# As we can see, there is, apparently, a positive correlation between Z and X and also
-# Z and Y. On the other hand, there is no visible correlation between X and Y 
-# (as should). We can check it by calculating the estimates and significance of
-# each pair. For that we will create a function that accepts the following 
-# arguments: variables to check, dependent variable (to get the estimate and
-# p value), and the title of the variables; the last two ones should be text
-# input in order to make it work.
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=7cm]{PLOT_CASE1.png}
+\centering
+\end{figure}
+
+
+As we can see, there is, apparently, a positive correlation between Z and X and also
+Z and Y. On the other hand, there is no visible correlation between X and Y 
+\(as should\). We can check it by calculating the estimates and significance of
+each pair. For that we will create a function that accepts the following 
+arguments: variables to check, dependent variable \(to get the estimate and
+p value\), and the title of the variables; the last two ones should be text
+input in order to make it work.
+
+
+Now that we already checked the distribution of our data, now we should check for our 
+estimates and p values to see if that association or lack thereof is also
+visible in our values. To do so, we created a function that returns a string
+that reveals whether there is an association or not, and the values for the 
+estimate and pvalue for our two variables.
+
+
+\begin{lstlisting}
+
+SUM.2VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, ...){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
+} # SUMMARY for 2 variables
+
+SUM.3VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, variable3, v_dep3, title_var3){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  PV3 <- summary(lm(variable3))$coefficients[v_dep3, 'Pr(>|t|)']
+  E3 <- summary(lm(variable3))$coefficients[v_dep3, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  assign(title_var3, PV3, P.VAL.DICT)
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  assign(title_var3, E3, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
+} # SUMMARY for 3 variables
+
+SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, variable3, v_dep3, title_var3, 
+                     variable4, v_dep4, title_var4){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  PV3 <- summary(lm(variable3))$coefficients[v_dep3, 'Pr(>|t|)']
+  E3 <- summary(lm(variable3))$coefficients[v_dep3, 'Estimate']
+  
+  PV4 <- summary(lm(variable4))$coefficients[v_dep4, 'Pr(>|t|)']
+  E4 <- summary(lm(variable4))$coefficients[v_dep4, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  assign(title_var3, PV3, P.VAL.DICT)
+  assign(title_var4, PV4, P.VAL.DICT)
+  
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  assign(title_var3, E3, E.DICT)
+  assign(title_var4, E4, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
+} #SUMMARY for 4 variables
+
+
+#Let's check our variables:
+SUM.4VAR(X ~ Z, "Z", "X and Z", Y ~ Z, "Z", "Y and Z", X ~ Y, "Y", "X and Y", X ~ Y + Z, 
+         "Y", "X and Y (when Z)")
+         
+         
+         
+         
+#The variables X and Y do not show an association with a p value of 0.3328062 and an #estimate of 0.03488318 
+#The variables X and Y (when Z) show an association with a p value of 0 and an estimate of 
+#-0.6506454 
+#The variables X and Z show an association with a p value of 6.677158e-103 and an estimate #of 0.1942392 
+#The variables Y and Z show an association with a p value of 5.433219e-62 and an estimate of #0.2025114
+
+
 
 \end{lstlisting}
+
+
+We can see a strong correlation between Z and X. There is also a positive
+relation between Z and Y, but none between X and Y. But the two independent 
+variables (X and Y) when we adjust by Z raise a correlation that wasn't 
+supposed to be there.
+
+When controling a collider, you can induce a bias in the estimate of the
+parent variables when there is, actually, none.
+
+Knowing now well how to check our estimates and pvalues to aknowledge the 
+association between the two variables \(X and Y, whatever those might be\), let's
+explore a more realistic example:
+
+
+Here we have a set of variables: cigarettes smoked in a day, COVID19 virus
+load and \% of lung capacity. Both cigarette consumption and virus load should
+affect the lung capacity, but there should not be a relation between the 
+number of cigarettes consumed daily and the COV19 virus load.
+
+Let's take a look at the DAG:
+
+
+\begin{lstlisting}
+
+DAG.Lung <- dagitty("dag {
+cigarettes_day -> lung_capacity
+vir_load_COV19 -> lung_capacity
+}")
+
+coordinates(DAG.Lung) <- list(x = c(cigarettes_day = 1, vir_load_COV19 = 3, 
+                                    lung_capacity = 2),
+                              y = c(cigarettes_day = 1, vir_load_COV19 = 1,
+                                     lung_capacity = 3))
+drawdag(DAG.Lung)
+
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=7cm]{DAG_CIG_LUNG.png}
+\centering
+\end{figure}
+
+
+We now generate the data for this particular example, in which both cigarettes
+and virus load are integer values. And lung capacity is expressed as a \% value.
+
+
+\begin{lstlisting}
+
+b_cd <- (-0.7) # Relation between cigarettes and lung capacity
+b_vlc <- (-0.8) # Relation between virus load and lung capacity 
+
+cigarettes_day <- floor(runif(N, min = 0, max = 45)) #number of cig a day
+vir_load_COV19 <- floor(runif(N, min = 0, max = 40)) #Ct
+lung_capacity <- 100 + b_cd * cigarettes_day + b_vlc * vir_load_COV19 + 
+  rnorm(N, 0, sd = 0.01) # % of lung capacity
+
+\end{lstlisting}
+
+
+
+
+
+
+
+
 
 
 
@@ -872,7 +1066,6 @@ To develop this issue, we will need the following packages:
 \begin{lstlisting}
 library(simstudy)
 library(dagitty)
-library(car)
 library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {drawdag <- plot}
 \end{lstlistings}
