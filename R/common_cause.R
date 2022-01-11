@@ -330,7 +330,7 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   cat('\nWhen Z ~ Y + X + A: \nCoefficient of X is ', mean(three_coefX),'and its s.d. is',
       sd(three_coefX),'\nSee plots:\n')
   
-  op <- par(mfrow= c(2,3))
+  op <- par(mfrow= c(2,3), mar = rep(4,4))
   
   hist(onlyX_pvX, main = 'Z ~ X', xlab = 'p value of X')
   hist(bothXA_pvX, main = 'Z ~ X + A', xlab = 'p value of X')
@@ -472,15 +472,16 @@ sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
 #In this case, if MATP is not considered, it seems that the total effect is negative.
 when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
                             N = samplesize)
-scatterplot(Z ~ X, data = when_xz_4, main ='Original case', regLine=TRUE, xlab = 'X', 
-            ylab = 'Y', boxplots = FALSE)
+scatterplot(Z ~ X, data = when_xz_4, main ='Original case', regLine=TRUE, 
+            xlab = 'UV radiation (exposure/time)', 
+            ylab = 'INK4a expression')
 #If we input a higher X->Z value
 sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
 when_xz_40 <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
                              N = samplesize)
 scatterplot(Z~X, data = when_xz_40, main = 'If UV radiation effect is stronger', regLine=TRUE,
-            xlab = 'X', ylab = 'Y', boxplots = FALSE)
+            xlab = 'UV radiation (exposure/time)', ylab = 'INK4a expression')
 #This is because the X contribution has a higher impact over Z than Y in this second case.
 
 #The estimate for X in the simpler model isn't negative, it's total effect is lower
@@ -491,7 +492,7 @@ sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
 when_xz_40andnegative <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
                              N = samplesize)
 scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', regLine=TRUE,
-            xlab = 'X', ylab = 'Y', boxplots = FALSE)
+            xlab = 'UV radiation (exposure/time)', ylab = 'INK4a expression', boxplots = FALSE)
 
 #Then the effect of X, UV radiation, over Z, INK4a, is increased, as it should be obvious.
 

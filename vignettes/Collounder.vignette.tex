@@ -559,7 +559,7 @@ To condition on Y or not may give unexpected outcomes when looking at X over Z. 
 If we input a higher X->Z value:
 \begin{lstlisting}
 when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,N = samplesize)
-scatterplot(Z~X, data = when_xz_4, main ='Original case', regLine=TRUE)
+scatterplot(Z~X, data = when_xz_4, main ='Original case', regLine=TRUE, boxplots = FALSE, ylab = 'INK4a expression')
 \end{lstlisting}
 \begin{figure}[h]
 \includegraphics[width=7cm]{scatterplotOriginal.png}
