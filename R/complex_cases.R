@@ -248,24 +248,28 @@ summary(glm(Mortality ~ Birth_defects + Smoking + LBW, data = LBWsc3.df, family 
 
 
 
-#Berkson's paradox: 
+#________________________Berkson's paradox: 
 
+# This paradox is a particular kind of selection bias 
+# caused by systematically observing some events more than others.
 
-library(tidyverse) # not sure si lo necesito, la vd.
+# Let's take a look at the DAG for our particular example, where we observe 
+# hospital patients with diabetes and hospital patients with cholecystitis.
 
 
 DAG.Berkson <- dagitty("dag {
-diabetes -> hosp_patient
-cholecystitis -> hosp_patient
+var1 -> hosp_patient
+var2 -> hosp_patient
 e_z -> hosp_patient
 }")
 
-coordinates(DAG.Berkson) <- list(x = c(diabetes = 1,  cholecystitis = 3, 
+coordinates(DAG.Berkson) <- list(x = c(var1 = 1,  var2 = 3, 
                                        hosp_patient = 2, e_z = 1.25),
-                                 y = c(diabetes = 1, cholecystitis = 1, 
+                                 y = c(var1 = 1, var2 = 1, 
                                        hosp_patient = 3, e_z = 3))
 drawdag(DAG.Berkson)
 
+# Let us generate the data according to the DAG:
 
 set.seed(11)
 
@@ -276,41 +280,51 @@ diabetes <- rbinom(n=100, size=1, prob=0.7)
 cholecystitis <- rbinom(n=100, size=1, prob=0.3) 
 hosp_patients <- diabetes*0.6 + cholecystitis*0.4 + rnorm(N, mean = 0, sd = 0.2)
 
-dataset_d_ch <- data.frame(diabetes,cholecystitis)
+# Let's take a look at our data estimates, for that we will use a 
+# function that creates a dataframe containing the p values and estimates for 
+# the variables diabetes and cholecystitis and also diabetes and cholecystitis 
+# adjusting by the hospital patients. It also returns a string checking the 
+# significance of the pvalue for diabetes and cholecystitis and another one
+# for the same value but when adjusting by the hospital patients.
 
-
-dataset_d_ch_hP <- data.frame(diabetes,cholecystitis,hosp_patients)
-
-
-est_d_ch <- summary(glm(diabetes~cholecystitis, data = dataset_d_ch, family = 'binomial')
-        )$coefficients['cholecystitis', 'Estimate']
-pval_d_ch <- summary(glm(diabetes~cholecystitis, data = dataset_d_ch, family = 'binomial')
-        )$coefficients['cholecystitis', 'Pr(>|z|)']
-
-
-est_d_ch_hP <- summary(glm(diabetes~cholecystitis+hosp_patients, data=dataset_d_ch_hP, 
-            family = 'binomial'))$coefficients['cholecystitis', 'Estimate']
-pval_d_ch_hP <-summary(glm(diabetes~cholecystitis+hosp_patients, data=dataset_d_ch_hP, 
-            family = 'binomial'))$coefficients['cholecystitis', 'Pr(>|z|)']
-
-df_diab_chol <- data.frame('values_of' = c('Estimates', 'P_values'), 'diab_chol' = 
-                             c(est_d_ch, pval_d_ch), 'diab_chol_HP' = 
-                             c(est_d_ch_hP, pval_d_ch_hP))
-
-df_diab_chol
-
-
-{if (pval_d_ch > 0.05)
-  cat('The variables diabetes and cholecystitis do not show a association with a p value of',  
-      pval_d_ch, 'and an estimate of',est_d_ch, '\n')
-else
-  cat('The variables diabetes and cholecystitis show a association with a p value of',  
-      pval_d_ch, 'and an estimate of', est_d_ch, '\n')}
-
-{if (pval_d_ch_hP > 0.05)
-  cat('The variables diabetes and cholecystitis, adjusting by hospital patients 
-      (a collider) do not show a association with a p value of',  
-      pval_d_ch_hP, 'and an estimate of',est_d_ch_hP, '\n')
+df_pval_estimates <- function(var1, var2, var3) {
+  dataset_2var <- data.frame(var1,var2)
+  
+  
+  dataset_3var <- data.frame(var1,var2,var3)
+  
+  
+  est_v1_v2 <- summary(glm(var1~var2, data = dataset_2var, family = 'binomial')
+  )$coefficients['var2', 'Estimate']
+  pval_v1_v2 <- summary(glm(var1~var2, data = dataset_2var, family = 'binomial')
+  )$coefficients['var2', 'Pr(>|z|)']
+  
+  
+  est_v1_v2_v3 <- summary(glm(var1~var2+var3, data=dataset_3var, 
+                             family = 'binomial'))$coefficients['var2', 'Estimate']
+  pval_v1_v2_v3 <-summary(glm(var1~var2+var3, data=dataset_3var, 
+                             family = 'binomial'))$coefficients['var2', 'Pr(>|z|)']
+  
+  df_final <- data.frame('values_of' = c('Estimates', 'P_values'), 'diab_chol' = 
+                               c(est_v1_v2, pval_v1_v2), 'diab_chol_HP' = 
+                               c(est_v1_v2_v3, pval_v1_v2_v3))
+  
+print(df_final)
+cat('\n')
+  
+{if (pval_v1_v2 > 0.05)
+  cat('The variables do not show an association. The p value is', 
+      pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')
   else
-    cat('The variables diabetes and cholecystitis show a association with a p value of',  
-        pval_d_ch_hP, 'and an estimate of', est_d_ch_hP, '\n')}
+    cat('The variables do show an association. The p value is', 
+        pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')}
+
+{if (pval_v1_v2_v3 > 0.05)
+  cat('The variables do not show an association when adjusting by the collider. The p value is', 
+      pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')
+  else
+    cat('The variables do show an association when adjusting by the collider. The p value is', 
+        pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')}
+}
+
+df_pval_estimates(diabetes, cholecystitis, hosp_patients)
