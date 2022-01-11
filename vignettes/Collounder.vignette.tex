@@ -46,7 +46,7 @@
 \section{Objective}
 
 Causal inference is a key element in statistics. It help us reach valuable conclusions about how do variables relate to one another, and help us make decisions in order to mantain our health, combat disease, adjust habits, etc. The problem comes when data is misinterpreted, and correlation is mistaken by causalty. It is very different to say 'ice cream causes cancer' rather than 'in the same season of the year, both ice cream sales and number of melanoma diagnosis increase'. A wrong conclusion can have serious repercusions, that may go from administrating a wrong treatment to ruining the ice cream economy. Even if our field of study is not statistics, it is interesting to understand some basic concepts to prevent us from being fooled by sensational news and develop the so called 'critical thinking'. 
-The objective of this project is to show what changes when data is modelled in the wrong way and how to interpret it correctly. The code can be accessed from the GitHub repository \href{https://github.com/igarcia17/causal_inference}{Causalinference - GitHub repository} .
+The objective of this project is to show what changes when data is modelled in the wrong way and how to interpret it correctly. The code can be accessed from the GitHub repository \href{https://github.com/igarcia17/causal_inference}{Causalinference - GitHub repository} . We recommend to get the code from it, as some updates may not be reflected in this file.
 Along the document, we will explain basic concepts with examples, vaguely based in real life events. It is present all the code necessary to perform each of the cases.
 
 \newpage
@@ -708,6 +708,28 @@ This last causal structure introduce us to the next issue: colliders and common 
 \section{What to do when there is a common effect}
 
 \section{Complex cases and backdoor criteria}
+
+To develop this issue, we will need the following packages:
+
+\begin{lstlistings}
+library(simstudy)
+library(dagitty)
+library(car)
+library(rethinking)
+if(!suppressWarnings(require("rethinking", quietly = TRUE))) {drawdag <- plot}
+\end{lstlistings}
+
+A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly 
+
+
+#Simpson paradox and backdoor criterion
+
+#Simpson paradox -> extreme case of confounding (though this is a simplicity of what he
+#originally published)
+#It is given when a trend appears in multiple data groups but
+#disappears or is reversed when the groups are combined.
+
+#Example of Simpson's paradox and unmeasured variables problem.
 
 \section{Conclusion}
 

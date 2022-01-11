@@ -50,10 +50,10 @@ df_pval_estimates <- function(var1, var2, var3) {
                                c(est_v1_v2, pval_v1_v2), 'diab_chol_HP' = 
                                c(est_v1_v2_v3, pval_v1_v2_v3))
   
-df_final
+print(df_final)
   
 {if (pval_v1_v2 > 0.05)
-  cat('The variables', var1, 'and', var2 'do not show a association with a p value of',  
+  cat('The variables', var1, 'and', var2, 'do not show a association with a p value of',  
       pval_v1_v2, 'and an estimate of',est_v1_v2, '\n')
   else
     cat('The variables var1 and var2 show a association with a p value of',  
