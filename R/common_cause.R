@@ -199,10 +199,10 @@ sc1.comm <- function(b_yz, N, b_xz, b_xy, reps = 100, ...){
       'and its s.d. is', sd(both_coefX),'\n')
   cat('\nBeing input x -> z: ', b_xz)
   #This illustrates how, even if the estimate of the coefficient for X is similar in both cases, the variance is higher in the presence of Y
-  op <- par(mfrow= c(2,1), mar = rep(3,4))
-  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
+  op <- par(mfrow= c(2,1))
+  hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z', ylab = FALSE)
   abline(v = b_xz, col = 'red')
-  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
+  hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z', ylab = FALSE)
   abline(v = b_xz, col = 'red')
   par(op)
 
@@ -301,7 +301,7 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
       sd(bothXA_coefA),'\n')
   cat('\nWhen Z ~ Y + X + A: \nCoefficient of A is ', mean(three_coefA),'and its s.d. is',
       sd(three_coefA), '\nSee plots:\n')
-  op <- par(mfrow= c(2,3), mar = rep(2,4))
+  op <- par(mfrow= c(2,3))
   hist(onlyA_pvA, main = 'Z ~ A', xlab = 'p value of A')
   hist(bothXA_pvA, main = 'Z ~ X + A', xlab = 'p value of A')
   hist(three_pvA, main='Z ~X + A + Y', xlab = 'p value of A')
@@ -323,14 +323,14 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   #estimate de X en los modelos y error estandar
   cat('\n____Effect of X over Z\n\n')
   cat('Input X -> Z: ', b_xz,'\n')
-  cat('\nWhen Z ~ A: \nCoefficient of X is ', mean(onlyX_coefX),'and its s.d. is',
+  cat('\nWhen Z ~ X: \nCoefficient of X is ', mean(onlyX_coefX),'and its s.d. is',
       sd(onlyX_coefX),'\n')
-  cat('\nWhen Z ~ X +A: \nCoefficient of X is ', mean(bothXA_coefX),'and its s.d. is',
+  cat('\nWhen Z ~ X + A: \nCoefficient of X is ', mean(bothXA_coefX),'and its s.d. is',
       sd(bothXA_coefX),'\n')
   cat('\nWhen Z ~ Y + X + A: \nCoefficient of X is ', mean(three_coefX),'and its s.d. is',
       sd(three_coefX),'\nSee plots:\n')
   
-  op <- par(mfrow= c(2,3), mar = rep(2,4))
+  op <- par(mfrow= c(2,3))
   
   hist(onlyX_pvX, main = 'Z ~ X', xlab = 'p value of X')
   hist(bothXA_pvX, main = 'Z ~ X + A', xlab = 'p value of X')
@@ -360,10 +360,9 @@ impliedConditionalIndependencies(i_uv_i_sun.DAG)
 #covariates.
 
 #As seen in the cause of the cause previous work from Ram?n D?az Uriarte, when the standard
-#error of X increases the variance of the estimate doesn't change as much with the 
-#presence of A on the model. We are still working on why this happens.
+#error of X increases the variance of the estimate is reduced
 sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2,
-                      b_ax = b_ax_i_uv_i2, b_xy=b_xy_i_uv_i2, e_x =10)
+                      b_ax = b_ax_i_uv_i2, b_xy=b_xy_i_uv_i2, e_x =20)
 
 #This function also illustrates a key property of causal inference: same rules for
 #simple models (toy example in Z_X_Y_adjust.R) can be applied to more complex models
@@ -431,7 +430,7 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   cat('\nWhen Z ~ Y + X:\nY coefficient:', mean(both_coefY), 's.d:', sd(both_coefY))
   ##legend: blue, direct effect X, red total effect X, green effect Y
   
-  op <- par(mfrow= c(2,2), mar = rep(3,4))
+  op <- par(mfrow= c(2,2), mar = rep(4,4))
   hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
   abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect, it takes into account both sources of effect
   abline(v = b_xz, col = 'red')#direct effect
@@ -440,9 +439,9 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect
   abline(v = b_xz, col = 'red')#direct effect
   
-  hist(onlyY_coefY, main = 'Z ~ Y', xlab = 'Effect X over Z')
+  hist(onlyY_coefY, main = 'Z ~ Y', xlab = 'Effect Y over Z')
   abline(v = b_yz, col = 'green')
-  hist(both_coefY, main = 'Z ~ Y + X', xlab = 'Effect X over Z')
+  hist(both_coefY, main = 'Z ~ Y + X', xlab = 'Effect Y over Z')
   abline(v = b_yz, col = 'green') 
   par(op)
 
@@ -473,8 +472,7 @@ sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
 #In this case, if MATP is not considered, it seems that the total effect is negative.
 when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
                             N = samplesize)
-scatterplot(Z~X, data = when_xz_4, main ='Original case', regLine=TRUE)
-
+scatterplot(Z ~ X, data = when_xz_4, main ='Original case', regLine=TRUE)
 #If we input a higher X->Z value
 sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
@@ -490,13 +488,19 @@ sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
          N = samplesize)
 when_xz_40andnegative <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
                              N = samplesize)
-#scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', regLine=TRUE)
+scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', regLine=TRUE)
 
 #Then the effect of X, UV radiation, over Z, INK4a, is increased, as it should be obvious.
 
 #The study goes on and we discovers that both the expression of MATP and INK4a
 #is also influenced by another key factor, the cortisol level. This leaves us 
 #with the following DAG:
+samplesize <- 100
+b_by_m_uv_i_c <- 3
+b_bz_m_uv_i_c <- 2
+b_xz_m_uv_i_c <- 4
+b_xy_m_uv_i_c <- 2
+b_yz_m_uv_i_c <- (-3)
 
 m_uv_i_c.DAG <- dagitty("dag {
 UV.radiation -> MATP
@@ -509,13 +513,6 @@ MATP -> INK4a
 coordinates(m_uv_i_c.DAG) <- list(x = c(UV.radiation = 1, MATP = 2, INK4a = 2, Cortisol = 3),
                                 y = c(UV.radiation = 1, MATP = 2, INK4a = 3, Cortisol = 1))
 drawdag(m_uv_i_c.DAG)
-
-samplesize <- 100
-b_by_m_uv_i_c <- 3
-b_bz_m_uv_i_c <- 2
-b_xz_m_uv_i_c <- 4
-b_xy_m_uv_i_c <- 2
-b_yz_m_uv_i_c <- (-3)
 
 #From the previous function we have learnt that the condition on the mediator
 #variable Y, MATP, would allow us to know the direct effect of UV.radiation. If it is not 
@@ -548,7 +545,7 @@ sc2.comm.extraoverY <- function(b_by, b_bz, b_xz, b_xy, b_yz, N, reps = 200, ...
   
  ##legend: blue, total efffect X, red direct effect X, green effect Y
   
-  op <- par(mfrow= c(1,3), mar = rep(3,4))
+  op <- par(mfrow= c(1,3), mar = c(4,4,4,4))
   hist(onlyB_coefB, main = 'Z ~ B', xlab = 'Effect B over Z')
   abline(v = b_bz, col = 'red')#direct effect
   abline(v = b_bz + b_yz*b_by, col = 'blue')#total effect of B
