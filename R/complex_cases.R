@@ -47,7 +47,7 @@ drawdag(LBWsc2.DAG)
 #Does smoking cause LBW? Let's simulate the data: we will increase the natural proba-
 #bilities to maximise the effect. Let's assume that U is an unkown health condition, and
 #can be 0 or 1 in the absence or presence.
-samplesize <- 10000
+samplesize <- 100
 
 var.sc1 <- defData(varname = 'U', dist = 'binary', formula = 0.5)
 var.sc1 <- defData(var.sc1, varname = 'Smoking', dist = 'binary', formula = 0.5)
@@ -84,15 +84,7 @@ LBW.fun <- function(dataset, reps = 100){
   #This shows the estimate of Smoking
   cat('\nThe estimate for Smoking is:\nWhen Mortality ~ Smoking:', mean(onlyS_coefS),
       '\nWhen Mortality ~ Smoking + LBW:', mean(both_coefS), '\n')
-  ##poner scatterplots en una sola imagen, y que la leyenda del seguno sea mas descriptiva o no aparezca
-  op <- par(mfrow= c(2,1), mar = rep(3,4))
-  scatterplot(Mortality ~ Smoking, data = dataset, main = 'Mortality ~ Smoking', 
-              smooth = FALSE, reset.par = FALSE)
-  scatterplot(Mortality ~ Smoking + LBW, data = dataset, main = 'Mortality ~ Smoking + LBW', 
-              smooth = FALSE, legend = FALSE,
-              ylab = 'Mortality', xlab = 'Mortality / Smoking', reset.par = FALSE)
-  par(op)
-  }
+}
   
 LBW.fun(LBWsc1.df)
 LBW.fun(LBWsc2.df)
