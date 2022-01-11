@@ -250,8 +250,10 @@ summary(glm(Mortality ~ Birth_defects + Smoking + LBW, data = LBWsc3.df, family 
 
 #________________________Berkson's paradox: 
 
-# This paradox is a particular kind of selection bias 
-# caused by systematically observing some events more than others.
+
+
+# This particular paradox is a particular kind of selection bias, or statistical 
+# result, caused by systematically observing some events more than other.
 
 # Let's take a look at the DAG for our particular example, where we observe 
 # hospital patients with diabetes and hospital patients with cholecystitis.
@@ -314,10 +316,10 @@ cat('\n')
   
 {if (pval_v1_v2 > 0.05)
   cat('The variables do not show an association. The p value is', 
-      pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')
+      pval_v1_v2, 'and the estimate is',est_v1_v2, '\n')
   else
     cat('The variables do show an association. The p value is', 
-        pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')}
+        pval_v1_v2, 'and the estimate is',est_v1_v2, '\n')}
 
 {if (pval_v1_v2_v3 > 0.05)
   cat('The variables do not show an association when adjusting by the collider. The p value is', 
