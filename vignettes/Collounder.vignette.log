@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.8)  11 JAN 2022 15:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.8)  11 JAN 2022 20:37
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1171,29 +1171,126 @@ File: images//histextraoverY.png Graphic file (type png)
 Package pdftex.def Info: images//histextraoverY.png  used on input line 695.
 (pdftex.def)             Requested size: 227.62204pt x 142.65819pt.
 [25 <./images//histextraoverY.png>] [26]
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 719.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 723.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 725.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 726.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 727.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 728.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 729.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 731.
+<images//LBW1DAG.png, id=679, 349.305pt x 298.11375pt>
+File: images//LBW1DAG.png Graphic file (type png)
+<use images//LBW1DAG.png>
+Package pdftex.def Info: images//LBW1DAG.png  used on input line 735.
+(pdftex.def)             Requested size: 227.62204pt x 194.26746pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[27]
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 740.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 741.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 742.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 743.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 744.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 745.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 747.
+<images//LBW2DAG.png, id=704, 349.305pt x 298.11375pt>
+File: images//LBW2DAG.png Graphic file (type png)
+<use images//LBW2DAG.png>
+Package pdftex.def Info: images//LBW2DAG.png  used on input line 751.
+(pdftex.def)             Requested size: 227.62204pt x 194.26746pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[28 <./images//LBW1DAG.png>]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 716.
+(Font)              <10> on input line 755.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 716.
+(Font)              <7> on input line 755.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 716.
-[27] (./Collounder.vignette.aux)
+(Font)              <5> on input line 755.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 760.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 762.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 763.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 764.
+[29 <./images//LBW2DAG.png>]
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 765.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 767.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 769.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 770.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 771.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 772.
+Package textcomp Info: Symbol \textminus not provided by
+(textcomp)             font family aer in TS1 encoding.
+(textcomp)             Default family used instead on input line 774.
+[30] [31] (./Collounder.vignette.aux)
 Package rerunfilecheck Info: File `Collounder.vignette.out' has not changed.
 (rerunfilecheck)             Checksum: D2B557C25FC9667875FC6B27D197C399;1033.
  ) 
 Here is how much of TeX's memory you used:
- 15286 strings out of 480313
- 243020 string characters out of 5895781
+ 15394 strings out of 480313
+ 244560 string characters out of 5895781
  1122949 words of memory out of 5000000
- 32389 multiletter control sequences out of 15000+600000
+ 32444 multiletter control sequences out of 15000+600000
  447978 words of font info for 78 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 70i,6n,79p,909b,1857s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc} <c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb>
-Output written on Collounder.vignette.pdf (27 pages, 262217 bytes).
+ 70i,6n,79p,1049b,1857s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc} <c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb>
+Output written on Collounder.vignette.pdf (31 pages, 279523 bytes).
 PDF statistics:
- 846 PDF objects out of 1000 (max. 8388607)
- 759 compressed objects within 8 object streams
- 525 named destinations out of 1000 (max. 500000)
- 129 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 924 PDF objects out of 1000 (max. 8388607)
+ 828 compressed objects within 9 object streams
+ 576 named destinations out of 1000 (max. 500000)
+ 139 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,56 +1,5 @@
 
-#Low birth weight paradox: 
-LBWsc1.DAG <- dagitty('dag {
-Smoking -> LBW
-Smoking -> Mortality
-U -> LBW
-U -> Mortality
-}')
-
-coordinates(LBWsc1.DAG) <- list(x = c(LBW = 1, Smoking = 2, U = 2, Mortality = 3),
-                                y = c(LBW = 3, Smoking = 2, U = 1, Mortality = 3))
-
-drawdag(LBWsc1.DAG)
-
-LBWsc2.DAG <- dagitty("dag {
-Smoking -> LBW
-LBW -> Mortality
-Smoking -> Mortality
-U -> LBW
-U -> Mortality
-}")
-
-coordinates(LBWsc2.DAG) <- list(x = c(LBW = 1, Smoking = 2, U = 2, Mortality = 3),
-                                y = c(LBW = 3, Smoking = 2, U = 1, Mortality = 3))
-
-drawdag(LBWsc2.DAG)
-
-#If U is not taken into consideration, same scenarios as in common cause analysis.
-#An unmeasured variable can't be controlled in a model, and may represent for causes that
-#we don't even consider in the experiment. In the low birth weight paradox, there are 
-#unmeasured causes of low birth weight and mortality, though the only cause that we are accounting for
-#is smoking. The questions are: does smoking cause mortality? Does LBW cause mortality?
-#Does smoking cause LBW? Let's simulate the data: we will increase the natural proba-
-#bilities to maximise the effect. Let's assume that U is an unkown health condition, and
-#can be 0 or 1 in the absence or presence.
-samplesize <- 10000
-
-var.sc1 <- defData(varname = 'U', dist = 'binary', formula = 0.5)
-var.sc1 <- defData(var.sc1, varname = 'Smoking', dist = 'binary', formula = 0.5)
-var.sc1 <- defData(var.sc1, varname = 'LBW', dist = 'binary', formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
-var.sc1 <- defData(var.sc1, varname = 'Mortality', dist = 'binary', formula = '0.05 * Smoking + 0.95 * U', link = 'identity')
-
-set.seed(13)
-LBWsc1.df <- genData(samplesize, var.sc1)
-
-var.sc2 <- defData(varname = 'U', dist = 'binary', formula = 0.5)
-var.sc2 <- defData(var.sc2, varname = 'Smoking', dist = 'binary', formula = 0.5)
-var.sc2 <- defData(var.sc2, varname = 'LBW', dist = 'binary', formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
-var.sc2 <- defData(var.sc2, varname = 'Mortality', dist = 'binary', formula = '0.01 * Smoking + 0.7 * U + 0.1 * LBW', link = 'identity')
-
-set.seed(13)
-LBWsc2.df <- genData(samplesize, var.sc2)
-
+\\\\\\This conclusion may impulse mothers who fear having an underweight baby to start smoking. We must think about this scenarios carefully to avoid making fake statements and
 
 LBW.fun <- function(dataset, reps = 100){
   #it doesn't check the p value of LBW because it is not the main issue of this type of

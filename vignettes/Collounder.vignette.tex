@@ -711,7 +711,7 @@ This last causal structure introduce us to the next issue: colliders and common 
 
 To develop this issue, we will need the following packages:
 
-\begin{lstlistings}
+\begin{lstlisting}
 library(simstudy)
 library(dagitty)
 library(car)
@@ -719,19 +719,76 @@ library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {drawdag <- plot}
 \end{lstlistings}
 
-A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly 
+A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification \(Hernan, 2017\).
+One striking example of Simpson's paradox is the low birth-weight paradox. It will also help us to introduce the problem that may involve the unmeasured variables: those events that may affect the causal structure of our model but can't be measured, or that we are not even aware of. This example presents the same issue in any of the following two directed acyclic graphs:
+\begin{lstlisting}
+LBWsc1.DAG <- dagitty('dag {
+Smoking -> LBW
+Smoking -> Mortality
+U -> LBW
+U -> Mortality}')
+
+coordinates(LBWsc1.DAG) <- list(x = c(LBW = 1, Smoking = 2, U = 2, Mortality = 3), y = c(LBW = 3, Smoking = 2, U = 1, Mortality = 3))
+drawdag(LBWsc1.DAG)
+\end{lstlisting}
+\begin{figure}[h]
+\includegraphics[width=8cm]{LBW1DAG.png}
+\centering
+\end{figure}
+\newpage
+\begin{lstlisting}
+LBWsc2.DAG <- dagitty("dag {
+Smoking -> LBW
+LBW -> Mortality
+Smoking -> Mortality
+U -> LBW
+U -> Mortality}")
+
+coordinates(LBWsc2.DAG) <- list(x = c(LBW = 1, Smoking = 2, U = 2, Mortality = 3), y = c(LBW = 3, Smoking = 2, U = 1, Mortality = 3))
+drawdag(LBWsc2.DAG)
+\end{lstlisting}
+\begin{figure}[h]
+\includegraphics[width=8cm]{LBW2DAG.png}
+\centering
+\end{figure}
+\newpage
+The variables of study are three: if the mother smokes or not, if the baby presents a low weight at the moment of birth, and if the baby survives the first month of life. Notice the shape of the graphs: if U is ignored, they are the same scenarios as presented in the common cause section. What medical studies suggest is that underweighted babies present less chances of survival than ordinary babies for multiple reasons: weight involves a better organ development, and indicates that there is certain fat that can be used for protection, warmth and energy. Experts also proclaim that if the mother smokes during the pregnancy, the baby development can be compromised, leading to miscarriage or fragile health \(increasing infant mortality\). But when 'smoking mother' and 'low birth weight' are implied in the same model, it seems that if the mother smokes during the pregnancy, and the baby has low weight at birth, she has less chances of dying. 
 
 
-#Simpson paradox and backdoor criterion
+In this example, there are unmeasured variables \(U\) that affect both low birth weight and mortality, though the only cause that we are accounting for is smoking. The questions that arise are: does smoking cause mortality? Does low birth weight cause mortality? We will simulate the data with the R package \textbf{simstudy}. We will increase the natural probabilities to visualize with clarity the issue. Let's assume that U is an unkown health condtion that can be absent \(0\) or present \(1\).
+\begin{lstlisting}
+samplesize <- 10000
+#Data for scenario 1
+var.sc1 <- defData(varname = 'U', dist = 'binary', formula = 0.5)
+var.sc1 <- defData(var.sc1, varname = 'Smoking', dist = 'binary', formula = 0.5)
+var.sc1 <- defData(var.sc1, varname = 'LBW', dist = 'binary', formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
+var.sc1 <- defData(var.sc1, varname = 'Mortality', dist = 'binary', formula = '0.05 * Smoking + 0.95 * U', link = 'identity')
+set.seed(13)
+LBWsc1.df <- genData(samplesize, var.sc1)
+#Data for scenario 2
+var.sc2 <- defData(varname = 'U', dist = 'binary', formula = 0.5)
+var.sc2 <- defData(var.sc2, varname = 'Smoking', dist = 'binary', formula = 0.5)
+var.sc2 <- defData(var.sc2, varname = 'LBW', dist = 'binary', formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
+var.sc2 <- defData(var.sc2, varname = 'Mortality', dist = 'binary', formula = '0.01 * Smoking + 0.7 * U + 0.1 * LBW', link = 'identity')
+set.seed(13)
+LBWsc2.df <- genData(samplesize, var.sc2)
+\end{lstlisting}
 
-#Simpson paradox -> extreme case of confounding (though this is a simplicity of what he
-#originally published)
-#It is given when a trend appears in multiple data groups but
-#disappears or is reversed when the groups are combined.
 
-#Example of Simpson's paradox and unmeasured variables problem.
+
+
+
+
 
 \section{Conclusion}
+
+
+
+
+
+
+
+
 
 \section{References}
 
