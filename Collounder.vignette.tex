@@ -1801,18 +1801,40 @@ LBW.fun(LBWsc2.df)
 It doesn't matter if in the causal structure of the initial DAG LBW relates to mortality or not, in both cases when the model conditions on LBW, the estimate for Smoking (which is always significant, though not shown, it is obvious), gets negative. These results are contraintuitive: there is something that we are not taking into account. 
 What happens is that those unmeasured variables have a higher influence on mortality and low birth weight than smoking, maybe because they cause serious birth defects. They are 'invisible confounders' that may lead to a wrong conclusion, and by conditioning on Low Birth Weight we are creating a bridge for them to show their effect.
 It is very common for the so called experts to get excited when they have measured many variables, but sometimes adjusting for other covariates that enable the exposure of a non\-causal relationship can be a real handicap. This is why it arises the necessity to stablish a criteria to know what to condition on and what to avoid.
-We introduce this concept at the end, as it is necessary to know certain basic concepts of the \(Science of Why\) to apply this criteria with sense
+The backdoor cirteria is the most common method to condition on covariates, along with frontdoor criteria which is very similar.
+We introduce this concept at the end, as it is necessary to know certain basic concepts of the \(Science of Why\) to apply this criteria correctly and with sense.
+In the backdoor criteria, given a pair of treatment-outcome variables, we should condition on the set of covariates (Z) that:
+\begin{itemize} \item Block all the backdoor paths. \item Are not a descendant of the 'treatment', or cause of study, variable.\end{itemize}
+We are going to explain this with another example, given the treatment variable is X\_i and the outcome variable is X\_j:
+\begin{lstlisting}
+complex.DAG <- dagitty('dag{
+X_1 -> X_3
+X_1 -> X_4
+X_2 -> X_4
+X_2 -> X_5
+X_3 -> X_i
+X_4 -> X_i
+X_4 -> X_j
+X_5 -> X_j
+X_i -> X_6
+X_6 -> X_j}')
+
+coordinates(complex.DAG) <- list(x = c(X_1 =1, X_3 = 1, X_i =1,X_4 = 2, X_6 = 2,X_2 = 3, X_5 = 3, X_j =3),y = c(X_1=1, X_2 = 1, X_3 =2, X_4 = 2, X_5 = 2, X_i = 3, X_6 = 3, X_j =3))
+
+drawdag(complex.DAG)
+\end{lstlisting}
+\begin{figure}[h]
+\includegraphics[width=8cm]{complex.DAG.png}
+\centering
+\end{figure}
+First we have to identify all the backdoor paths. A backdoor path is a non causal path between the treatment variable X\_i and the outcome variable, which can be identified by an arrow pointing to X\_i.
 
 
 
-
-
+\newpage
 \section{Conclusion}
 
-
-
-
-
+As we have seen, causal inference analysis have more tricks and traps than expected. It is crucial to know the causal structure that is followed in the real life cases, and use it properly. If this first model is not correct, it will be very difficult to have a correct insight of the problem. For this same reason, we cannot forget the causal context of the covariates and reduce them just to scatistical terms. The causal structure is important if we want to apply backdoor criteria, and to identify if what we are observing is a direct effect or a total effect. 
 
 
 
