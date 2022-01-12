@@ -585,7 +585,7 @@ coordinates(DAG.Diabetes.Descendant) <- list(x = c(cortisol = 1,
 drawdag(DAG.Diabetes.Descendant)
 
 
-# As the example is very simmilar to the previous one, we well be using the
+# As the example is very simmilar to the previous one, we will be using the
 # same values for the data, excepting the heart disease variable.
  
 b_co_d_d <- 1.5
