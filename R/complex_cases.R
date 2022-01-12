@@ -11,7 +11,6 @@ if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
 #________________________Berkson's paradox: 
 
 
-
 # This paradox is a particular kind of selection bias, caused by systematically 
 # observing some events more than other.
 
@@ -22,7 +21,6 @@ if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
 DAG.Berkson <- dagitty("dag {
 diabetes -> hosp_patient
 cholycistitis -> hosp_patient
-
 }")
 
 coordinates(DAG.Berkson) <- list(x = c(diabetes = 1,  cholycistitis = 3, 
@@ -50,7 +48,7 @@ hosp_patients <- diabetes*0.6 + cholecystitis*0.4 + rnorm(N, mean = 0, sd = 0.2)
 # for the same value but when adjusting by the hospital patients.
 
 df_pval_estimates <- function(var1, var2, var3) {
-
+  
   dataset <- data.frame(var1,var2,var3)
   
   est_v1_v2 <- summary(glm(var1~var2, data = dataset, family = 'binomial')
@@ -72,22 +70,18 @@ df_pval_estimates <- function(var1, var2, var3) {
   cat('\n')
   
   {if (pval_v1_v2 > 0.05)
-    cat('The variables', columns[1], 'and', columns[2], 
-    'do not show an association. The p value is', pval_v1_v2, 'and the estimate is',
-    est_v1_v2, '\n')
+    cat('The variables diabetes and cholecystitis do not show an association. The p value is',
+        pval_v1_v2, 'and the estimate is', est_v1_v2, 'for this model', '\n')
     else
-      cat('The variables', columns[1], 'and', columns[2], 
-      'do show an association. The p value is', pval_v1_v2, 'and the estimate is',
-      est_v1_v2, '\n')}
+      cat('The variables diabetes and cholecystitis do show an association. The p value is',
+          pval_v1_v2, 'and the estimate is', est_v1_v2, 'for this model', '\n')}
   
   {if (pval_v1_v2_v3 > 0.05)
-    cat('The variables', columns[1], 'and', columns[2], 
-    'do not show an association when adjusting by the collider', columns[2],
-    '. The p value is', pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')
+    cat('The variables diabetes and cholycistitis do not show an association when adjusting by hospital patients. The p value is',
+        pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, 'for this model', '\n')
     else
-      cat('The variables', columns[1], 'and', columns[2], 
-      'do show an association when adjusting by the collider,',columns[3],
-      '. The p value is', pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')}
+      cat('The variables diabetes and cholycistitis do show an association when adjusting by hospital patients. The p value is',
+          pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, 'for this model', '\n')}
 }
 
 df_pval_estimates(diabetes, cholecystitis, hosp_patients)
