@@ -706,13 +706,7 @@ This last causal structure introduce us to the next issue: colliders and common 
 \newpage
 \section{What to do when there is a common effect}
 
-In this second section, we are going to analyze the problems and biases you can
-create by not controlling a particular case of covariates: the colliders. When
-studying the effects of differents variables on a particular one, and the 
-difficulties of adjusting by the collider, Z, when X and Y are its parents and
-may or may not have an association between them. In this case Z is the \textbf{common effect}
-of X and Y.
-We have used the following modules to make the analysis:
+In this second section, we are going to analyze the problems and biases you can create by not controlling a particular case of covariates: the colliders. When studying the effects of differents variables on a particular one, and the  difficulties of adjusting by the collider, Z, when X and Y are its parents and may or may not have an association between them. In this case Z is the \textbf{common effect} of X and Y. We have used the following modules to make the analysis:
 
 \begin{lstlisting}
 
@@ -722,8 +716,7 @@ quietly = TRUE))) {drawdag <- plot}
   
 \end{lstlisting}
 
-The variable X can have an effect on Y or not. This gives us two basic scenarios to work on. 
-The first scenario is illustrated in the following DAG:
+The variable X can have an effect on Y or not. This gives us two basic scenarios to work on.The first scenario is illustrated in the following DAG:
 
 \begin{lstlisting}
 
@@ -745,8 +738,7 @@ drawdag(comm.effect.DAG)
 \end{figure}
 
 
-For this first case, X is not associated to Y.
-The second scenario would be:
+For this first case, X is not associated to Y. The second scenario would be:
 
 \begin{lstlisting}
 
@@ -767,15 +759,8 @@ drawdag(DAG_Situation2)
 \centering
 \end{figure}
 
-In this second case, X does have an effect over Y.
-Whether this two variables do or do not affect each other is important in terms
-of what kind of effect the adjustment of the collider will have on each one. For
-the first case, adjusting on the collider will create an association not present
-before. For the second one, the association between the variables already existed,
-so what happens is that when we adjust for our collider the direction of that 
-relation might change. 
-For this part, we will create our data using vectors. Let's see how we are going 
-to do that for case 1 and case 2.
+In this second case, X does have an effect over Y. Whether this two variables do or do not affect each other is important in terms of what kind of effect the adjustment of the collider will have on each one. For the first case, adjusting on the collider will create an association not present before. For the second one, the association between the variables already existed, so what happens is that when we adjust for our collider the direction of that relation might change. 
+For this part, we will simulate our data using vectors. Let's see how we are going to do that for case 1 and case 2.
 
 Let us begin with case 1:
 
@@ -795,11 +780,7 @@ Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 
 \end{lstlisting}
 
-We use vectors to generate random numbers from 1 to 10 for our X variable and 
-from 1.5 to 12 for our Y variable, as both are independent. For our collider \(Z\)
-we multiply the values of the two previous variables by a number we want to set
-as the relation between the parents \(X and Y\) and the collider \(Z\). We also add
-our standard deviation.
+We use vectors to generate random numbers from 1 to 10 for our X variable and from 1.5 to 12 for our Y variable, as both are independent. For our collider \(Z\) we multiply the values of the two previous variables by a number we want to set as the relation between the parents \(X and Y\) and the collider \(Z\). We also add our standard deviation.
 
 Now for our case number 2:
 
@@ -815,13 +796,9 @@ Z2 <- X2 * b_xz2 + Y2 * b_yz2 + rnorm(N, mean = 0, sd = 1)
 
 \end{lstlisting}
 
-In this case there \textbf{is} a relation between X2 and Y2, so for that, we 
-generate the values for Y2 by multiplying our \"b\_xy2\" and our X values. We 
-do the same process for the Z2 values as we did for Z in our previous case.
+In this case there \textbf{is} a relation between X2 and Y2, so for that, we  generate the values for Y2 by multiplying our \"b\_xy2\" and our X values. We  do the same process for the Z2 values as we did for Z in our previous case.
 
-Next we will see a function created to generate plots for the regression between
-two variables, adding our abline. This function will come in handy when we want
-to check the distribution of our data.
+Next we will see a function created to generate plots for the regression between two variables, adding our abline. This function will come in handy when we want to check the distribution of our data.
 
 
 \begin{lstlisting}
@@ -858,20 +835,10 @@ par(op)
 \newpage
 
 
-As we can see, there is, apparently, a positive correlation between Z and X and also
-Z and Y. On the other hand, there is no visible correlation between X and Y 
-\( as should \). We can check it by calculating the estimates and significance of
-each pair. For that we will create a function that accepts the following 
-arguments: variables to check, dependent variable \( to get the estimate and
-p value \), and the title of the variables; the last two ones should be text
-input in order to make it work.
+As we can see, there is, apparently, a positive correlation between Z and X and also Z and Y. On the other hand, there is no visible correlation between X and Y  \( as should \). We can check it by calculating the estimates and significance of each pair. For that we will create a function that accepts the following  arguments: variables to check, dependent variable \( to get the estimate and p value \), and the title of the variables; the last two ones should be text input in order to make it work.
 
 
-Now that we already checked the distribution of our data, now we should check for our 
-estimates and p values to see if that association or lack thereof is also
-visible in our values. To do so, we created a function that returns a string
-that reveals whether there is an association or not, and the values for the 
-estimate and pvalue for our two variables.
+Now that we already checked the distribution of our data, now we should check for our estimates and p values to see if that association or lack thereof is also visible in our values. To do so, we created a function that returns a string that reveals whether there is an association or not, and the values for the estimate and pvalue for our two variables.
 
 
 \begin{lstlisting}
@@ -973,9 +940,6 @@ SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2,
 SUM.4VAR(X ~ Z, "Z", "X and Z", Y ~ Z, "Z", "Y and Z", X ~ Y, "Y", "X and Y", X ~ Y + Z, 
          "Y", "X and Y (when Z)")
          
-         
-         
-         
 #The variables X and Y do not show an association with a p value of 0.3328062 and an #estimate of 0.03488318 
 #The variables X and Y (when Z) show an association with a p value of 0 and an estimate of 
 #-0.6506454 
@@ -987,26 +951,13 @@ SUM.4VAR(X ~ Z, "Z", "X and Z", Y ~ Z, "Z", "Y and Z", X ~ Y, "Y", "X and Y", X 
 \end{lstlisting}
 
 
-We can see a strong correlation between Z and X. There is also a positive
-relation between Z and Y, but none between X and Y. But the two independent 
-variables (X and Y) when we adjust by Z raise a correlation that wasn't 
-supposed to be there.
+We can see a strong correlation between Z and X. There is also a positive relation between Z and Y, but none between X and Y. But the two independent  variables \(X and Y\) when we adjust by Z raise a correlation that wasn't supposed to be there.
+When controling a collider, you can induce a bias in the estimate of theparent variables when there is, actually, none.
+Knowing now well how to check our estimates and pvalues to aknowledge the association between the two variables \( X and Y, whatever those might be \), let's explore a more realistic example:
 
-When controling a collider, you can induce a bias in the estimate of the
-parent variables when there is, actually, none.
-
-Knowing now well how to check our estimates and pvalues to aknowledge the 
-association between the two variables \( X and Y, whatever those might be \), let's
-explore a more realistic example:
-
-
-Here we have a set of variables: cigarettes smoked in a day, COVID19 virus
-load and \% of lung capacity. Both cigarette consumption and virus load should
-affect the lung capacity, but there should not be a relation between the 
-number of cigarettes consumed daily and the COV19 virus load.
+Here we have a set of variables: cigarettes smoked in a day, COVID19 virus load and \% of lung capacity. Both cigarette consumption and virus load should affect the lung capacity, but there should not be a relation between the number of cigarettes consumed daily and the COV19 virus load.
 
 Let's take a look at the DAG:
-
 
 \begin{lstlisting}
 
@@ -1029,12 +980,7 @@ drawdag(DAG.Lung)
 \includegraphics[width=5cm]{DAG_CIG_LUNG.png}
 \centering
 \end{figure}
-
-
-We now generate the data for this particular example, in which both cigarettes
-and virus load are integer values. And lung capacity is expressed as a \% value.
-
-
+We now simulate the data for this particular example, in which both cigarettes and virus load are numerical values, while lung capacity is expressed as a percentage.
 \begin{lstlisting}
 
 b_cd <- (-0.7) # Relation between cigarettes and lung capacity
@@ -1043,14 +989,11 @@ b_vlc <- (-0.8) # Relation between virus load and lung capacity
 cigarettes_day <- floor(runif(N, min = 0, max = 45)) #number of cig a day
 vir_load_COV19 <- floor(runif(N, min = 0, max = 40)) #Ct
 lung_capacity <- 100 + b_cd * cigarettes_day + b_vlc * vir_load_COV19 + 
-  rnorm(N, 0, sd = 0.01) # % of lung capacity
+  rnorm(N, 0, sd = 0.01) #percentage of lung capacity
 
 \end{lstlisting}
 
-
-Here we have the plots showing the distribution of the variables cigarettes_day
-and vir_load_COV19, where apparently there is no correlation.
-
+Here we have the plots showing the distribution of the variables cigarettes\_day and vir\_load\_COV19, where apparently there is no correlation.
 
 \begin{lstlisting}
 
@@ -1064,12 +1007,10 @@ par(op)
 
 \end{lstlisting}
 
-
 \begin{figure}[h]
 \includegraphics[width=7cm]{PLOT_cig_vir_lung.png}
 \centering
 \end{figure}
-
 
 Let's see the relations between our variables.
 
@@ -1087,13 +1028,9 @@ SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cigarettes and lung c
 #The variables cigarettes and vir_load_COV19 (when lung capacity) show an association with a p value of 0 and an estimate of -1.142745 
 #The variables vir_load_COV19 and lung capacity show an association with a p value of 1.787942e-70 and an estimate of -0.5881356 
 
-
 \end{lstlisting}
 
-
-No correlation between nº of cigarettes smoked a day and the viral load of 
-COV19 infection but a correlation between these two variables arises when 
-adjusting for the collider (lung_capacity).
+No correlation between number of cigarettes smoked a day and the viral load of COV19 infection but a correlation between these two variables arises when  adjusting for the collider \(lung\_capacity\).
 
 At this point we have already seen how adjusting a collider may create some problems when analyzing data. But things can get a lot more complicated. Let's  not go too far, but see a new example which is a bit more complicated than the previous ones.
 
@@ -1179,14 +1116,9 @@ SUM.4VAR(leg_lenght ~ metabolism, "metabolism", "leg_len and metabolism", leg_le
 \end{lstlisting}
 
 
-There is no correlation between leg lenght and metabolism, leg lenght and 
-cholesterol and leg lenght and heart disease; but when we adjust for the 
-collider speed, we open a path between leg lenght and heart disease. We 
-do find  a correlation between heart when there is no correlation between 
-how long your legs are and cardiac disease.
+There is no correlation between leg lenght and metabolism, leg lenght and  cholesterol and leg lenght and heart disease; but when we adjust for the  collider speed, we open a path between leg lenght and heart disease. We  do find  a correlation between heart when there is no correlation between  how long your legs are and cardiac disease.
 
-Let's look at our data one more time and see whether this correlation we find when adjusting
-by our collider (speed) is actually present. The second plot shows the correlation that actually exists between the variables cholesterol and heart, as opposed to the previous ones (for comparison).
+Let's look at our data one more time and see whether this correlation we find when adjusting by our collider (speed) is actually present. The second plot shows the correlation that actually exists between the variables cholesterol and heart, as opposed to the previous ones (for comparison).
 
 
 \begin{lstlisting}
@@ -1209,7 +1141,6 @@ par(op)
 Let's dive in into our second case. In this situation our X and Y variables have some sort of relation but the estimate (its correlation) changes from positive to negative when we condition on Z (collider).
 
 Let's take another peak at the DAG to remind us of the structure:
-
 
 \begin{figure}[h]
 \includegraphics[width=5cm]{DAG_Situation2.png}
@@ -1251,15 +1182,13 @@ par(op)
 
 
 
-\begin{figure}[h]
-\includegraphics[width=8cm]{PLOT_CASE2.png}
-\centering
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=8cm]{PLOT_CASE2.png}
+%\centering
+%\end{figure}
 
 
-As we can see, there is, apparently a positive correlation between Z2 and X2;  
-Z2 and Y2; and X2 and Y2. In this case we are interested in the relationship  
-between X2 and Y2; we can check it: 
+As we can see, there is, apparently a positive correlation between Z2 and X2;   Z2 and Y2; and X2 and Y2. In this case we are interested in the relationship between X2 and Y2; we can check it: 
 
 
 \begin{lstlisting}
@@ -1273,17 +1202,12 @@ SUM.2VAR(X2 ~ Y2, "Y2", "X2 and Y2", X2 ~ Y2 + Z2, "Y2", "X2 and Y2 (when Z2)")
 \end{lstlisting}
 
 
-The positive correlation we find between X2 and Y2 switches to
-a negative correlation when we adjust for Z2
-As we can see, in this particular case, conditioning on Z changes the sign 
-of the estimate for the Y2 variable, as in Simpson's paradox
+The positive correlation we find between X2 and Y2 switches to a negative correlation when we adjust for Z2. As we can see, in this particular case, conditioning on Z changes the sign of the estimate for the Y2 variable, as in Simpson's paradox
 
 
 Now, with a more practical example: 
 
-We want to study the effect of UV radiation (hours of exposure a day) and INK4a on the mutation of gen p53. 
-
-#First of all we create our DAG:
+We want to study the effect of UV radiation (hours of exposure a day) and INK4a on the mutation of gen p53. First of all we illustrate the causal structure:
 
 \begin{lstlisting}
 
@@ -1302,10 +1226,10 @@ drawdag(DAG.p53)
 \end{lstlisting}
 
 
-\begin{figure}[h]
-\includegraphics[width=5cm]{DAG_UV_INK_P53.png}
-\centering
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=5cm]{DAG_UV_INK_P53.png}
+%\centering
+%\end{figure}
 
 
 Let's generate our data for this particular case:
@@ -1325,11 +1249,7 @@ mutatedp53 <- UV_radiation * b_UV_mp53 + INK4a * b_INK4a_mp53 +
   
 \end{lstlisting}
 
-
-
-
 Again lets gather our data in a dataframe to check it:
-
 
 \begin{lstlisting}
 
@@ -1337,12 +1257,10 @@ PLOT.REG(UV_radiation ~ INK4a, 'UV ~ INK4a')
 
 \end{lstlisting}
 
-
-
-\begin{figure}[h]
-\includegraphics[width=8cm]{PLOT_UV_INK4A.png}
-\centering
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=8cm]{PLOT_UV_INK4A.png}
+%\centering
+%\end{figure}
 
 
 \begin{lstlisting}
@@ -1357,18 +1275,14 @@ SUM.2VAR(UV_radiation ~ INK4a, "INK4a", "UV and INK4a", UV_radiation ~ INK4a
 \end{lstlisting}
 
 
-As shown in the Summary function, the correlation between the variables UV 
-radiation is maintained after adjusting for the collider but the relation
-that was once positive becomes negative when adjusting for Mp53 (collider)
+As shown in the Summary function, the correlation between the variables UV  radiation is maintained after adjusting for the collider but the relation that was once positive becomes negative when adjusting for Mp53 (collider)
 
 
 Now that we have seen how adjusting the collider can afect the estimates and pvalues, we should also check two more scenarios: Ancestors and Descendants.Let's start with the ancestors:
 
 
 
-Imagine we have now a variable Z (a collider) that has an ancestor 
-(variable W), does conditioning on any of those two affect the relation 
-between variable X and Y?
+Imagine we have now a variable Z (a collider) that has an ancestor \(variable W\), does conditioning on any of those two affect the relation between variable X and Y?
 
 Let's draw our DAG: 
 
@@ -1387,10 +1301,10 @@ drawdag(DAG_Ancestor)
 \end{lstlisting}
 
 
-\begin{figure}[h]
-\includegraphics[width=5cm]{DAG_ANCESTOR.png}
-\centering
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=5cm]{DAG_ANCESTOR.png}
+%\centering
+%\end{figure}
 
 
 As always, we create the data according to our DAG:
@@ -1411,7 +1325,7 @@ Z3 <- b_xz * X3 + b_yz * Y3 + W3 * b_wz + rnorm(N, 0, sd = sd_z)
 \end{lstlisting}
 
 
-And once again we will be checking the summaries for our estimates and pvalues, but this time we want to check also what happens when we adjust for the ancestor of our collider (W).
+And once again we will be checking the summaries for our estimates and pvalues, but this time we want to check also what happens when we adjust for the ancestor of our collider \(W\).
 
 
 \begin{lstlisting}
@@ -1428,10 +1342,7 @@ SUM.4VAR(X3 ~ W3, "W3", "X3 and W3", X3 ~ W3 + Z3, "W3", "X3 and W3 (when Z3)", 
 
 
 
-There is no significant correlation between X3 and W3, but when conditioned
-for Z3 a negative correlation arises. Same thing hapopens between the 
-variables X3 and Y3.
-Therefore, conditioning on Z3 modifies the independence between X3, Y3 and W3
+There is no significant correlation between X3 and W3, but when conditioned for Z3 a negative correlation arises. Same thing hapopens between the  variables X3 and Y3. Therefore, conditioning on Z3 modifies the independence between X3, Y3 and W3
 
 
 
@@ -1445,17 +1356,9 @@ SUM.2VAR(X3 ~ Y3, "Y3", "X3 and Y3", X3 ~ Y3 + W3, "Y3", "X3 and Y3 (when W3)")
 
 \end{lstlisting}
 
+No significant correlation found between X3 and Y3, nor can we find a  correlation when adjusting for the ancestor (W3). So, conditioning on W3 does not change the independence between X3 and Y3.
 
-No significant correlation found between X3 and Y3, nor can we find a 
-correlation when adjusting for the ancestor (W3). 
-So, conditioning on W3 does not change the independence between X3 and Y3.
-
-
-
-
-Let's take a look at a more realistic example: we want to study the effect
-of cortisol and cholesterol on diabetes, but we also have to take into 
-consideration the variable "sugar consumption in gr". Here is the DAG:
+Let's take a look at a more realistic example: we want to study the effect of cortisol and cholesterol on diabetes, but we also have to take into consideration the variable "sugar consumption in gr". Here is the DAG:
 
 
 \begin{lstlisting}
@@ -1477,10 +1380,10 @@ drawdag(DAG.Diabetes.Ancestor)
 \end{lstlisting}
 
 
-\begin{figure}[h]
-\includegraphics[width=5cm]{DAG_DIAB_ANCESTOR.png}
-\centering
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=5cm]{DAG_DIAB_ANCESTOR.png}
+%\centering
+%\end{figure}
 
 
 
@@ -1510,10 +1413,10 @@ PLOT.REG(cortisol ~ cholesterol, 'cortisol ~ cholesterol')
 
 
 
-\begin{figure}[h]
-\includegraphics[width=8cm]{PLOT_CORT_CHOL.png}
-\centering
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=8cm]{PLOT_CORT_CHOL.png}
+%\centering
+%\end{figure}
 
 
 \begin{lstlisting}
@@ -1527,7 +1430,7 @@ SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cort
 
 \end{lstlisting}
 
-Again we find no correlation between cortisol and cholesterol, even if we adjust for the ancestor (sugar_consumption).
+Again we find no correlation between cortisol and cholesterol, even if we adjust for the ancestor (sugar\_consumption).
 
 
 
@@ -1542,12 +1445,9 @@ SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cort
 \end{lstlisting}
 
 
-But we do find a correlation between those two variables when adjusting for diabetes (the collider)
+But we do find a correlation between those two variables when adjusting for diabetes \(the collider\).
 
-
-
-
-Let's take a look at our second possible scenario with the ancestor and descendant situations. We now have a variable Z (a collider) that has a descendant (variable W), does conditioning on any of those two affect the relation between variable X and Y?
+Let's take a look at our second possible scenario with the ancestor and descendant situations. We now have a variable Z \(a collider\) that has a descendant \(variable W\), does conditioning on any of those two affect the relation between variable X and Y?
 Starting with the DAG:
 
 \begin{lstlisting}
@@ -1568,10 +1468,10 @@ drawdag(DAG.Descendant)
 \end{lstlisting}
 
 
-\begin{figure}[h]
-\includegraphics[width=5cm]{DAG_DESCENDANT.png}
-\centering
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=5cm]{DAG_DESCENDANT.png}
+%\centering
+%\end{figure}
 
 
 We generate the data...
@@ -1606,8 +1506,8 @@ SUM.3VAR(X4 ~ Y4, "Y4", "X4 and Y4", X4 ~ Y4 + W4, "Y4", "X4 and Y4 (when W4)", 
 
 \end{lstlisting}
 
-We find no correlation between X4 and Y4, but when we condition on the collider (Z) or its descendant (W4) we find a significantly negative correlation between the two variables. 
-In this case adjusting by Z4 and W4 (its descendant) resulted in a correlation between the variables X4 and Y4. 
+We find no correlation between X4 and Y4, but when we condition on the collider \(Z\) or its descendant \(W4\) we find a significantly negative correlation between the two variables. 
+In this case adjusting by Z4 and W4 \(its descendant\) resulted in a correlation between the variables X4 and Y4. 
 
 
 
@@ -1633,10 +1533,10 @@ drawdag(DAG.Diabetes.Descendant)
 \end{lstlisting}
 
 
-\begin{figure}[h]
-\includegraphics[width=5cm]{DAG_DESCENDANT_DIAB.png}
-\centering
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=5cm]{DAG_DESCENDANT_DIAB.png}
+%\centering
+%\end{figure}
 
 
 
@@ -1679,8 +1579,6 @@ SUM.3VAR(cortisol_desc ~ cholesterol_desc, "cholesterol_desc", "cortisol and cho
 
 Just like in our previous simple example, in this case there should not be any relation between cortisol and cholesterol (as we did intend with our data) and when we see our summary we can confirm there is no relation. But when we  condition on our collider or its descendant (heart disease) a correlation between the variables cortisol and cholesterol arises. 
 
-
-
 To better visualize this non existent correlation between our two variables we can check the plot for the regression of both of them and it's pretty clear that there is no apparent positive or negative correlation. To reinforce this data, we can also check and compare the plot for the variables cortisol and heart disease, where we see a positive correlation.
 
 \begin{lstlisting}
@@ -1695,12 +1593,10 @@ PLOT.REG(cortisol_desc ~ heart_disease, 'cortisol ~ heart_disease')
 \end{lstlisting}
 
 
-\begin{figure}[h]
-\includegraphics[width=8cm]{PLOT_CR_CH_HD.png}
-\centering
-\end{figure}
-
-
+%\begin{figure}[h]
+%\includegraphics[width=8cm]{PLOT_CR_CH_HD.png}
+%\centering
+%\end{figure}
 
 
 
