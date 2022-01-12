@@ -1,18 +1,16 @@
 \name{Ycheck}
 \alias{Ycheck, checking for descendant of common cause}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Y check: What is the relation between Y, descendant of X, and Z, variable of study
-%%~~function to do ... ~~
 }
 \description{
 Receives a dataset an input and analyses the relevance of variable Y, that is a descendant of X, with Z, which is also a descendant of X, and the variable of the study. Returns the DAG of causal relationship among the three of them. Doesn't take into account other possible confounders.
-%%~~ A concise (1-5 lines) description of what the function does. ~~
 }
+
 \usage{
 Check common cause scenario of dataset(x)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{dataset}{
       Data frame that must include as column names X, Y and Z. TODO: improve this.   %%~~Describe \code{x} here~~
@@ -22,31 +20,20 @@ Check common cause scenario of dataset(x)
      %%~~Describe \code{x} here~~
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
+
+\value{ --Nera: falta rellenar
   Returns the type of relationship between Y and variable of study Z and corresponding DAG~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
+
 \author{
   Ines Garcia Ortiz
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 ## NOT directly executable
 ## The function is currently defined as
