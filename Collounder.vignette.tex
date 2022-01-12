@@ -1617,6 +1617,114 @@ library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {drawdag <- plot}
 \end{lstlistings}
 
+\(BERKSON'S\) \(PARADOX\)
+
+A specific collider bias that has a quite famous example (\"Why are handsome men such jerks?\") is the Berkson's paradox. This paradox produces a selection bias, and it is caused by systematically observing some events more than others. Let's explain a little bit of this paradox using the previousely mentioned example:
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{berkson_men.png}
+\centering
+\end{figure}
+
+If we take a look at this plot, we can see that there is no apparent association between being handsome and being nice. The data shows independence between these two varaibles. But, being a smart woman, you are probably not going to look for an unpleasant man or an ugly one, right? Your goal is probably somwhere in the green area shown in the plot. But those man might not be single or interested in you so, is there any other man you would consider? Yes, for sure. But not all of them. You would probably accept a not so handsome man that is really nice or a not so nice man that is really handsome. And that's what causes your bias. You only pay attention to specific groups of population, as you are not even considering man who are not very nice and also not very handsome (who would want that, right\?). This is what Berkson's paradox describes, a selection bias in our observations.
+
+Okay, now that we know not all handsome man are jerks, let's take a look at a different example.
+We are going to observe hospital patients with diabetes and hospital patients with cholecystitis.The corresponding DAG:
+
+
+
+\begin{lstlisting}
+
+DAG.Berkson <- dagitty("dag {
+diabetes -> hosp_patient
+cholycistitis -> hosp_patient
+
+}")
+
+coordinates(DAG.Berkson) <- list(x = c(diabetes = 1,  cholycistitis = 3, 
+                                       hosp_patient = 2),
+                                 y = c(diabetes = 1, cholycistitis = 1, 
+                                       hosp_patient = 3))
+drawdag(DAG.Berkson)
+
+
+\end{lstlisting}
+
+
+
+Let us generate the data according to the DAG. For this particular case we are going to work with dicotomyc variables.
+
+\begin{lstlisting}
+
+N=100
+
+diabetes <- rbinom(n=100, size=1, prob=0.7)
+cholecystitis <- rbinom(n=100, size=1, prob=0.3) 
+hosp_patients <- diabetes*0.6 + cholecystitis*0.4 + rnorm(N, mean = 0, sd = 0.2)
+
+\end{lstlisting}
+
+
+Let's take a look at our data estimates, for that we will use a function that creates a dataframe containing the p values and estimates for the variables diabetes and cholecystitis and also diabetes and cholecystitis adjusting by the hospital patients. It also returns a string checking the  significance of the pvalue for diabetes and cholecystitis and another one for the same value but when adjusting by the hospital patients.
+
+
+\begin{lstlisting}
+
+df_pval_estimates <- function(var1, var2, var3) {
+  dataset_2var <- data.frame(var1,var2)
+  
+  
+  dataset_3var <- data.frame(var1,var2,var3)
+  
+  
+  est_v1_v2 <- summary(glm(var1~var2, data = dataset_2var, family = 'binomial')
+  )$coefficients['var2', 'Estimate']
+  pval_v1_v2 <- summary(glm(var1~var2, data = dataset_2var, family = 'binomial')
+  )$coefficients['var2', 'Pr(>|z|)']
+  
+  
+  est_v1_v2_v3 <- summary(glm(var1~var2+var3, data=dataset_3var, 
+                              family = 'binomial'))$coefficients['var2', 'Estimate']
+  pval_v1_v2_v3 <-summary(glm(var1~var2+var3, data=dataset_3var, 
+                              family = 'binomial'))$coefficients['var2', 'Pr(>|z|)']
+  
+  df_final <- data.frame('values_of' = c('Estimates', 'P_values'), 'diab_chol' = 
+                           c(est_v1_v2, pval_v1_v2), 'diab_chol_HP' = 
+                           c(est_v1_v2_v3, pval_v1_v2_v3))
+  
+  print(df_final)
+  cat('\n')
+  
+  {if (pval_v1_v2 > 0.05)
+    cat('The variables do not show an association. The p value is', 
+        pval_v1_v2, 'and the estimate is',est_v1_v2, '\n')
+    else
+      cat('The variables do show an association. The p value is', 
+          pval_v1_v2, 'and the estimate is',est_v1_v2, '\n')}
+  
+  {if (pval_v1_v2_v3 > 0.05)
+    cat('The variables do not show an association when adjusting by the collider. The p value is', 
+        pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')
+    else
+      cat('The variables do show an association when adjusting by the collider. The p value is', 
+          pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')}
+}
+
+df_pval_estimates(diabetes, cholecystitis, hosp_patients)
+
+
+# values_of diab_chol diab_chol_HP
+#1 Estimates 0.6988779  -7.36168368
+#2  P_values 0.3038396   0.00373474
+
+# The variables do not show an association. The p value is 0.3038396 and the estimate is 0.6988779 
+#The variables do show an association when adjusting by the collider. The p value is 0.00373474 and the estimate is -7.361684
+
+\end{lstlisting}
+
+So, for this example we can see how two variables that should not have any association between them, when adjusting for our collider (a small selection of the population, in this case hospital patients) a negative association arises, meaning you should not find the two diseases in one person.
+
+
 A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification (Hernan, 2017).
 One striking example of Simpson's paradox is the low birth-weight paradox. It will also help us to introduce the problem that may involve the unmeasured variables: those events that may affect the causal structure of our model but can't be measured, or that we are not even aware of. This example presents the same issue in any of the following two directed acyclic graphs:
 \begin{lstlisting}
