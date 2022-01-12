@@ -50,21 +50,19 @@ hosp_patients <- diabetes*0.6 + cholecystitis*0.4 + rnorm(N, mean = 0, sd = 0.2)
 # for the same value but when adjusting by the hospital patients.
 
 df_pval_estimates <- function(var1, var2, var3) {
-  dataset_2var <- data.frame(var1,var2)
+
+  dataset <- data.frame(var1,var2,var3)
   
   
-  dataset_3var <- data.frame(var1,var2,var3)
-  
-  
-  est_v1_v2 <- summary(glm(var1~var2, data = dataset_2var, family = 'binomial')
+  est_v1_v2 <- summary(glm(var1~var2, data = dataset, family = 'binomial')
   )$coefficients['var2', 'Estimate']
-  pval_v1_v2 <- summary(glm(var1~var2, data = dataset_2var, family = 'binomial')
+  pval_v1_v2 <- summary(glm(var1~var2, data = dataset, family = 'binomial')
   )$coefficients['var2', 'Pr(>|z|)']
   
   
-  est_v1_v2_v3 <- summary(glm(var1~var2+var3, data=dataset_3var, 
+  est_v1_v2_v3 <- summary(glm(var1~var2+var3, data=dataset, 
                               family = 'binomial'))$coefficients['var2', 'Estimate']
-  pval_v1_v2_v3 <-summary(glm(var1~var2+var3, data=dataset_3var, 
+  pval_v1_v2_v3 <-summary(glm(var1~var2+var3, data=dataset, 
                               family = 'binomial'))$coefficients['var2', 'Pr(>|z|)']
   
   df_final <- data.frame('values_of' = c('Estimates', 'P_values'), 'diab_chol' = 
