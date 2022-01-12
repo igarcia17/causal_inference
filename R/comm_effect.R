@@ -404,7 +404,7 @@ INK4a <- UV_radiation * b_UV_INK4a + rnorm(N, mean = 0, sd = 0.5)
 mutatedp53 <- UV_radiation * b_UV_mp53 + INK4a * b_INK4a_mp53 + 
   rnorm(N, mean = 0, sd = 0.1)
 
-# Again lets gather our data in a dataframe to check it:
+# Again let's gather our data in a dataframe to check it:
 data.frame(UV_radiation, INK4a, mutatedp53)
 
 PLOT.REG(UV_radiation ~ INK4a, 'UV ~ INK4a')
