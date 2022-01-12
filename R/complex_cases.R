@@ -53,7 +53,6 @@ df_pval_estimates <- function(var1, var2, var3) {
 
   dataset <- data.frame(var1,var2,var3)
   
-  
   est_v1_v2 <- summary(glm(var1~var2, data = dataset, family = 'binomial')
   )$coefficients['var2', 'Estimate']
   pval_v1_v2 <- summary(glm(var1~var2, data = dataset, family = 'binomial')
@@ -73,18 +72,22 @@ df_pval_estimates <- function(var1, var2, var3) {
   cat('\n')
   
   {if (pval_v1_v2 > 0.05)
-    cat('The variables do not show an association. The p value is', 
-        pval_v1_v2, 'and the estimate is',est_v1_v2, '\n')
+    cat('The variables', columns[1], 'and', columns[2], 
+    'do not show an association. The p value is', pval_v1_v2, 'and the estimate is',
+    est_v1_v2, '\n')
     else
-      cat('The variables do show an association. The p value is', 
-          pval_v1_v2, 'and the estimate is',est_v1_v2, '\n')}
+      cat('The variables', columns[1], 'and', columns[2], 
+      'do show an association. The p value is', pval_v1_v2, 'and the estimate is',
+      est_v1_v2, '\n')}
   
   {if (pval_v1_v2_v3 > 0.05)
-    cat('The variables do not show an association when adjusting by the collider. The p value is', 
-        pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')
+    cat('The variables', columns[1], 'and', columns[2], 
+    'do not show an association when adjusting by the collider', columns[2],
+    '. The p value is', pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')
     else
-      cat('The variables do show an association when adjusting by the collider. The p value is', 
-          pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')}
+      cat('The variables', columns[1], 'and', columns[2], 
+      'do show an association when adjusting by the collider,',columns[3],
+      '. The p value is', pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')}
 }
 
 df_pval_estimates(diabetes, cholecystitis, hosp_patients)
