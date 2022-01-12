@@ -212,18 +212,6 @@ lung_capacity <- 100 + b_cd * cigarettes_day + b_vlc * vir_load_COV19 +
 #Checking the data: 
 data.frame(cigarettes_day, vir_load_COV19, lung_capacity)
 
-#Let's see the relations between our variables.
-SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cigarettes and lung capacity",
-         vir_load_COV19 ~ lung_capacity, "lung_capacity", "vir_load_COV19 and lung capacity",
-         cigarettes_day ~ vir_load_COV19, "vir_load_COV19", "cigarettes and vir_load_COV19",
-          cigarettes_day ~ vir_load_COV19 + lung_capacity, "vir_load_COV19",
-         "cigarettes and vir_load_COV19 (when lung capacity)")
-
-
-# No correlation between nº of cigarettes smoked a day and the viral load of 
-# COV19 infection but a correlation between these two variables arises when 
-# adjusting for the collider (lung_capacity)
-
 
 # Here we have the plots showing the distribution of the variables cigarettes_day
 # and vir_load_COV19, where apparently there is no correlation.
@@ -235,6 +223,19 @@ PLOT.REG(cigarettes_day ~ lung_capacity, "Cigarettes ~ Lung_capacity")
 
 par(op)
 
+
+
+#Let's see the relations between our variables.
+SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cigarettes and lung capacity",
+         vir_load_COV19 ~ lung_capacity, "lung_capacity", "vir_load_COV19 and lung capacity",
+         cigarettes_day ~ vir_load_COV19, "vir_load_COV19", "cigarettes and vir_load_COV19",
+          cigarettes_day ~ vir_load_COV19 + lung_capacity, "vir_load_COV19",
+         "cigarettes and vir_load_COV19 (when lung capacity)")
+
+
+# No correlation between nº of cigarettes smoked a day and the viral load of 
+# COV19 infection but a correlation between these two variables arises when 
+# adjusting for the collider (lung_capacity)
 
 
 
@@ -368,8 +369,8 @@ if (P.VAL.DICT[[i]] > 0)
 # The positive correlation we find between X2 and Y2 switches to
 # a negative correlation when we adjust for Z2
 
-## As we can see, in this particular case, conditioning on Z changes the sign 
-## of the estimate for the Y2 variable, as in Simpson's paradox
+# As we can see, in this particular case, conditioning on Z changes the sign 
+# of the estimate for the Y2 variable, as in Simpson's paradox
 
 
 
@@ -394,10 +395,9 @@ coordinates(DAG.p53) <- list(x = c(UV_radiation = 1, INK4a = 3,
 drawdag(DAG.p53)
 
 
-#X = UV.radiation (minutes of exposure/day), Y = INK4a, Z= mutatedp53
 # Let's generate our data for this particular case:
 
-b_UV_INK4a <- (0.2)
+b_UV_INK4a <- 0.2
 b_INK4a_mp53 <- 2
 b_UV_mp53 <- 0.7
 
@@ -490,7 +490,7 @@ coordinates(DAG.Diabetes.Ancestor) <- list(x = c(cortisol = 1, cholesterol = 3,
                                              sugar_consumpt = 3))
 drawdag(DAG.Diabetes.Ancestor)
 
-#X = cortisol, Y = colesterol, Z = diabetes, W = sugar consumption in gr
+#Once more, we create our data:
 
 b_co_d <- 0.9
 b_ch_d <- 0.95
@@ -535,13 +535,10 @@ DAG.Descendant <- dagitty("dag {
 X -> Z
 Y -> Z
 Z -> W
-e_z -> Z
 }")
 
-coordinates(DAG.Descendant) <- list(x = c(X = 1, Y = 3, Z = 2, 
-                                             e_z = 1.75, W = 2),
-                                       y = c(X = 1, Y = 1, Z = 2, 
-                                             e_z = 2, W = 3))
+coordinates(DAG.Descendant) <- list(x = c(X = 1, Y = 3, Z = 2, W = 2),
+                                       y = c(X = 1, Y = 1, Z = 2, W = 3))
 drawdag(DAG.Descendant)
 
 
@@ -590,7 +587,6 @@ coordinates(DAG.Diabetes.Descendant) <- list(x = c(cortisol = 1,
                                              heart_disease = 3))
 drawdag(DAG.Diabetes.Descendant)
 
-#X = cortisol, Y = colesterol, Z = diabetes, W = heart disease
 
 # As the example is very simmilar to the previous one, we well be using the
 # same values for the data, excepting the heart disease variable.
