@@ -1,38 +1,4 @@
 
-\\\\\\This conclusion may impulse mothers who fear having an underweight baby to start smoking. We must think about this scenarios carefully to avoid making fake statements and
-
-LBW.fun <- function(dataset, reps = 100){
-  #it doesn't check the p value of LBW because it is not the main issue of this type of
-  #paradox; we want to focus on how the effect of Smoking changes in presence or absence of LBW
-  onlyS_coefS <- rep(NA, reps)
-  both_coefS <- rep(NA, reps)
-  
-  for (i in 1:reps){
-    onlyS <- glm(Mortality~Smoking, data = dataset, family = 'binomial')
-    both <- glm(Mortality~LBW+Smoking, data = dataset, family = 'binomial')
-    
-    onlyS_coefS[i] <- summary(onlyS)$coefficients['Smoking','Estimate']
-    both_coefS[i] <- summary(both)$coefficients['Smoking','Estimate']
-    
-  }
-
-  #This shows the estimate of Smoking
-  cat('\nThe estimate for Smoking is:\nWhen Mortality ~ Smoking:', mean(onlyS_coefS),
-      '\nWhen Mortality ~ Smoking + LBW:', mean(both_coefS), '\n')
-  ##poner scatterplots en una sola imagen, y que la leyenda del seguno sea mas descriptiva o no aparezca
-  op <- par(mfrow= c(2,1), mar = rep(3,4))
-  scatterplot(Mortality ~ Smoking, data = dataset, main = 'Mortality ~ Smoking', smooth = FALSE, regline = FALSE)
-  scatterplot(Mortality ~ Smoking + LBW, data = dataset, main = 'Mortality ~ Smoking + LBW', smooth = FALSE, regline = FALSE)
-  par(op)
-  }
-  
-LBW.fun(LBWsc1.df)
-LBW.fun(LBWsc2.df)
-#Because low birth weight can be caused by other variables rather than smoking,
-#that can be more dangerous to the child's health, when conditioning on LBW it is seen
-#that Smoking has a negative correlation with mortality, thus, protecting the baby
-#of dying. This non-measured variables are unknown confounders. As in the previous 
-#cases, coditioning on Y, LBW, is a bad idea.
 
 #If U could be measured as birth defects, it would give the following DAG:
 LBWsc3.DAG <- dagitty("dag {
