@@ -279,8 +279,10 @@ paths(complex.DAG, from = 'X_i', to = 'X_j') #It is also included the causal pat
 #necessary to condition on one of their ascendants, or a descendant of the ascendant.
 #It gives 4 options: X_4 with X_1, X_2, or X_5, X_3.
 
-identical(summary(lm(X_j ~ X_i + X_4))$coefficients['X_i'],summary(lm(X_j ~ X_i + X_4 + X_1))$coefficients['X_i'])
-identical(summary(lm(X_j ~ X_i + X_4))$coefficients['X_i'],summary(lm(X_j ~ X_i + X_1))$coefficients['X_i'])
+identical(summary(lm(X_j ~ X_i + X_4))$coefficients['X_i'],
+          summary(lm(X_j ~ X_i + X_4 + X_1))$coefficients['X_i'])
+identical(summary(lm(X_j ~ X_i + X_4))$coefficients['X_i'],
+          summary(lm(X_j ~ X_i + X_1))$coefficients['X_i'])
 
 #This corresponds to:
 adjustmentSets(complex.DAG, "X_i", "X_j")
