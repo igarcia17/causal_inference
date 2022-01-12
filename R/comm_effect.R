@@ -60,8 +60,8 @@ PLOT.REG(Z ~ Y, 'Var distribution Y-Z')
 PLOT.REG(X ~ Y, 'Var distribution X-Y')
 par(op)
 
-# As we can see, there is, apparently, a positive correlation between Z and X and also
-# Z and Y. On the other hand, there is no visible correlation between X and Y 
+# As we can see, there is, apparently, a positive association between Z and X and also
+# Z and Y. On the other hand, there is no visible association between X and Y 
 # (as should). We can check it by calculating the estimates and significance of
 # each pair. For that we will create a function that accepts the following 
 # arguments: variables to check, dependent variable (to get the estimate and
@@ -166,9 +166,9 @@ SUM.4VAR(X ~ Z, "Z", "X and Z", Y ~ Z, "Z", "Y and Z", X ~ Y, "Y", "X and Y", X 
          "Y", "X and Y (when Z)")
 
 
-# We can see a strong correlation between Z and X. There is also a positive
+# We can see a strong association between Z and X. There is also a positive
 # relation between Z and Y, but none between X and Y. But the two independent 
-# variables (X and Y) when we adjust by Z raise a correlation that wasn't 
+# variables (X and Y) when we adjust by Z raise a association that wasn't 
 # supposed to be there.
 
 # When controling a collider, you can induce a bias in the estimate of the
@@ -214,11 +214,11 @@ data.frame(cigarettes_day, vir_load_COV19, lung_capacity)
 
 
 # Here we have the plots showing the distribution of the variables cigarettes_day
-# and vir_load_COV19, where apparently there is no correlation.
+# and vir_load_COV19, where apparently there is no association.
 op <- par(mfrow= c(2, 1))
 PLOT.REG(cigarettes_day ~ vir_load_COV19, "Cigarettes ~ Virus_load")
 
-# A plot for comparison, cigarettes and lung capacity, a negative correlation:
+# A plot for comparison, cigarettes and lung capacity, a negative association:
 PLOT.REG(cigarettes_day ~ lung_capacity, "Cigarettes ~ Lung_capacity")
 
 par(op)
@@ -233,8 +233,8 @@ SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cigarettes and lung c
          "cigarettes and vir_load_COV19 (when lung capacity)")
 
 
-# No correlation between nº of cigarettes smoked a day and the viral load of 
-# COV19 infection but a correlation between these two variables arises when 
+# No association between nÂº of cigarettes smoked a day and the viral load of 
+# COV19 infection but a association between these two variables arises when 
 # adjusting for the collider (lung_capacity)
 
 
@@ -268,10 +268,7 @@ coordinates(DAG.Runner) <- list(x = c(cholesterol = 1, heart = 3,
 drawdag(DAG.Runner)
 
 
-# To represent the effect of conditioning on a collider in this case we will
-# be using data for every variable, but we will consider as if we could not 
-# measure the metabolism in order to control the counfounder. 
-
+# Let us generate our data. 
 
 b_ll_s <- 1.2
 b_m_s <- 1
@@ -296,18 +293,18 @@ SUM.4VAR(leg_lenght ~ metabolism, "metabolism", "leg_len and metabolism", leg_le
          "cholesterol", "leg_len and cholesterol", leg_lenght ~ heart, "heart", "leg_len and heart", 
          leg_lenght ~ heart + speed, "heart", "leg_len and heart (when speed)")
 
-# There is no correlation between leg lenght and metabolism, leg lenght and 
+# There is no association between leg lenght and metabolism, leg lenght and 
 # cholesterol and leg lenght and heart disease; but when we adjust for the 
 # collider speed, we open a path between leg lenght and heart disease. We 
-# do find  a correlation between heart when there is no correlation between 
+# do find  a association between heart when there is no association between 
 # how long your legs are and cardiac disease.
 
-#Let's look at our data and see whether this correlation we find when adjusting
+#Let's look at our data and see whether this association we find when adjusting
 # by our collider (speed) is actually present:
 op <- par(mfrow= c(2, 1))
 PLOT.REG(leg_lenght ~ heart, "LEG ~ HEART")
 
-# The following plot shows the correlation that actually exists between
+# The following plot shows the association that actually exists between
 # the variables cholesterol and heart, as opposed to the previous ones.
 PLOT.REG(cholesterol ~ heart, "CHOLESTEROL ~ HEART")
 
@@ -318,7 +315,7 @@ par(op)
 
 #________________________________SITUATION 2___________________________________
 # We could also have a case in which our X and Y variables have some sort of
-# relation but the estimate (its correlation) changes from positive to negative
+# relation but the estimate (its association) changes from positive to negative
 # when we condition on Z.
 
 #Let's take a look at the DAG:
@@ -351,7 +348,7 @@ PLOT.REG(X2 ~ Y2, "Var distribution X2 ~ Y2")
 
 par(op)
 
-# As we can see, there is, apparently a positive correlation between Z2 and X2;  
+# As we can see, there is, apparently a positive association between Z2 and X2;  
 # Z2 and Y2; and X2 and Y2. In this case we are interested in the relationship  
 # between X2 and Y2; we can check it: 
 
@@ -359,15 +356,15 @@ SUM.2VAR(X2 ~ Y2, "Y2", "X2 and Y2", X2 ~ Y2 + Z2, "Y2", "X2 and Y2 (when Z2)"){
 if (P.VAL.DICT[[i]] > 0)
   for (i in ls(P.VAL.DICT)) {
     if (P.VAL.DICT[[i]] > 0)
-      cat('The variables', i, 'have a positive correlation',
+      cat('The variables', i, 'have a positive association',
           'with an estimate of', E.DICT[[i]], '\n')
     else
-      cat('The variables', i, 'have a negative correlation',
+      cat('The variables', i, 'have a negative association',
           'with an estimate of', E.DICT[[i]], '\n')}}
 
 
-# The positive correlation we find between X2 and Y2 switches to
-# a negative correlation when we adjust for Z2
+# The positive association we find between X2 and Y2 switches to
+# a negative association when we adjust for Z2
 
 # As we can see, in this particular case, conditioning on Z changes the sign 
 # of the estimate for the Y2 variable, as in Simpson's paradox
@@ -416,7 +413,7 @@ PLOT.REG(UV_radiation ~ INK4a, 'UV ~ INK4a')
 SUM.2VAR(UV_radiation ~ INK4a, "INK4a", "UV and INK4a", UV_radiation ~ INK4a
          + mutatedp53, "INK4a", "UV and INK4a (when Mp53)")
 
-# As shown in the Summary function, the correlation between the variables UV 
+# As shown in the Summary function, the association between the variables UV 
 # radiation is maintained after adjusting for the collider but the relation
 # that was once positive becomes negative when adjusting for Mp53 (collider)
 
@@ -456,15 +453,15 @@ Z3 <- b_xz * X3 + b_yz * Y3 + W3 * b_wz + rnorm(N, 0, sd = sd_z)
 SUM.4VAR(X3 ~ W3, "W3", "X3 and W3", X3 ~ W3 + Z3, "W3", "X3 and W3 (when Z3)", X3 ~ Y3 + Z3, 
          "Y3", "X3 and Y3 (when Z3)", X3 ~ Y3, "Y3", "X3 and Y3")
 
-# There is no significant correlation between X3 and W3, but when conditioned
-# for Z3 a negative correlation arises. Same thing hapopens between the 
+# There is no significant association between X3 and W3, but when conditioned
+# for Z3 a negative association arises. Same thing hapopens between the 
 # variables X3 and Y3.
 # Therefore, conditioning on Z3 modifies the independence between X3, Y3 and W3
 
 SUM.2VAR(X3 ~ Y3, "Y3", "X3 and Y3", X3 ~ Y3 + W3, "Y3", "X3 and Y3 (when W3)")
 
-# No significant correlation found between X3 and Y3, nor can we find a 
-# correlation when adjusting for the ancestor (W3). 
+# No significant association found between X3 and Y3, nor can we find a 
+# association when adjusting for the ancestor (W3). 
 # So, conditioning on W3 does not change the independence between X3 and Y3.
 
 
@@ -509,13 +506,13 @@ PLOT.REG(cortisol ~ cholesterol, 'cortisol ~ cholesterol')
 SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cortisol 
          ~ cholesterol + sug_consumption, "cholesterol", "colesterol and cortisol (when sugar)")
 
-# Again we find no correlation between cortisol and cholesterol, even if we
+# Again we find no association between cortisol and cholesterol, even if we
 # adjust for the ancestor (sugar_consumption).
 
 SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cortisol 
          ~ cholesterol + diabetes, "cholesterol", "colesterol and cortisol (when diabetes)")
 
-# But we do find a correlation between those two variables when adjusting
+# But we do find a association between those two variables when adjusting
 # for diabetes (the collider)
 
 
@@ -557,10 +554,10 @@ W4 <- b_zw * Z4 + rnorm(N, 0, sd = sd_w)
 SUM.3VAR(X4 ~ Y4, "Y4", "X4 and Y4", X4 ~ Y4 + W4, "Y4", "X4 and Y4 (when W4)", X4 ~ Y4 + Z4,
          "Y4", "X4 and Y4 (when Z4)")
 
-# We find no correlation between X4 and Y4, but when we condition on the 
+# We find no association between X4 and Y4, but when we condition on the 
 # collider (Z) or its descendant (W4) we find a significantly negative 
-# correlation between the two variables. 
-# In this case adjusting by Z4 and W4 (its descendant) resulted in a correlation
+# association between the two variables. 
+# In this case adjusting by Z4 and W4 (its descendant) resulted in a association
 # between the variables X4 and Y4. 
 
 
@@ -615,18 +612,18 @@ SUM.3VAR(cortisol_desc ~ cholesterol_desc, "cholesterol_desc", "cortisol and cho
 # Just like in our previous simple example, in this case there should not be
 # any relation between cortisol and cholesterol (as we did intend with our data)
 # and when we see our summary we can confirm there is no relation. But when we 
-# condition on our collider or its descendant (heart disease) a correlation 
+# condition on our collider or its descendant (heart disease) a association 
 # between the variables cortisol and cholesterol arises. 
 
 op <- par(mfrow= c(2, 1))
 
 PLOT.REG(cortisol_desc ~ cholesterol_desc, 'cortisol ~ cholesterol')
 
-# To better visualize this non existent correlation between our two variables
+# To better visualize this non existent association between our two variables
 # we can check the plot for the regression of both of them and it's pretty clear
-# that there is no apparent positive or negative correlation.
+# that there is no apparent positive or negative association.
 
 PLOT.REG(cortisol_desc ~ heart_disease, 'cortisol ~ heart_disease')
 
 # To reinforce this data, we can also check and compare the plot for the 
-# variables cortisol and heart disease, where we see a positive correlation.
+# variables cortisol and heart disease, where we see a positive association.
