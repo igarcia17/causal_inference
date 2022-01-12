@@ -1,43 +1,29 @@
 \name{sc1.comm}
 \alias{sc1.comm.plusancestor, sc2.comm.extraoverY}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Description of common cause cases
 }
 \description{
 Given the parameters that affect a set of variables X, Y, Z, (A, B), generate the plots that illustrate a change of the estimates and a terminal output of description.
 }
-%- maybe also 'usage' for other objects documented here.
-\arguments{
+\arguments{ -- Nera: falta o quitar
   \item{x}{
 %%     ~~Describe \code{x} here~~ TODO
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
+
+\value{ -- Nera: falta
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
+
 \author{
 Ines Garcia Ortiz
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 ##Not directly executable!!
 
