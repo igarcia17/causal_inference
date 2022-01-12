@@ -1033,7 +1033,6 @@ SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cigarettes and lung c
 
 \end{lstlisting}
 
-
 No association between number of cigarettes smoked a day and the viral load of COV19 infection but a association between these two variables arises when  adjusting for the collider (lung\_capacity).
 
 At this point we have already seen how adjusting a collider may create some problems when analyzing data. But things can get a lot more complicated. Let's  not go too far, but see a new example which is a bit more complicated than the previous ones.
@@ -1041,7 +1040,6 @@ At this point we have already seen how adjusting a collider may create some prob
 Imagine we are studying the performance of a professional runner. We have a few variables to take into consideration, but we will focus on the following ones: leg length,metabolism (which affects weight, meaning it also affects performance), heart disease (measured through the values of high-sensitivity cardiac troponin  (hs-cTn)), cholesterol (as a measure of overall health); this last variable  does not affect directly the performance of the runner (speed), but it might through its health. 
 
 Let's take a look at the DAG:
-
 
 \begin{lstlisting}
 
@@ -1068,7 +1066,6 @@ drawdag(DAG.Runner)
 Let's, one more time, generate the data. In this case we have 5 variables, some are associated, others not, it's all on the next piece of code:
 
 \begin{lstlisting}
-
 
 b_ll_s <- 1.2
 b_m_s <- 1
@@ -1422,9 +1419,7 @@ PLOT.REG(cortisol ~ cholesterol, 'cortisol ~ cholesterol')
 \centering
 \end{figure}
 
-
 As we can seee, apparently there is no association... But what happens when we adjust for the collider and ancestor?
-
 
 \begin{lstlisting}
 
@@ -1546,7 +1541,6 @@ drawdag(DAG.Diabetes.Descendant)
 \end{figure}
 
 
-
 As the example is very simmilar to the previous one, we will be using the same values for the data, excepting the heart disease variable.
  
  
@@ -1566,7 +1560,6 @@ diabetes_desc <- cortisol_desc * b_co_d_d + cholesterol_desc * b_ch_d_d +
 heart_disease <- diabetes_desc * b_d_hd + rnorm(N, 0, sd = sd_hd)
 
 \end{lstlisting}
-
 
 Let's check the values...
 
@@ -1604,7 +1597,7 @@ PLOT.REG(cortisol_desc ~ heart_disease, 'cortisol ~ heart_disease')
 \includegraphics[width=8cm]{PLOT_CR_CH_HD.png}
 \centering
 \end{figure}
-
+\newpage
 
 \section{Complex cases and backdoor criteria}
 
@@ -1712,7 +1705,6 @@ df_pval_estimates <- function(var1, var2, var3) {
 
 df_pval_estimates(diabetes, cholecystitis, hosp_patients)
 
-
 # values_of diab_chol diab_chol_HP
 #1 Estimates 0.6988779  -7.36168368
 #2  P_values 0.3038396   0.00373474
@@ -1723,7 +1715,6 @@ df_pval_estimates(diabetes, cholecystitis, hosp_patients)
 \end{lstlisting}
 
 So, for this example we can see how two variables that should not have any association between them, when adjusting for our collider (a small selection of the population, in this case hospital patients) a negative association arises, meaning you should not find the two diseases in one person.
-
 
 A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification (Hernan, 2017).
 One striking example of Simpson's paradox is the low birth-weight paradox. It will also help us to introduce the problem that may involve the unmeasured variables: those events that may affect the causal structure of our model but can't be measured, or that we are not even aware of. This example presents the same issue in any of the following two directed acyclic graphs:
@@ -1807,12 +1798,10 @@ LBW.fun(LBWsc2.df)
 #When Mortality ~ Smoking + LBW: -0.7021735 
 \end{lstlisting}
 
-
-#Because low birth weight can be caused by other variables rather than smoking,
-#that can be more dangerous to the child's health, when conditioning on LBW it is seen
-#that Smoking has a negative correlation with mortality, thus, protecting the baby
-#of dying. This non-measured variables are unknown confounders. As in the previous 
-#cases, coditioning on Y, LBW, is a bad idea.
+It doesn't matter if in the causal structure of the initial DAG LBW relates to mortality or not, in both cases when the model conditions on LBW, the estimate for Smoking (which is always significant, though not shown, it is obvious), gets negative. These results are contraintuitive: there is something that we are not taking into account. 
+What happens is that those unmeasured variables have a higher influence on mortality and low birth weight than smoking, maybe because they cause serious birth defects. They are 'invisible confounders' that may lead to a wrong conclusion, and by conditioning on Low Birth Weight we are creating a bridge for them to show their effect.
+It is very common for the so called experts to get excited when they have measured many variables, but sometimes adjusting for other covariates that enable the exposure of a non\-causal relationship can be a real handicap. This is why it arises the necessity to stablish a criteria to know what to condition on and what to avoid.
+We introduce this concept at the end, as it is necessary to know certain basic concepts of the \(Science of Why\) to apply this criteria with sense
 
 
 
