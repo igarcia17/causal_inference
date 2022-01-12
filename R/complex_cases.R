@@ -12,23 +12,23 @@ if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
 
 
 
-# This particular paradox is a particular kind of selection bias, or statistical 
-# result, caused by systematically observing some events more than other.
+# This paradox is a particular kind of selection bias, caused by systematically 
+# observing some events more than other.
 
 # Let's take a look at the DAG for our particular example, where we observe 
 # hospital patients with diabetes and hospital patients with cholecystitis.
 
 
 DAG.Berkson <- dagitty("dag {
-var1 -> hosp_patient
-var2 -> hosp_patient
-e_z -> hosp_patient
+diabetes -> hosp_patient
+cholycistitis -> hosp_patient
+
 }")
 
-coordinates(DAG.Berkson) <- list(x = c(var1 = 1,  var2 = 3, 
-                                       hosp_patient = 2, e_z = 1.25),
-                                 y = c(var1 = 1, var2 = 1, 
-                                       hosp_patient = 3, e_z = 3))
+coordinates(DAG.Berkson) <- list(x = c(diabetes = 1,  cholycistitis = 3, 
+                                       hosp_patient = 2),
+                                 y = c(diabetes = 1, cholycistitis = 1, 
+                                       hosp_patient = 3))
 drawdag(DAG.Berkson)
 
 # Let us generate the data according to the DAG:
