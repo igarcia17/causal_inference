@@ -1,45 +1,31 @@
 \name{LBW}
 \alias{LBW description function}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Low Birth Weight Paradox estimates description%%  ~~function to do ... ~~
+Low Birth Weight Paradox estimates description
 }
 \description{
-Function to illustrate the problem that arises in the Low Birth Weight paradox case, being it a Simpson's paradox example. %%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
+Function to illustrate the problem that arises in the Low Birth Weight paradox case, being it a Simpson's paradox example.}
 
-%- maybe also 'usage' for other objects documented here.
-\arguments{
+\arguments{ 
   \item{dataset}{
   Must contain variables: Smoking, LBW, Mortality, U.
 %%     ~~Describe \code{x} here~~
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
+
+\value{  -- Nera: falta rellenar
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
+
 \author{
 Ines Garcia Ortiz
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
