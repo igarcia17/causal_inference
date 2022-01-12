@@ -780,7 +780,7 @@ Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
 
 \end{lstlisting}
 
-We use vectors to generate random numbers from 1 to 10 for our X variable and from 1.5 to 12 for our Y variable, as both are independent. For our collider \(Z\) we multiply the values of the two previous variables by a number we want to set as the relation between the parents \(X and Y\) and the collider \(Z\). We also add our standard deviation.
+We use vectors to generate random numbers from 1 to 10 for our X variable and from 1.5 to 12 for our Y variable, as both are independent. For our collider (Z) we multiply the values of the two previous variables by a number we want to set as the relation between the parents (X and Y) and the collider (Z). We also add our standard deviation.
 
 Now for our case number 2:
 
@@ -835,7 +835,7 @@ par(op)
 \newpage
 
 
-As we can see, there is, apparently, a positive correlation between Z and X and also Z and Y. On the other hand, there is no visible correlation between X and Y  \( as should \). We can check it by calculating the estimates and significance of each pair. For that we will create a function that accepts the following  arguments: variables to check, dependent variable \( to get the estimate and p value \), and the title of the variables; the last two ones should be text input in order to make it work.
+As we can see, there is, apparently, a positive correlation between Z and X and also Z and Y. On the other hand, there is no visible correlation between X and Y  ( as should ). We can check it by calculating the estimates and significance of each pair. For that we will create a function that accepts the following  arguments: variables to check, dependent variable ( to get the estimate and p value ), and the title of the variables; the last two ones should be text input in order to make it work.
 
 
 Now that we already checked the distribution of our data, now we should check for our estimates and p values to see if that association or lack thereof is also visible in our values. To do so, we created a function that returns a string that reveals whether there is an association or not, and the values for the estimate and pvalue for our two variables.
@@ -951,9 +951,9 @@ SUM.4VAR(X ~ Z, "Z", "X and Z", Y ~ Z, "Z", "Y and Z", X ~ Y, "Y", "X and Y", X 
 \end{lstlisting}
 
 
-We can see a strong correlation between Z and X. There is also a positive relation between Z and Y, but none between X and Y. But the two independent  variables \(X and Y\) when we adjust by Z raise a correlation that wasn't supposed to be there.
+We can see a strong correlation between Z and X. There is also a positive relation between Z and Y, but none between X and Y. But the two independent  variables (X and Y) when we adjust by Z raise a correlation that wasn't supposed to be there.
 When controling a collider, you can induce a bias in the estimate of theparent variables when there is, actually, none.
-Knowing now well how to check our estimates and pvalues to aknowledge the association between the two variables \( X and Y, whatever those might be \), let's explore a more realistic example:
+Knowing now well how to check our estimates and pvalues to aknowledge the association between the two variables ( X and Y, whatever those might be ), let's explore a more realistic example:
 
 Here we have a set of variables: cigarettes smoked in a day, COVID19 virus load and \% of lung capacity. Both cigarette consumption and virus load should affect the lung capacity, but there should not be a relation between the number of cigarettes consumed daily and the COV19 virus load.
 
@@ -1030,7 +1030,7 @@ SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cigarettes and lung c
 
 \end{lstlisting}
 
-No correlation between number of cigarettes smoked a day and the viral load of COV19 infection but a correlation between these two variables arises when  adjusting for the collider \(lung\_capacity\).
+No correlation between number of cigarettes smoked a day and the viral load of COV19 infection but a correlation between these two variables arises when  adjusting for the collider (lung\_capacity).
 
 At this point we have already seen how adjusting a collider may create some problems when analyzing data. But things can get a lot more complicated. Let's  not go too far, but see a new example which is a bit more complicated than the previous ones.
 
@@ -1282,7 +1282,7 @@ Now that we have seen how adjusting the collider can afect the estimates and pva
 
 
 
-Imagine we have now a variable Z (a collider) that has an ancestor \(variable W\), does conditioning on any of those two affect the relation between variable X and Y?
+Imagine we have now a variable Z (a collider) that has an ancestor (variable W), does conditioning on any of those two affect the relation between variable X and Y?
 
 Let's draw our DAG: 
 
@@ -1325,7 +1325,7 @@ Z3 <- b_xz * X3 + b_yz * Y3 + W3 * b_wz + rnorm(N, 0, sd = sd_z)
 \end{lstlisting}
 
 
-And once again we will be checking the summaries for our estimates and pvalues, but this time we want to check also what happens when we adjust for the ancestor of our collider \(W\).
+And once again we will be checking the summaries for our estimates and pvalues, but this time we want to check also what happens when we adjust for the ancestor of our collider (W).
 
 
 \begin{lstlisting}
@@ -1445,9 +1445,9 @@ SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cort
 \end{lstlisting}
 
 
-But we do find a correlation between those two variables when adjusting for diabetes \(the collider\).
+But we do find a correlation between those two variables when adjusting for diabetes (the collider).
 
-Let's take a look at our second possible scenario with the ancestor and descendant situations. We now have a variable Z \(a collider\) that has a descendant \(variable W\), does conditioning on any of those two affect the relation between variable X and Y?
+Let's take a look at our second possible scenario with the ancestor and descendant situations. We now have a variable Z (a collider) that has a descendant (variable W), does conditioning on any of those two affect the relation between variable X and Y?
 Starting with the DAG:
 
 \begin{lstlisting}
@@ -1506,8 +1506,8 @@ SUM.3VAR(X4 ~ Y4, "Y4", "X4 and Y4", X4 ~ Y4 + W4, "Y4", "X4 and Y4 (when W4)", 
 
 \end{lstlisting}
 
-We find no correlation between X4 and Y4, but when we condition on the collider \(Z\) or its descendant \(W4\) we find a significantly negative correlation between the two variables. 
-In this case adjusting by Z4 and W4 \(its descendant\) resulted in a correlation between the variables X4 and Y4. 
+We find no correlation between X4 and Y4, but when we condition on the collider (Z) or its descendant (W4) we find a significantly negative correlation between the two variables. 
+In this case adjusting by Z4 and W4 (its descendant) resulted in a correlation between the variables X4 and Y4. 
 
 
 
@@ -1611,7 +1611,7 @@ library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {drawdag <- plot}
 \end{lstlistings}
 
-A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification \(Hernan, 2017\).
+A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification (Hernan, 2017).
 One striking example of Simpson's paradox is the low birth-weight paradox. It will also help us to introduce the problem that may involve the unmeasured variables: those events that may affect the causal structure of our model but can't be measured, or that we are not even aware of. This example presents the same issue in any of the following two directed acyclic graphs:
 \begin{lstlisting}
 LBWsc1.DAG <- dagitty('dag {
@@ -1644,10 +1644,9 @@ drawdag(LBWsc2.DAG)
 \centering
 \end{figure}
 \newpage
-The variables of study are three: if the mother smokes or not, if the baby presents a low weight at the moment of birth, and if the baby survives the first month of life. Notice the shape of the graphs: if U is ignored, they are the same scenarios as presented in the common cause section. What medical studies suggest is that underweighted babies present less chances of survival than ordinary babies for multiple reasons: weight involves a better organ development, and indicates that there is certain fat that can be used for protection, warmth and energy. Experts also proclaim that if the mother smokes during the pregnancy, the baby development can be compromised, leading to miscarriage or fragile health \(increasing infant mortality\). But when 'smoking mother' and 'low birth weight' are implied in the same model, it seems that if the mother smokes during the pregnancy, and the baby has low weight at birth, she has less chances of dying. 
+The variables of study are three: if the mother smokes or not, if the baby presents a low weight at the moment of birth, and if the baby survives the first month of life. Notice the shape of the graphs: if U is ignored, they are the same scenarios as presented in the common cause section. What medical studies suggest is that underweighted babies present less chances of survival than ordinary babies for multiple reasons: weight involves a better organ development, and indicates that there is certain fat that can be used for protection, warmth and energy. Experts also proclaim that if the mother smokes during the pregnancy, the baby development can be compromised, leading to miscarriage or fragile health (increasing infant mortality). But when 'smoking mother' and 'low birth weight' are implied in the same model, it seems that if the mother smokes during the pregnancy, and the baby has low weight at birth, she has less chances of dying. 
 
-
-In this example, there are unmeasured variables \(U\) that affect both low birth weight and mortality, though the only cause that we are accounting for is smoking. The questions that arise are: does smoking cause mortality? Does low birth weight cause mortality? We will simulate the data with the R package \textbf{simstudy}. We will increase the natural probabilities to visualize with clarity the issue. Let's assume that U is an unkown health condtion that can be absent \(0\) or present \(1\).
+In this example, there are unmeasured variables (U) that affect both low birth weight and mortality, though the only cause that we are accounting for is smoking. The questions that arise are: does smoking cause mortality? Does low birth weight cause mortality? We will simulate the data with the R package \textbf{simstudy}. We will increase the natural probabilities to visualize with clarity the issue. Let's assume that U is an unkown health condtion that can be absent (0) or present (1).
 \begin{lstlisting}
 samplesize <- 10000
 #Data for scenario 1
@@ -1665,8 +1664,41 @@ var.sc2 <- defData(var.sc2, varname = 'Mortality', dist = 'binary', formula = '0
 set.seed(13)
 LBWsc2.df <- genData(samplesize, var.sc2)
 \end{lstlisting}
+With the following function, we will see what actually happens with the variable Smoking when LBW is present in the model. The coefficients and estimates that are not relevant for the problem are not shown:
+\begin{lstlisting}
+LBW.fun <- function(dataset, reps = 100){
+  #it doesn't check the p value of LBW because it is not the main issue of this type of paradox
+  
+  onlyS_coefS <- rep(NA, reps)
+  both_coefS <- rep(NA, reps)
+  
+  for (i in 1:reps){
+    onlyS <- glm(Mortality~Smoking, data = dataset, family = 'binomial')
+    both <- glm(Mortality~LBW+Smoking, data = dataset, family = 'binomial')
+    
+    onlyS_coefS[i] <- summary(onlyS)$coefficients['Smoking','Estimate']
+    both_coefS[i] <- summary(both)$coefficients['Smoking','Estimate'] }
+  
+  cat('\nThe estimate for Smoking is:\nWhen Mortality ~ Smoking:', mean(onlyS_coefS),
+      '\nWhen Mortality ~ Smoking + LBW:', mean(both_coefS), '\n')
+}
+
+LBW.fun(LBWsc1.df)
+#The estimate for Smoking is:
+#When Mortality ~ Smoking: 0.180505 
+#When Mortality ~ Smoking + LBW: -0.7805442
+LBW.fun(LBWsc2.df)
+#The estimate for Smoking is:
+#When Mortality ~ Smoking: 0.2600481 
+#When Mortality ~ Smoking + LBW: -0.7021735 
+\end{lstlisting}
 
 
+#Because low birth weight can be caused by other variables rather than smoking,
+#that can be more dangerous to the child's health, when conditioning on LBW it is seen
+#that Smoking has a negative correlation with mortality, thus, protecting the baby
+#of dying. This non-measured variables are unknown confounders. As in the previous 
+#cases, coditioning on Y, LBW, is a bad idea.
 
 
 
@@ -1684,23 +1716,23 @@ LBWsc2.df <- genData(samplesize, var.sc2)
 
 \section{References}
 
-Causal Mediation | Columbia Public Health. \(2022\). Retrieved 11 January 2022, from \href{https://www.publichealth.columbia.edu/research/population-health-methods/causal-mediation}{PublicHealth Columbia - Causal Mediation}
+Causal Mediation | Columbia Public Health. (2022). Retrieved 11 January 2022, from \href{https://www.publichealth.columbia.edu/research/population-health-methods/causal-mediation}{PublicHealth Columbia - Causal Mediation}
 
-Coffman, D., \& Zhong, W. \(2012\). Assessing mediation using marginal structural models in the presence of confounding and moderation. Psychological Methods, 17\(4\), 642-664. doi: 10.1037\/a0029311
+Coffman, D., \& Zhong, W. (2012). Assessing mediation using marginal structural models in the presence of confounding and moderation. Psychological Methods, 17(4), 642-664. doi: 10.1037\/a0029311
 
-Cole, S., \& Hernan, M. \(2002\). Fallibility in estimating direct effects. International Journal Of Epidemiology, 31\(1\), 163-165. doi: 10.1093\/ije\/31.1.163
+Cole, S., \& Hernan, M. (2002). Fallibility in estimating direct effects. International Journal Of Epidemiology, 31(1), 163-165. doi: 10.1093\/ije\/31.1.163
 
-Davis, D. \(2020\). Average Sprinting Speed \& Usain Bolt Top Speed | Track Spikes. Retrieved 11 January 2022, from \href{https://trackspikes.co.uk/average-sprinting-speed/#}{Trackspikes.co.uk}
+Davis, D. (2020). Average Sprinting Speed \& Usain Bolt Top Speed | Track Spikes. Retrieved 11 January 2022, from \href{https://trackspikes.co.uk/average-sprinting-speed/#}{Trackspikes.co.uk}
 
-Hernan, M. \(2017\). Simpson's Paradox Unraveled. Retrieved 11 January 2022, from \href{https://twitter.com/_MiguelHernan/status/860542619818106881?s=20}{Miguel Hernan's Tweet, very recomended blog.}
+Hernan, M. (2017). Simpson's Paradox Unraveled. Retrieved 11 January 2022, from \href{https://twitter.com/_MiguelHernan/status/860542619818106881?s=20}{Miguel Hernan's Tweet, very recomended blog.}
 
-Hernan, M., Clayton, D., \& Keiding, N. \(2011\). The Simpson\'s paradox unraveled. International Journal Of Epidemiology, 40\(3\), 780\-785. doi: 10.1093\/ije\/dyr041
+Hernan, M., Clayton, D., \& Keiding, N. (2011). The Simpson\'s paradox unraveled. International Journal Of Epidemiology, 40(3), 780\-785. doi: 10.1093\/ije\/dyr041
 
-Santalo Bel, M., Guindo Soldevila, J., \& Ordonez Llanos, J. \(2003\). Marcadores biológicos de necrosis miocardica. Revista Española De Cardiologia, 56\(7\), 703-720. doi: 10.1016\/s0300-8932\(03\)76942-5
+Santalo Bel, M., Guindo Soldevila, J., \& Ordonez Llanos, J. (2003). Marcadores biológicos de necrosis miocardica. Revista Española De Cardiologia, 56(7), 703-720. doi: 10.1016\/s0300-8932(03)76942-5
 
-SARS-CoV-2: PCR, Carga Viral y CTs | Life Length BLOG \(2022\). Retrieved 11 January 2022, \href{from https://lifelength.com/es/sars-cov-2-pcr-carga-viral-y-cts/}{Life Length Divulgation Blog}
+SARS-CoV-2: PCR, Carga Viral y CTs | Life Length BLOG (2022). Retrieved 11 January 2022, \href{from https://lifelength.com/es/sars-cov-2-pcr-carga-viral-y-cts/}{Life Length Divulgation Blog}
 
-Soufir, N., Guedj, M., Bourrillon, A., Combadieres, C., Descamps, V., \& Dupin, N. et al. \(2008\). Polymorphisms of the MATP\/SLC45A2 gene and susceptibility to melanoma in the French population. Journal Of Clinical Oncology, 26\(15\_suppl\), 11040-11040. doi: 10.1200\/jco.2008.26.15\_suppl.11040
+Soufir, N., Guedj, M., Bourrillon, A., Combadieres, C., Descamps, V., \& Dupin, N. et al. (2008). Polymorphisms of the MATP\/SLC45A2 gene and susceptibility to melanoma in the French population. Journal Of Clinical Oncology, 26(15\_suppl), 11040-11040. doi: 10.1200\/jco.2008.26.15\_suppl.11040
 
 The Birth-Weight paradox. Retrieved 11 January 2022, from \href{https://library.bayesia.com/articles/#!bayesialab-knowledge-hub/the-birth-weight-paradox}{BayesiaLab - Weight Paradox simulation}
 
@@ -1708,8 +1740,8 @@ Cholesterol Levels: What You Need to Know: MedlinePlus. Retrieved 11 January 202
 
 Troponin - Health Encyclopedia - University of Rochester Medical Center. Retrieved 11 January 2022, from \href{https://www.urmc.rochester.edu/encyclopedia/content.aspx?contenttypeid=167&contentid=troponin}{Encyclopedia entry: Troponin}
 
-VanderWeele, T. \(2014\). Commentary: Resolutions of the birthweight paradox: competing explanations and analytical insights. International Journal Of Epidemiology, 43\(5\), 1368-1373. doi: 10.1093\/ije\/dyu162
+VanderWeele, T. (2014). Commentary: Resolutions of the birthweight paradox: competing explanations and analytical insights. International Journal Of Epidemiology, 43(5), 1368-1373. doi: 10.1093\/ije\/dyu162
 
-VanderWeele, T., \& Shpitser, I. \(2011\). A New Criterion for Confounder Selection. Biometrics, 67\(4\), 1406-1413. doi: 10.1111\/j.1541-0420.2011.01619.x
+VanderWeele, T., \& Shpitser, I. (2011). A New Criterion for Confounder Selection. Biometrics, 67(4), 1406-1413. doi: 10.1111\/j.1541-0420.2011.01619.x
 
 \end{document}
