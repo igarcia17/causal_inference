@@ -1610,7 +1610,8 @@ library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {drawdag <- plot}
 \end{lstlistings}
 
-\(BERKSON'S\) \(PARADOX\)
+\subsection{Berkson's paradox}
+
 
 A specific collider bias that has a quite famous example (\"Why are handsome men such jerks?\") is the Berkson's paradox. This paradox produces a selection bias, and it is caused by systematically observing some events more than others. Let's explain a little bit of this paradox using the previousely mentioned example:
 
@@ -1624,10 +1625,7 @@ If we take a look at this plot, we can see that there is no apparent association
 Okay, now that we know not all handsome man are jerks, let's take a look at a different example.
 We are going to observe hospital patients with diabetes and hospital patients with cholecystitis.The corresponding DAG:
 
-
-
 \begin{lstlisting}
-
 DAG.Berkson <- dagitty("dag {
 diabetes -> hosp_patient
 cholycistitis -> hosp_patient
@@ -1639,8 +1637,6 @@ coordinates(DAG.Berkson) <- list(x = c(diabetes = 1,  cholycistitis = 3,
                                  y = c(diabetes = 1, cholycistitis = 1, 
                                        hosp_patient = 3))
 drawdag(DAG.Berkson)
-
-
 \end{lstlisting}
 
 
@@ -1660,7 +1656,10 @@ hosp_patients <- diabetes*0.6 + cholecystitis*0.4 + rnorm(N, mean = 0, sd = 0.2)
 
 Let's take a look at our data estimates, for that we will use a function that creates a dataframe containing the p values and estimates for the variables diabetes and cholecystitis and also diabetes and cholecystitis adjusting by the hospital patients. It also returns a string checking the  significance of the pvalue for diabetes and cholecystitis and another one for the same value but when adjusting by the hospital patients.
 
-
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_DESCENDANT.png} %%change it for the Berkson one
+\centering
+\end{figure}
 \begin{lstlisting}
 
 df_pval_estimates <- function(var1, var2, var3) {
@@ -1715,6 +1714,10 @@ df_pval_estimates(diabetes, cholecystitis, hosp_patients)
 \end{lstlisting}
 
 So, for this example we can see how two variables that should not have any association between them, when adjusting for our collider (a small selection of the population, in this case hospital patients) a negative association arises, meaning you should not find the two diseases in one person.
+
+
+
+\subsection{Simpson's paradox}
 
 A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification (Hernan, 2017).
 One striking example of Simpson's paradox is the low birth-weight paradox. It will also help us to introduce the problem that may involve the unmeasured variables: those events that may affect the causal structure of our model but can't be measured, or that we are not even aware of. This example presents the same issue in any of the following two directed acyclic graphs:
