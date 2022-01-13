@@ -1616,7 +1616,7 @@ library(simstudy)
 library(dagitty)
 library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {drawdag <- plot}
-\end{lstlistings}
+\end{lstlisting}
 
 \subsection{Berkson\'s paradox}
 
@@ -1628,7 +1628,7 @@ A specific collider bias that has a quite famous example (\"Why are handsome men
 \centering
 \end{figure}
 
-If we take a look at this plot, we can see that there is no apparent association between being handsome and being nice. The data shows independence between these two varaibles. But, being a smart woman, you are probably not going to look for an unpleasant man or an ugly one, right? Your goal is probably somwhere in the green area shown in the plot. But those man might not be single or interested in you so, is there any other man you would consider? Yes, for sure. But not all of them. You would probably accept a not so handsome man that is really nice or a not so nice man that is really handsome. And that's what causes your bias. You only pay attention to specific groups of population, as you are not even considering man who are not very nice and also not very handsome (who would want that, right\?). This is what Berkson's paradox describes, a selection bias in our observations.
+If we take a look at this plot, we can see that there is no apparent association between being handsome and being nice. The data shows independence between these two variables. But, being a smart woman, you are probably not going to look for an unpleasant man or an ugly one. Your goal is probably somewhere in the green area shown in the plot. But those man might not be single or interested in you so you would probably accept a not so handsome man that is really nice or a not so nice man that is really handsome. And that\'s what causes your bias. You only pay attention to specific groups of population, as you are not even considering man who are not very nice and also not very handsome (which wouldn't be very convenient). This is what Berkson\'s paradox describes, a selection bias in our observations.
 
 Okay, now that we know not all handsome man are jerks, let's take a look at a different example.
 We are going to observe hospital patients with diabetes and hospital patients with cholecystitis.The corresponding DAG:
