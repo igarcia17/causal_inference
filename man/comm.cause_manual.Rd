@@ -6,18 +6,17 @@ Description of common cause cases
 \description{
 Given the parameters that affect a set of variables X, Y, Z, (A, B), generate the plots that illustrate a change of the estimates and a terminal output of description.
 }
-\arguments{ -- Nera: falta o quitar
-  \item{x}{
-%%     ~~Describe \code{x} here~~ TODO
-}
+\arguments{
+  \item{b_yz}{ Coefficient of Y over Z}
+  \item{b_xz}{ Coefficient of X over Z}
+  \item{b_xy}{ Coefficient of X over Y}
+  \item{b_ax}{ Coefficient of A over X}
+  \item{b_by}{ Coefficient of B over ZY}
+  \item{N}{Sample size for each time a dataset is done}
+  \item{reps}{Number of times models are generated}
 }
 
-\value{ -- Nera: falta
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\value{ Console output of descriptive parameters to pay attention in the analysis.
 }
 
 \author{
@@ -279,12 +278,3 @@ sc2.comm.extraoverY <- function(b_by, b_bz, b_xz, b_xy, b_yz, N, reps = 200, ...
 {
   }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory (show via RShowDoc("KEYWORDS")):
-% \keyword{ ~kwd1 }
-% \keyword{ ~kwd2 }
-% Use only one keyword per line.
-% For non-standard keywords, use \concept instead of \keyword:
-% \concept{ ~cpt1 }
-% \concept{ ~cpt2 }
-% Use only one concept per line.

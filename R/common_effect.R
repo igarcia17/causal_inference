@@ -1,6 +1,5 @@
 #_____________________COLLIDER AND SELECTION BIAS, CASES_______________________
 
-# Import modules
 library(dagitty)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
   drawdag <- plot
@@ -11,9 +10,6 @@ set.seed(11)
 # another where we don't. The purpose of these two scenarios is to check whether
 # adjusting for a collider will induce a bias in our estimates and how exactly
 # this bias will change these estimates. 
-
-
-
 
 #_________________________________SITUATION 1___________________________________
 
@@ -606,7 +602,8 @@ data.frame(cortisol_desc, cholesterol_desc, diabetes_desc, heart_disease)
 
 SUM.3VAR(cortisol_desc ~ cholesterol_desc, "cholesterol_desc", "cortisol and cholesterol", 
          cortisol_desc ~ cholesterol_desc + diabetes_desc, "cholesterol_desc",
-         "cortisol and cholesterol (when diabetes)", cortisol_desc ~ cholesterol_desc + heart_disease,
+         "cortisol and cholesterol (when diabetes)", 
+         cortisol_desc ~ cholesterol_desc + heart_disease,
          "cholesterol_desc", "cortisol and cholesterol (when heart disease)")
 
 # Just like in our previous simple example, in this case there should not be

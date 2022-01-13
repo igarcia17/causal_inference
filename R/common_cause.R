@@ -1,6 +1,5 @@
-#Confounders, common cause and mediators
+#_______________COMMON CAUSE CASES: CONFOUNDERS___________________________
 
-#import modules
 library(dagitty)
 library(car)
 library(rethinking)
@@ -147,7 +146,8 @@ b <- Y_check(Yinfluences)
 c <- Y_check(Ynoinfluences)
 #d <- Y_check(wrongcommoncause)
 
-###______________________Scenario 1 of common cause
+#_______________SCENARIO 1 COMMON CAUSE: NO RELATION___________________________
+
 
 #We will study the expression of gene INK4a, key for melanoma development. It 
 #will be the outcome variable of Z.
@@ -228,6 +228,8 @@ impliedConditionalIndependencies(i_uv_i.DAG)
 #Hence, in scenario 1 we should always condition on the common cause X or we 
 #could see a fake, but significant, causal relation between Y and Z.
 
+
+#_______________SCENARIO 1 COMPLEX: PLUS ANCESTOR OF COMM CAUSE________________
 #A variation would be to consider that uv raditaion depends on sun exposure, 
 #having the following DAG:
 b_ax_i_uv_i2 <- 2
@@ -388,7 +390,7 @@ sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2,
 #simple models (toy example in Z_X_Y_adjust.R) can be applied to more complex models
 #(as in this case).
 
-#_______________Scenario 2 in common cause
+#_______________SCENARIO 2 COMMON CAUSE: RELATION_______________________________
 
 #Let's move on to the scenario 2. We will illustrate with another example what 
 #to expect conditioning on the different possibilities. We have concluded that 
@@ -480,8 +482,8 @@ sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
 #On green, the effect of Y over Z. 
 
 #When the mediator Y is out of the model, the X estimates the total effect over Z,
-#including Y contribution. Only when Y is included it is possible to discern what is the
-#direct effect of X.
+#including Y contribution. Only when Y is included it is possible to discern what 
+#is the direct effect of X.
 #Depending on the case it would be more interesting to study the total or the direct
 #effect of X. For this case, we argue that to know the total effect would be better
 #because in the human body MATP expression is unavoidable.
@@ -494,7 +496,8 @@ sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
 
 #To condition on Y or not may give unexpected outcomes when looking at X over Z.
 #In this case, if MATP is not considered, it seems that the total effect is negative.
-when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
+when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, 
+                            b_xy = b_xy_m_uv_i,
                             N = samplesize)
 scatterplot(Z ~ X, data = when_xz_4, main ='Original case', regLine=TRUE, 
             xlab = 'UV radiation (exposure/time)', 
@@ -523,7 +526,10 @@ scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a',
             regLine=TRUE, xlab = 'UV radiation (exposure/time)', 
             ylab = 'INK4a expression', boxplots = FALSE)
 
-#Then the effect of X, UV radiation, over Z, INK4a, is increased, as it should be obvious.
+#Then the effect of X, UV radiation, over Z, INK4a, is increased, as it should 
+#be obvious.
+
+#_______________SCENARIO 2 COMPLEX: TWO COMMON CAUSES___________________________
 
 #The study goes on and we discovers that both the expression of MATP and INK4a
 #is also influenced by another key factor, the cortisol level. This leaves us 

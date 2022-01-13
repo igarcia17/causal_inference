@@ -1,6 +1,5 @@
 \name{SUM.2VAR}
 \alias{Summary for 2 variables}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Summary 2 variables}
 \description{
 This function recieves 2 variables and loops through each one of the p values
@@ -139,12 +138,3 @@ SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2,
 } #SUMMARY for 4 variables
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory (show via RShowDoc("KEYWORDS")):
-% \keyword{ ~kwd1 }
-% \keyword{ ~kwd2 }
-% Use only one keyword per line.
-% For non-standard keywords, use \concept instead of \keyword:
-% \concept{ ~cpt1 }
-% \concept{ ~cpt2 }
-% Use only one concept per line.

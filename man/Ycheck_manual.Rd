@@ -13,20 +13,16 @@ Check common cause scenario of dataset(x)
 
 \arguments{
   \item{dataset}{
-      Data frame that must include as column names X, Y and Z. TODO: improve this.   %%~~Describe \code{x} here~~
+      Data frame that must include as column names X, Y and Z.
 }
   \item{conflevel}{
      Confident level to which decide in which scenario are we in. Default = 0.01.
-     %%~~Describe \code{x} here~~
+
 }
 }
 
-\value{ --Nera: falta rellenar
+\value{
   Returns the type of relationship between Y and variable of study Z and corresponding DAG~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
 }
 
 \author{
@@ -86,12 +82,3 @@ Y_check <- function (dataset, conflevel = 0.01) {
   return(invisible(0))}
   }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory (show via RShowDoc("KEYWORDS")):
-% \keyword{ ~kwd1 }
-% \keyword{ ~kwd2 }
-% Use only one keyword per line.
-% For non-standard keywords, use \concept instead of \keyword:
-% \concept{ ~cpt1 }
-% \concept{ ~cpt2 }
-% Use only one concept per line.
