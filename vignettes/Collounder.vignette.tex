@@ -1728,7 +1728,6 @@ df_pval_estimates(diabetes, cholecystitis, hosp_patients)
 So, for this example we can see how two variables that should not have any association between them, when adjusting for our collider (a small selection of the population, in this case hospital patients) a negative association arises, meaning you should not find the two diseases in one person.
 
 
-
 \subsection{Simpson's paradox}
 
 A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification (Hernan, 2017).
@@ -1813,9 +1812,10 @@ LBW.fun(LBWsc2.df)
 #When Mortality ~ Smoking + LBW: -0.7021735 
 \end{lstlisting}
 
-It doesn't matter if in the causal structure of the initial DAG LBW relates to mortality or not, in both cases when the model conditions on LBW, the estimate for Smoking (which is always significant, though not shown, it is obvious), gets negative. These results are contraintuitive: there is something that we are not taking into account. 
+It doesn't matter if in the DAG the variable of low birth weight relates to mortality or not, in both cases when the model conditions on it, the estimate for Smoking gets negative.\footnote{The estimate for Smoking, though not shown, is always significant, as it is directly related to Mortality. This should be obvious up to this point.} These results are contraintuitive: there is something that we are not taking into account.
 What happens is that those unmeasured variables have a higher influence on mortality and low birth weight than smoking, maybe because they cause serious birth defects. They are 'invisible confounders' that may lead to a wrong conclusion, and by conditioning on Low Birth Weight we are creating a bridge for them to show their effect.
-It is very common for the so called experts to get excited when they have measured many variables, but sometimes adjusting for other covariates that enable the exposure of a non\-causal relationship can be a real handicap. This is why it arises the necessity to stablish a criteria to know what to condition on and what to avoid.
+It is very common for the so called experts to get excited when they have measured many variables, but sometimes adjusting for other covariates that enable the exposure of a non\-causal relationship can be a real handicap. This is why there is a necessity to stablish a criteria to know what to condition on and what to avoid.
+\subsection{Backdoor criteria}
 The backdoor cirteria is the most common method to condition on covariates, along with frontdoor criteria which is very similar.
 We introduce this concept at the end, as it is necessary to know certain basic concepts of the \(Science of Why\) to apply this criteria correctly and with sense.
 In the backdoor criteria, given a pair of treatment-outcome variables, we should condition on the set of covariates (Z) that:
@@ -1842,16 +1842,98 @@ drawdag(complex.DAG)
 \includegraphics[width=8cm]{complex.DAG.png}
 \centering
 \end{figure}
-First we have to identify all the backdoor paths. A backdoor path is a non causal path between the treatment variable X\_i and the outcome variable, which can be identified by an arrow pointing to X\_i.
+First we have to identify all the backdoor paths. A backdoor path is a non causal path between the treatment variable X\_i and the outcome variable, which can be identified by an arrow pointing to X\_i. This can be seen in the following image:
+\begin{figure}[h]
+\includegraphics[width=8cm]{complex.DAG.arrows.png}
+\centering
+\end{figure}
+The R package \(dagitty\) contains a function, \(paths\), that can get all the paths between the treatment and the outcome variable. If the graph is too complex, it could be useful to use this package and exclude the causal paths to get the backdoor ones.
+\begin{lstlisting}
+paths(complex.DAG, from = 'X_i', to = 'X_j')$paths
+#[1] "X_i -> X_6 -> X_j"                            
+#[2] "X_i <- X_3 <- X_1 -> X_4 -> X_j"              
+#[3] "X_i <- X_3 <- X_1 -> X_4 <- X_2 -> X_5 -> X_j"
+#[4] "X_i <- X_4 -> X_j"                            
+#[5] "X_i <- X_4 <- X_2 -> X_5 -> X_j"
+\end{lstlisting}
+We would have to exclude path \[1\].
+The next step would be to identify which variables block all the backdoor paths. In this case, it would be X\_4, as it is present in all of them. It satisfies the second condition, as it is not a descendant of the treatment variable X\_i. In this case, X\_4 is not only a confounder of the variables of study; it is also a collider of two other causes. To account for all the possible causes of confounding, it is necessary to also condition either on one of X\_4 parents or on one of the descendants of those parents. The function \(adjustmentSets\) is useful to get all the possible combinations to block these backdoor paths:
 
+\begin{lstlisting}
+adjustmentSets(complex.DAG, "X_i", "X_j")
+#{ X_4, X_5 }
+#{ X_2, X_4 }
+#{ X_1, X_4 }
+#{ X_3, X_4 }
+\end{lstlisting}
 
+Let's apply the backdoor criteria with the above examples. 
+Berkson\'s paradox is not due to a bad adjustment, but for a bad selection of the data, so applying these criteria won't solve it.
+In the low birth weight paradox, as long as the U variables are not measured, it is not possible to adjust on anything else but the \'treatment\' variable \(Smoking\)\: the LBW covariate is a descedant of it, so it doesn\'t comply with the second condition. If we could measure the U variable, and name it as 'birth defects', we would have:
+\begin{lstlisting}
+LBWsc3.DAG <- dagitty("dag {
+Smoking -> LBW
+LBW -> Mortality
+Smoking -> Mortality
+Birth.defects -> LBW
+Birth.defects -> Mortality}")
 
+coordinates(LBWsc3.DAG) <- list(x = c(LBW = 1.5, Smoking = 1, Birth.defects = 1, Mortality = 3),y = c(LBW = 2, Smoking = 3, Birth.defects = 1, Mortality = 2))
+
+drawdag(LBWsc3.DAG)
+\end{lstlisting}
+\begin{figure}[h]
+\includegraphics[width=8cm]{LBW3.DAG.png}
+\centering
+\end{figure}
+We can clearly see that it has the same causal structure that another simulation done before, with MATP and INK4a being both descendants of Cortisol and UV radiation. There we concluded that conditioning on both common causes, but not in the mediators, was the best option because their total effect could be appreciated and the variance of the estimates was reduced. Then we explored that conditioning on a collider is not a good idea. Now we can say that the backdoor criteria supports this conclusions. The only backdoor path in this DAG is Smoking, LBW, Birth defects, Mortality. The only option to block it is to condition on birth defects, because LBW is a descendant of Smoking. If we emulate data, and create a function very similar to sc2.comm.extraoverY:
+\begin{lstlisting}
+
+var.sc3 <- defData(varname = 'Birth_defects', dist = 'binary', formula = 0.5)
+var.sc3 <- defData(var.sc3, varname = 'Smoking', dist = 'binary', formula = 0.5)
+var.sc3 <- defData(var.sc3, varname = 'LBW', dist = 'binary', formula = '0.5 * Birth_defects + 0.4 * Smoking', link = 'identity')
+var.sc3 <- defData(var.sc3, varname = 'Mortality', dist = 'binary', formula = '0.1 * Smoking + 0.7 * Birth_defects + 0.1 * LBW', link = 'identity')
+
+set.seed(13)
+LBWsc3.df <- genData(samplesize, var.sc3)
+
+LBW.fun_noU <- function(dataset){
+  onlyS <- glm(Mortality~Smoking, data = dataset, family = 'binomial')
+  onlyBD <- glm(Mortality~Birth_defects, data = dataset, family = 'binomial')
+  both <- glm(Mortality~Smoking+Birth_defects, data = dataset, family = 'binomial')
+  
+  cat('\nThe estimate for Smoking is:\nWhen Mortality ~ Smoking:', 
+      summary(onlyS)$coefficients['Smoking','Estimate'],'\ns.d:', 
+      summary(onlyS)$coefficients['Smoking','Std. Error'],
+      '\nWhen Mortality ~ Smoking + Birth defects:', 
+      summary(both)$coefficients['Smoking','Estimate'], '\ns.d:', 
+      summary(both)$coefficients['Smoking','Std. Error'],'\n')
+  cat('\nThe estimate for Birth defects is:\nWhen Mortality ~ Smoking:', 
+      summary(onlyBD)$coefficients['Birth_defects','Estimate'],'\ns.d:', 
+      summary(onlyBD)$coefficients['Birth_defects','Std. Error'],
+      '\nWhen Mortality ~ Smoking + Birth defects:', 
+      summary(both)$coefficients['Birth_defects','Estimate'], '\ns.d:', 
+      summary(both)$coefficients['Birth_defects','Std. Error'],'\n')}
+
+LBW.fun_noU(LBWsc3.df)
+
+#The estimate for Smoking is:
+#When Mortality ~ Smoking: 0.2600481 
+#s.d: 0.4063957 
+#When Mortality ~ Smoking + Birth defects: 0.9710298 
+#s.d: 0.6415113 
+
+#The estimate for Birth defects is:
+#When Mortality ~ Smoking: 3.819908 
+#s.d: 0.6301974 
+#When Mortality ~ Smoking + Birth defects: 4.041328 
+#s.d: 0.684317 
+\end{lstlisting}
+The paradox has been neutralised: the effect of Smoking on Mortality isn't negative when we adjust on the covariate Birth Defects. \footnote{It gets slightly higher, as well as its variance. We would need to do more trials and experiments to understand what is going on, which goes beyond the scope of this project.} Smoking increases Mortality though Birth Defects have a bigger effect.
 \newpage
 \section{Conclusion}
 
 As we have seen, causal inference analysis have more tricks and traps than expected. It is crucial to know the causal structure that is followed in the real life cases, and use it properly. If this first model is not correct, it will be very difficult to have a correct insight of the problem. For this same reason, we cannot forget the causal context of the covariates and reduce them just to scatistical terms. The causal structure is important if we want to apply backdoor criteria, and to identify if what we are observing is a direct effect or a total effect. 
-
-
 
 
 \section{References}

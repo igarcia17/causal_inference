@@ -4,5 +4,6 @@
 \contentsline {section}{\numberline {4}Complex cases and backdoor criteria}{51}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Berkson\'s paradox}{51}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Simpson's paradox}{54}{subsection.4.2}%
-\contentsline {section}{\numberline {5}Conclusion}{60}{section.5}%
-\contentsline {section}{\numberline {6}References}{60}{section.6}%
+\contentsline {subsection}{\numberline {4.3}Backdoor criteria}{59}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Conclusion}{64}{section.5}%
+\contentsline {section}{\numberline {6}References}{64}{section.6}%
