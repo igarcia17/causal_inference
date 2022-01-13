@@ -1,7 +1,6 @@
 
 library(simstudy)
 library(dagitty)
-#library(car)
 library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
   drawdag <- plot
@@ -77,10 +76,12 @@ df_pval_estimates <- function(var1, var2, var3) {
           pval_v1_v2, 'and the estimate is', est_v1_v2, 'for this model', '\n')}
   
   {if (pval_v1_v2_v3 > 0.05)
-    cat('The variables diabetes and cholycistitis do not show an association when adjusting by hospital patients. The p value is',
+    cat('The variables diabetes and cholycistitis do not show an association',
+    'when adjusting by hospital patients. The p value is',
         pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, 'for this model', '\n')
     else
-      cat('The variables diabetes and cholycistitis do show an association when adjusting by hospital patients. The p value is',
+      cat('The variables diabetes and cholycistitis do show an association when',
+          'adjusting by hospital patients. The p value is',
           pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, 'for this model', '\n')}
 }
 
@@ -189,9 +190,12 @@ var.sc3 <- defData(var.sc3, varname = 'Mortality', dist = 'binary', formula = '0
 
 set.seed(13)
 LBWsc3.df <- genData(samplesize, var.sc3)
-#It looks very alike the example with cortisol, UV radiation, INK4a and MATP.
+#It looks very alike the example with cortisol, UV radiation, INK4a and MATP
+#(common cause, scenario 2, complex).
 #To analyse it, it is basically the same as function sc2.comm.extraoverY
-#as it has the same causal structure
+#as it has the same causal structure. The backdoor criteria tells us to condition
+#on the same covariates as it was seen previously, in an experimental way, that the
+#best estimates with less variance are obtained.
 LBW.fun_noU <- function(dataset){
   onlyS <- glm(Mortality~Smoking, data = dataset, family = 'binomial')
   onlyBD <- glm(Mortality~Birth_defects, data = dataset, family = 'binomial')
@@ -212,7 +216,7 @@ LBW.fun_noU <- function(dataset){
 }
 
 LBW.fun_noU(LBWsc3.df)
-#estimate for smoking varies slightly more: more test would be required to check why
+#estimate for smoking doesn't change its sign.
 
 
 ##__________________________Backdoor criteria
@@ -249,14 +253,6 @@ coordinates(complex.DAG) <- list(x = c(X_1 =1, X_3 = 1, X_i =1,
                                        X_i = 3, X_6 = 3, X_j =3))
 drawdag(complex.DAG)
 
-X_1 <- runif(100, 1, 100)
-X_2 <- runif(100, 3, 30)
-X_3 <- X_1 * 5
-X_4 <- X_1 * 2 + X_2 * 3
-X_5 <- 11 * X_2
-X_i <- 7 * X_3 + 13 * X_4
-X_6 <- 17 * X_i
-X_j <- X_6 * 23 + X_4 * 31 + X_5 * 19
 
 #First, it is necessary to identify all the non-causal paths between X i and X j.
 #By hand:
@@ -281,23 +277,58 @@ identical(summary(lm(X_j ~ X_i + X_4))$coefficients['X_i'],
 #This corresponds to:
 adjustmentSets(complex.DAG, "X_i", "X_j")
 
-#summary(lm(X_j ~ X_i))
-#summary(lm(X_j ~ X_i + X_4))
-#summary(lm(X_j ~ X_i + X_1))
-#summary(lm(X_j ~ X_i + X_4 + X_1))
-#summary(lm(X_j ~ X_i + X_4 + X_2))
-#summary(lm(X_j ~ X_i + X_4 + X_3))
-#summary(lm(X_j ~ X_i + X_4 + X_5))
+#If U could be measured as birth defects, it would give the following DAG:
+LBWsc3.DAG <- dagitty("dag {
+Smoking -> LBW
+LBW -> Mortality
+Smoking -> Mortality
+Birth.defects -> LBW
+Birth.defects -> Mortality
+}")
+
+coordinates(LBWsc3.DAG) <- list(x = c(LBW = 1.5, Smoking = 1, Birth.defects = 1, Mortality = 3),
+                                y = c(LBW = 2, Smoking = 3, Birth.defects = 1, Mortality = 2))
+
+drawdag(LBWsc3.DAG)
+
+var.sc3 <- defData(varname = 'Birth_defects', dist = 'binary', formula = 0.5)
+var.sc3 <- defData(var.sc3, varname = 'Smoking', dist = 'binary', formula = 0.5)
+var.sc3 <- defData(var.sc3, varname = 'LBW', dist = 'binary', formula = '0.5 * Birth_defects + 0.4 * Smoking', link = 'identity')
+var.sc3 <- defData(var.sc3, varname = 'Mortality', dist = 'binary', formula = '0.1 * Smoking + 0.7 * Birth_defects + 0.1 * LBW', link = 'identity')
+
+set.seed(13)
+LBWsc3.df <- genData(samplesize, var.sc3)
+#It looks very alike the example with cortisol, UV radiation, INK4a and MATP
+#(common cause, scenario 2, complex).
+#To analyse it, it is basically the same as function sc2.comm.extraoverY
+#as it has the same causal structure. The backdoor criteria tells us to condition
+#on the same covariates as it was seen previously, in an experimental way, that the
+#best estimates with less variance are obtained.
+LBW.fun_noU <- function(dataset){
+  onlyS <- glm(Mortality~Smoking, data = dataset, family = 'binomial')
+  onlyBD <- glm(Mortality~Birth_defects, data = dataset, family = 'binomial')
+  both <- glm(Mortality~Smoking+Birth_defects, data = dataset, family = 'binomial')
+  
+  cat('\nThe estimate for Smoking is:\nWhen Mortality ~ Smoking:', 
+      summary(onlyS)$coefficients['Smoking','Estimate'],'\ns.d:', 
+      summary(onlyS)$coefficients['Smoking','Std. Error'],
+      '\nWhen Mortality ~ Smoking + Birth defects:', 
+      summary(both)$coefficients['Smoking','Estimate'], '\ns.d:', 
+      summary(both)$coefficients['Smoking','Std. Error'],'\n')
+  cat('\nThe estimate for Birth defects is:\nWhen Mortality ~ Smoking:', 
+      summary(onlyBD)$coefficients['Birth_defects','Estimate'],'\ns.d:', 
+      summary(onlyBD)$coefficients['Birth_defects','Std. Error'],
+      '\nWhen Mortality ~ Smoking + Birth defects:', 
+      summary(both)$coefficients['Birth_defects','Estimate'], '\ns.d:', 
+      summary(both)$coefficients['Birth_defects','Std. Error'],'\n')
+}
+
+LBW.fun_noU(LBWsc3.df)
+#estimate for smoking doesn't change its sign.
+
 
 #As the data analyst Motoharu Dei says,
 #When doing data analysis, you have to know the causal structure of the subject 
 #and use it properly. Otherwise, you may end up deriving a wrong insight. You 
 #can't forget the causal context and reduce all the variables to statistical terms.
 #Backdoor criteria cannot apply when subyacent DAG is not known.
-
-
-
-
-
-
-
