@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.13)  14 JAN 2022 00:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.13)  14 JAN 2022 00:32
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -407,7 +407,10 @@ Package textcomp Info: Symbol \textminus not provided by
 File: images//scenario1.DAG.png Graphic file (type png)
 <use images//scenario1.DAG.png>
 Package pdftex.def Info: images//scenario1.DAG.png  used on input line 87.
-(pdftex.def)             Requested size: 142.26378pt x 115.08723pt.
+(pdftex.def)             Requested size: 199.16928pt x 161.12308pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 95.
@@ -417,7 +420,6 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 97.
-[3 <./images//scenario1.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 98.
@@ -430,15 +432,18 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 102.
-<images//scenario2.DAG.png, id=122, 386.19281pt x 312.41719pt>
+<images//scenario2.DAG.png, id=92, 386.19281pt x 312.41719pt>
 File: images//scenario2.DAG.png Graphic file (type png)
 <use images//scenario2.DAG.png>
 Package pdftex.def Info: images//scenario2.DAG.png  used on input line 109.
-(pdftex.def)             Requested size: 142.26378pt x 115.08723pt.
+(pdftex.def)             Requested size: 199.16928pt x 161.12308pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[3]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 121.
-[4 <./images//scenario2.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 123.
@@ -457,6 +462,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 128.
+[4 <./images//scenario1.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 129.
@@ -499,6 +505,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 151.
+[5 <./images//scenario2.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 158.
@@ -517,7 +524,6 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 163.
-[5]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 164.
@@ -556,7 +562,10 @@ Package textcomp Info: Symbol \textminus not provided by
 File: images//i_uv_i.DAG.png Graphic file (type png)
 <use images//i_uv_i.DAG.png>
 Package pdftex.def Info: images//i_uv_i.DAG.png  used on input line 215.
-(pdftex.def)             Requested size: 142.26378pt x 115.08723pt.
+(pdftex.def)             Requested size: 199.16928pt x 161.12308pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 220.
@@ -575,7 +584,6 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 227.
-[7 <./images//i_uv_i.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 229.
@@ -588,6 +596,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 232.
+[7]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 233.
@@ -603,18 +612,18 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 248.
+[8 <./images//i_uv_i.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 263.
-[8]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 271.
-<images//i_uv_i1.png, id=277, 390.70969pt x 416.30531pt>
+<images//i_uv_i1.png, id=268, 390.70969pt x 416.30531pt>
 File: images//i_uv_i1.png Graphic file (type png)
 <use images//i_uv_i1.png>
 Package pdftex.def Info: images//i_uv_i1.png  used on input line 276.
-(pdftex.def)             Requested size: 142.26378pt x 151.58492pt.
+(pdftex.def)             Requested size: 199.16928pt x 212.2176pt.
 [9 <./images//i_uv_i1.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
@@ -643,11 +652,14 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 302.
-<images//i_uv_i_s.DAG.png, id=295, 386.19281pt x 312.41719pt>
+<images//i_uv_i_s.DAG.png, id=292, 386.19281pt x 312.41719pt>
 File: images//i_uv_i_s.DAG.png Graphic file (type png)
 <use images//i_uv_i_s.DAG.png>
 Package pdftex.def Info: images//i_uv_i_s.DAG.png  used on input line 309.
-(pdftex.def)             Requested size: 142.26378pt x 115.08723pt.
+(pdftex.def)             Requested size: 199.16928pt x 161.12308pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 317.
@@ -660,10 +672,10 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 321.
+[10]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 322.
-[10 <./images//i_uv_i_s.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 325.
@@ -706,6 +718,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 344.
+[11 <./images//i_uv_i_s.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 346.
@@ -742,7 +755,6 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 360.
-[11]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 361.
@@ -764,10 +776,10 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 374.
+[12]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 379.
-[12]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 396.
@@ -787,7 +799,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 430.
-<images//histA.sun.png, id=431, 390.70969pt x 416.30531pt>
+<images//histA.sun.png, id=416, 390.70969pt x 416.30531pt>
 File: images//histA.sun.png Graphic file (type png)
 <use images//histA.sun.png>
 Package pdftex.def Info: images//histA.sun.png  used on input line 439.
@@ -798,7 +810,8 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 445.
-<images//histX.sun.png, id=432, 390.70969pt x 416.30531pt>
+[14]
+<images//histX.sun.png, id=455, 390.70969pt x 416.30531pt>
 File: images//histX.sun.png Graphic file (type png)
 <use images//histX.sun.png>
 Package pdftex.def Info: images//histX.sun.png  used on input line 453.
@@ -806,16 +819,13 @@ Package pdftex.def Info: images//histX.sun.png  used on input line 453.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[14] [15 <./images//histA.sun.png>]
-<images//sdXdecreased.png, id=472, 433.62pt x 392.96812pt>
+[15 <./images//histA.sun.png>] [16 <./images//histX.sun.png>]
+<images//sdXdecreased.png, id=478, 433.62pt x 392.96812pt>
 File: images//sdXdecreased.png Graphic file (type png)
 <use images//sdXdecreased.png>
 Package pdftex.def Info: images//sdXdecreased.png  used on input line 476.
 (pdftex.def)             Requested size: 256.0748pt x 232.07703pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[16 <./images//histX.sun.png>]
+[17 <./images//sdXdecreased.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 488.
@@ -843,18 +853,18 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 496.
-[17 <./images//sdXdecreased.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 498.
-<images//m.uv.i.DAG.png, id=498, 390.70969pt x 293.59688pt>
+<images//m.uv.i.DAG.png, id=487, 390.70969pt x 293.59688pt>
 File: images//m.uv.i.DAG.png Graphic file (type png)
 <use images//m.uv.i.DAG.png>
 Package pdftex.def Info: images//m.uv.i.DAG.png  used on input line 504.
-(pdftex.def)             Requested size: 142.26378pt x 106.90436pt.
+(pdftex.def)             Requested size: 199.16928pt x 149.66522pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 510.
+[18 <./images//m.uv.i.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 511.
@@ -900,14 +910,13 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 528.
-[18 <./images//m.uv.i.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 529.
+[19]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 545.
-[19]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 564.
@@ -923,20 +932,26 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 571.
-<images//histsc2.png, id=565, 390.70969pt x 416.30531pt>
+<images//histsc2.png, id=548, 390.70969pt x 416.30531pt>
 File: images//histsc2.png Graphic file (type png)
 <use images//histsc2.png>
 Package pdftex.def Info: images//histsc2.png  used on input line 575.
 (pdftex.def)             Requested size: 170.71652pt x 181.89809pt.
-[20 <./images//histsc2.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[20]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 586.
-<images//scatterplotOriginal.jpeg, id=584, 483.30562pt x 386.94562pt>
+<images//scatterplotOriginal.jpeg, id=581, 483.30562pt x 386.94562pt>
 File: images//scatterplotOriginal.jpeg Graphic file (type jpg)
 <use images//scatterplotOriginal.jpeg>
 Package pdftex.def Info: images//scatterplotOriginal.jpeg  used on input line 592.
 (pdftex.def)             Requested size: 199.16928pt x 159.45761pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 598.
@@ -946,18 +961,19 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 604.
+[21 <./images//histsc2.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 610.
-<images//hist40.png, id=585, 359.84438pt x 350.81062pt>
+<images//hist40.png, id=602, 359.84438pt x 350.81062pt>
 File: images//hist40.png Graphic file (type png)
 <use images//hist40.png>
 Package pdftex.def Info: images//hist40.png  used on input line 615.
-(pdftex.def)             Requested size: 170.71652pt x 166.43335pt.
+(pdftex.def)             Requested size: 312.9803pt x 305.14923pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images//scatterplotradiationHIGH.jpeg, id=586, 486.31688pt x 391.4625pt>
+<images//scatterplotradiationHIGH.jpeg, id=603, 486.31688pt x 391.4625pt>
 File: images//scatterplotradiationHIGH.jpeg Graphic file (type jpg)
 <use images//scatterplotradiationHIGH.jpeg>
 Package pdftex.def Info: images//scatterplotradiationHIGH.jpeg  used on input line 621.
@@ -965,7 +981,6 @@ Package pdftex.def Info: images//scatterplotradiationHIGH.jpeg  used on input li
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[21 <./images//scatterplotOriginal.jpeg>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 628.
@@ -981,13 +996,15 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 633.
-[22 <./images//hist40.png> <./images//scatterplotradiationHIGH.jpeg>]
-<images//hist40neg.png, id=626, 359.84438pt x 350.81062pt>
+<images//hist40neg.png, id=604, 359.84438pt x 350.81062pt>
 File: images//hist40neg.png Graphic file (type png)
 <use images//hist40neg.png>
 Package pdftex.def Info: images//hist40neg.png  used on input line 645.
-(pdftex.def)             Requested size: 256.0748pt x 249.66609pt.
-[23 <./images//hist40neg.png>]
+(pdftex.def)             Requested size: 312.9803pt x 305.14923pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[22 <./images//scatterplotOriginal.jpeg>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 653.
@@ -1024,24 +1041,27 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 664.
+[23 <./images//hist40.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 665.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 667.
-<images//mUVicor.png, id=639, 359.84438pt x 303.38344pt>
+<images//mUVicor.png, id=648, 359.84438pt x 303.38344pt>
 File: images//mUVicor.png Graphic file (type png)
 <use images//mUVicor.png>
 Package pdftex.def Info: images//mUVicor.png  used on input line 674.
-(pdftex.def)             Requested size: 142.26378pt x 119.94392pt.
+(pdftex.def)             Requested size: 199.16928pt x 167.9215pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 681.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 681.
-[24 <./images//mUVicor.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 682.
@@ -1066,6 +1086,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 691.
+[24 <./images//scatterplotradiationHIGH.jpeg>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 694.
@@ -1087,22 +1108,23 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 701.
+[25 <./images//hist40neg.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 710.
-[25]
+[26 <./images//mUVicor.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 728.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 729.
-<images//histextraoverY.png, id=704, 433.62pt x 271.76532pt>
+<images//histextraoverY.png, id=717, 433.62pt x 271.76532pt>
 File: images//histextraoverY.png Graphic file (type png)
 <use images//histextraoverY.png>
 Package pdftex.def Info: images//histextraoverY.png  used on input line 735.
 (pdftex.def)             Requested size: 227.62204pt x 142.65819pt.
-[26 <./images//histextraoverY.png>] [27]
+[27 <./images//histextraoverY.png>] [28]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 758.
@@ -1118,17 +1140,18 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 771.
-<images//comm.effect.DAG.png, id=735, 350.05782pt x 280.79906pt>
+<images//comm.effect.DAG.png, id=739, 350.05782pt x 280.79906pt>
 File: images//comm.effect.DAG.png Graphic file (type png)
 <use images//comm.effect.DAG.png>
 Package pdftex.def Info: images//comm.effect.DAG.png  used on input line 779.
-(pdftex.def)             Requested size: 142.26378pt x 114.11717pt.
+(pdftex.def)             Requested size: 199.16928pt x 159.76576pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 787.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 788.
+[29 <./images//comm.effect.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 789.
@@ -1138,12 +1161,11 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 792.
-[28 <./images//comm.effect.DAG.png>]
 <images//DAG_Situation2.png, id=763, 350.05782pt x 280.79906pt>
 File: images//DAG_Situation2.png Graphic file (type png)
 <use images//DAG_Situation2.png>
 Package pdftex.def Info: images//DAG_Situation2.png  used on input line 799.
-(pdftex.def)             Requested size: 142.26378pt x 114.11717pt.
+(pdftex.def)             Requested size: 199.16928pt x 159.76576pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 810.
@@ -1165,13 +1187,13 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 817.
+[30 <./images//DAG_Situation2.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 827.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 828.
-[29 <./images//DAG_Situation2.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 829.
@@ -1202,7 +1224,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 856.
-<images//PLOT_CASE1.png, id=787, 496.10344pt x 428.35031pt>
+<images//PLOT_CASE1.png, id=788, 496.10344pt x 428.35031pt>
 File: images//PLOT_CASE1.png Graphic file (type png)
 <use images//PLOT_CASE1.png>
 Package pdftex.def Info: images//PLOT_CASE1.png  used on input line 863.
@@ -1210,7 +1232,7 @@ Package pdftex.def Info: images//PLOT_CASE1.png  used on input line 863.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[30]
+[31]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 872.
@@ -1226,7 +1248,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 878.
-[31 <./images//PLOT_CASE1.png>]
+[32 <./images//PLOT_CASE1.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 880.
@@ -1260,7 +1282,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 913.
-[32]
+[33]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 927.
@@ -1291,7 +1313,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 942.
-[33]
+[34]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 948.
@@ -1304,7 +1326,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 970.
-[34]
+[35]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 986.
@@ -1317,11 +1339,11 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 991.
-<images//DAG_CIG_LUNG.png, id=932, 445.665pt x 358.33875pt>
+<images//DAG_CIG_LUNG.png, id=936, 445.665pt x 358.33875pt>
 File: images//DAG_CIG_LUNG.png Graphic file (type png)
 <use images//DAG_CIG_LUNG.png>
 Package pdftex.def Info: images//DAG_CIG_LUNG.png  used on input line 998.
-(pdftex.def)             Requested size: 142.26378pt x 114.38641pt.
+(pdftex.def)             Requested size: 199.16928pt x 160.14098pt.
 
 Overfull \hbox (2.92726pt too wide) in paragraph at lines 1001--1001
 []\T1/aer/m/n/10 We now sim-u-late the data for this par-tic-u-lar ex-am-ple, in which both cigarettes
@@ -1342,13 +1364,14 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1008.
+[36 <./images//DAG_CIG_LUNG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1009.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1010.
-[35 <./images//DAG_CIG_LUNG.png>]
+
 Overfull \hbox (1.84561pt too wide) in paragraph at lines 1015--1015
 []\T1/aer/m/n/10 Here we have the plots show-ing the dis-tri-bu-tion of the vari-ables cigarettes_day
  []
@@ -1356,12 +1379,12 @@ Overfull \hbox (1.84561pt too wide) in paragraph at lines 1015--1015
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1019.
-<images//PLOT_cig_vir_lung.png, id=955, 496.10344pt x 428.35031pt>
+<images//PLOT_cig_vir_lung.png, id=957, 496.10344pt x 428.35031pt>
 File: images//PLOT_cig_vir_lung.png Graphic file (type png)
 <use images//PLOT_cig_vir_lung.png>
 Package pdftex.def Info: images//PLOT_cig_vir_lung.png  used on input line 1028.
 (pdftex.def)             Requested size: 199.16928pt x 171.97108pt.
-[36 <./images//PLOT_cig_vir_lung.png>]
+[37 <./images//PLOT_cig_vir_lung.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1043.
@@ -1398,18 +1421,18 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1063.
-<images//DAG_Runner.png, id=978, 344.78813pt x 336.50719pt>
+<images//DAG_Runner.png, id=981, 344.78813pt x 336.50719pt>
 File: images//DAG_Runner.png Graphic file (type png)
 <use images//DAG_Runner.png>
 Package pdftex.def Info: images//DAG_Runner.png  used on input line 1071.
-(pdftex.def)             Requested size: 142.26378pt x 138.84686pt.
+(pdftex.def)             Requested size: 199.16928pt x 194.38869pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+[38]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1079.
-[37]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1080.
@@ -1437,7 +1460,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1088.
-<images//PLOT_RUNNER.png, id=1002, 752.8125pt x 493.0922pt>
+<images//PLOT_RUNNER.png, id=1004, 752.8125pt x 493.0922pt>
 File: images//PLOT_RUNNER.png Graphic file (type png)
 <use images//PLOT_RUNNER.png>
 Package pdftex.def Info: images//PLOT_RUNNER.png  used on input line 1099.
@@ -1445,10 +1468,10 @@ Package pdftex.def Info: images//PLOT_RUNNER.png  used on input line 1099.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+[39 <./images//DAG_Runner.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1112.
-[38 <./images//DAG_Runner.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1114.
@@ -1458,19 +1481,17 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1122.
-<images//COMP_LEG_CHOL_HEART.png, id=1030, 496.10344pt x 428.35031pt>
+[40 <./images//PLOT_RUNNER.png>]
+<images//COMP_LEG_CHOL_HEART.png, id=1047, 496.10344pt x 428.35031pt>
 File: images//COMP_LEG_CHOL_HEART.png Graphic file (type png)
 <use images//COMP_LEG_CHOL_HEART.png>
 Package pdftex.def Info: images//COMP_LEG_CHOL_HEART.png  used on input line 1132.
 (pdftex.def)             Requested size: 227.62204pt x 196.5337pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[39 <./images//PLOT_RUNNER.png>]
+[41 <./images//COMP_LEG_CHOL_HEART.png>]
 File: images//DAG_Situation2.png Graphic file (type png)
 <use images//DAG_Situation2.png>
 Package pdftex.def Info: images//DAG_Situation2.png  used on input line 1145.
-(pdftex.def)             Requested size: 142.26378pt x 114.11717pt.
+(pdftex.def)             Requested size: 199.16928pt x 159.76576pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1151.
@@ -1486,18 +1507,21 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1156.
-[40 <./images//COMP_LEG_CHOL_HEART.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1157.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1164.
-<images//PLOT_CASE2.png, id=1060, 496.10344pt x 428.35031pt>
+<images//PLOT_CASE2.png, id=1057, 496.10344pt x 428.35031pt>
 File: images//PLOT_CASE2.png Graphic file (type png)
 <use images//PLOT_CASE2.png>
 Package pdftex.def Info: images//PLOT_CASE2.png  used on input line 1175.
 (pdftex.def)             Requested size: 227.62204pt x 196.5337pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[42]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1184.
@@ -1507,7 +1531,6 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1185.
-[41 <./images//PLOT_CASE2.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1197.
@@ -1523,11 +1546,12 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1203.
-<images//DAG_UV_INK_P53.png, id=1084, 445.665pt x 358.33875pt>
+[43 <./images//PLOT_CASE2.png>]
+<images//DAG_UV_INK_P53.png, id=1102, 445.665pt x 358.33875pt>
 File: images//DAG_UV_INK_P53.png Graphic file (type png)
 <use images//DAG_UV_INK_P53.png>
 Package pdftex.def Info: images//DAG_UV_INK_P53.png  used on input line 1210.
-(pdftex.def)             Requested size: 142.26378pt x 114.38641pt.
+(pdftex.def)             Requested size: 199.16928pt x 160.14098pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1218.
@@ -1546,19 +1570,21 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1224.
-[42 <./images//DAG_UV_INK_P53.png>]
-<images//PLOT_UV_INK4A.png, id=1109, 752.8125pt x 614.295pt>
+<images//PLOT_UV_INK4A.png, id=1103, 752.8125pt x 614.295pt>
 File: images//PLOT_UV_INK4A.png Graphic file (type png)
 <use images//PLOT_UV_INK4A.png>
 Package pdftex.def Info: images//PLOT_UV_INK4A.png  used on input line 1238.
 (pdftex.def)             Requested size: 227.62204pt x 185.74278pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1249.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1250.
-[43 <./images//PLOT_UV_INK4A.png>]
+[44 <./images//DAG_UV_INK_P53.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1263.
@@ -1574,11 +1600,12 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1268.
-<images//DAG_ANCESTOR.png, id=1126, 445.665pt x 371.13657pt>
+[45 <./images//PLOT_UV_INK4A.png>]
+<images//DAG_ANCESTOR.png, id=1141, 445.665pt x 371.13657pt>
 File: images//DAG_ANCESTOR.png Graphic file (type png)
 <use images//DAG_ANCESTOR.png>
 Package pdftex.def Info: images//DAG_ANCESTOR.png  used on input line 1275.
-(pdftex.def)             Requested size: 142.26378pt x 118.47163pt.
+(pdftex.def)             Requested size: 199.16928pt x 165.86029pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1283.
@@ -1603,13 +1630,13 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1291.
-[44 <./images//DAG_ANCESTOR.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1301.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1301.
+[46 <./images//DAG_ANCESTOR.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1302.
@@ -1640,12 +1667,14 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1327.
-[45]
-<images//DAG_DIAB_ANCESTOR.png, id=1180, 445.665pt x 371.13657pt>
+<images//DAG_DIAB_ANCESTOR.png, id=1167, 445.665pt x 371.13657pt>
 File: images//DAG_DIAB_ANCESTOR.png Graphic file (type png)
 <use images//DAG_DIAB_ANCESTOR.png>
 Package pdftex.def Info: images//DAG_DIAB_ANCESTOR.png  used on input line 1334.
-(pdftex.def)             Requested size: 142.26378pt x 118.47163pt.
+(pdftex.def)             Requested size: 199.16928pt x 165.86029pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1342.
@@ -1658,6 +1687,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1345.
+[47]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1347.
@@ -1670,7 +1700,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1351.
-<images//PLOT_CORT_CHOL.png, id=1181, 752.8125pt x 614.295pt>
+<images//PLOT_CORT_CHOL.png, id=1195, 752.8125pt x 614.295pt>
 File: images//PLOT_CORT_CHOL.png Graphic file (type png)
 <use images//PLOT_CORT_CHOL.png>
 Package pdftex.def Info: images//PLOT_CORT_CHOL.png  used on input line 1364.
@@ -1678,7 +1708,7 @@ Package pdftex.def Info: images//PLOT_CORT_CHOL.png  used on input line 1364.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[46 <./images//DAG_DIAB_ANCESTOR.png>]
+[48 <./images//DAG_DIAB_ANCESTOR.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1384.
@@ -1688,7 +1718,6 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1395.
-[47 <./images//PLOT_CORT_CHOL.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1396.
@@ -1701,14 +1730,15 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1399.
+[49 <./images//PLOT_CORT_CHOL.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1401.
-<images//DAG_DESCENDANT.png, id=1222, 445.665pt x 371.13657pt>
+<images//DAG_DESCENDANT.png, id=1234, 445.665pt x 371.13657pt>
 File: images//DAG_DESCENDANT.png Graphic file (type png)
 <use images//DAG_DESCENDANT.png>
 Package pdftex.def Info: images//DAG_DESCENDANT.png  used on input line 1409.
-(pdftex.def)             Requested size: 142.26378pt x 118.47163pt.
+(pdftex.def)             Requested size: 199.16928pt x 165.86029pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1416.
@@ -1745,7 +1775,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1436.
-[48 <./images//DAG_DESCENDANT.png>]
+[50 <./images//DAG_DESCENDANT.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1437.
@@ -1764,11 +1794,12 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1452.
-<images//DAG_DESCENDANT_DIAB.png, id=1254, 445.665pt x 371.13657pt>
+<images//DAG_DESCENDANT_DIAB.png, id=1263, 445.665pt x 371.13657pt>
 File: images//DAG_DESCENDANT_DIAB.png Graphic file (type png)
 <use images//DAG_DESCENDANT_DIAB.png>
 Package pdftex.def Info: images//DAG_DESCENDANT_DIAB.png  used on input line 1460.
-(pdftex.def)             Requested size: 142.26378pt x 118.47163pt.
+(pdftex.def)             Requested size: 199.16928pt x 165.86029pt.
+[51 <./images//DAG_DESCENDANT_DIAB.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1467.
@@ -1778,7 +1809,6 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1469.
-[49 <./images//DAG_DESCENDANT_DIAB.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1470.
@@ -1815,22 +1845,22 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1497.
-[50]
-<images//PLOT_CR_CH_HD.png, id=1300, 496.10344pt x 428.35031pt>
+[52]
+<images//PLOT_CR_CH_HD.png, id=1306, 496.10344pt x 428.35031pt>
 File: images//PLOT_CR_CH_HD.png Graphic file (type png)
 <use images//PLOT_CR_CH_HD.png>
 Package pdftex.def Info: images//PLOT_CR_CH_HD.png  used on input line 1506.
 (pdftex.def)             Requested size: 227.62204pt x 196.5337pt.
-[51 <./images//PLOT_CR_CH_HD.png>]
+[53 <./images//PLOT_CR_CH_HD.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1520.
-<images//berkson_men.png, id=1309, 578.16pt x 433.62pt>
+<images//berkson_men.png, id=1317, 578.16pt x 433.62pt>
 File: images//berkson_men.png Graphic file (type png)
 <use images//berkson_men.png>
 Package pdftex.def Info: images//berkson_men.png  used on input line 1529.
 (pdftex.def)             Requested size: 227.62204pt x 170.71231pt.
-[52 <./images//berkson_men.png>]
+[54 <./images//berkson_men.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1538.
@@ -1843,11 +1873,11 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1542.
-<images//BERKS_DAG.png, id=1322, 752.8125pt x 614.295pt>
+<images//BERKS_DAG.png, id=1330, 752.8125pt x 614.295pt>
 File: images//BERKS_DAG.png Graphic file (type png)
 <use images//BERKS_DAG.png>
 Package pdftex.def Info: images//BERKS_DAG.png  used on input line 1549.
-(pdftex.def)             Requested size: 142.26378pt x 116.08923pt.
+(pdftex.def)             Requested size: 199.16928pt x 162.52493pt.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1560.
@@ -1857,7 +1887,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1562.
-[53 <./images//BERKS_DAG.png>]
+[55 <./images//BERKS_DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1571.
@@ -1882,7 +1912,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1585.
-[54]
+[56]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1607.
@@ -1901,19 +1931,19 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1626.
+[57]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1627.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1629.
-[55]
-<images//LBW1DAG.png, id=1407, 349.305pt x 298.11375pt>
+<images//LBW1DAG.png, id=1412, 349.305pt x 298.11375pt>
 File: images//LBW1DAG.png Graphic file (type png)
 <use images//LBW1DAG.png>
 Package pdftex.def Info: images//LBW1DAG.png  used on input line 1635.
 (pdftex.def)             Requested size: 227.62204pt x 194.26746pt.
-[56 <./images//LBW1DAG.png>]
+[58 <./images//LBW1DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1640.
@@ -1935,12 +1965,12 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1647.
-<images//LBW2DAG.png, id=1417, 349.305pt x 298.11375pt>
+<images//LBW2DAG.png, id=1425, 349.305pt x 298.11375pt>
 File: images//LBW2DAG.png Graphic file (type png)
 <use images//LBW2DAG.png>
 Package pdftex.def Info: images//LBW2DAG.png  used on input line 1654.
 (pdftex.def)             Requested size: 227.62204pt x 194.26746pt.
-[57 <./images//LBW2DAG.png>]
+[59 <./images//LBW2DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1661.
@@ -1971,7 +2001,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1673.
-[58]
+[60]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1675.
@@ -2002,7 +2032,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1702.
-[59]
+[61]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1715.
@@ -2039,7 +2069,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1727.
-<images//complex.DAG.png, id=1488, 350.05782pt x 280.79906pt>
+<images//complex.DAG.png, id=1497, 350.05782pt x 280.79906pt>
 File: images//complex.DAG.png Graphic file (type png)
 <use images//complex.DAG.png>
 Package pdftex.def Info: images//complex.DAG.png  used on input line 1733.
@@ -2047,7 +2077,7 @@ Package pdftex.def Info: images//complex.DAG.png  used on input line 1733.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images//complex.DAG.arrows.png, id=1489, 509.65407pt x 424.96266pt>
+<images//complex.DAG.arrows.png, id=1498, 509.65407pt x 424.96266pt>
 File: images//complex.DAG.arrows.png Graphic file (type png)
 <use images//complex.DAG.arrows.png>
 Package pdftex.def Info: images//complex.DAG.arrows.png  used on input line 1739.
@@ -2055,7 +2085,7 @@ Package pdftex.def Info: images//complex.DAG.arrows.png  used on input line 1739
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[60]
+[62]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1745.
@@ -2110,7 +2140,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1749.
-[61 <./images//complex.DAG.png>]
+[63 <./images//complex.DAG.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1766.
@@ -2132,7 +2162,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1773.
-<images//LBW3.DAG.png, id=1531, 350.05782pt x 280.79906pt>
+<images//LBW3.DAG.png, id=1539, 350.05782pt x 280.79906pt>
 File: images//LBW3.DAG.png Graphic file (type png)
 <use images//LBW3.DAG.png>
 Package pdftex.def Info: images//LBW3.DAG.png  used on input line 1780.
@@ -2140,7 +2170,7 @@ Package pdftex.def Info: images//LBW3.DAG.png  used on input line 1780.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[62 <./images//complex.DAG.arrows.png>]
+[64 <./images//complex.DAG.arrows.png>]
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1785.
@@ -2168,28 +2198,28 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1796.
-[63 <./images//LBW3.DAG.png>] [64]
+[65 <./images//LBW3.DAG.png>] [66]
 Overfull \hbox (20.88472pt too wide) in paragraph at lines 1844--1845
 \T1/aer/m/n/10 rav-eled. In-ter-na-tional Jour-nal Of Epi-demi-ol-ogy, 40(3), 780-785. doi: 10.1093ijedyr041 
  []
 
-[65] (./Collounder.vignette.aux)
+[67] (./Collounder.vignette.aux)
 Package rerunfilecheck Info: File `Collounder.vignette.out' has not changed.
 (rerunfilecheck)             Checksum: 4E7C14D1C34207FC9FF25A37A602D931;3127.
  ) 
 Here is how much of TeX's memory you used:
- 15066 strings out of 480246
- 239836 string characters out of 5894451
- 1050905 words of memory out of 5000000
+ 15068 strings out of 480246
+ 239850 string characters out of 5894451
+ 1080905 words of memory out of 5000000
  31507 multiletter control sequences out of 15000+600000
  521886 words of font info for 97 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 70i,8n,79p,1052b,1823s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 70i,8n,79p,1052b,1827s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc} <c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk>{c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}<c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb>
-Output written on Collounder.vignette.pdf (65 pages, 1171438 bytes).
+Output written on Collounder.vignette.pdf (67 pages, 1172315 bytes).
 PDF statistics:
- 1925 PDF objects out of 2073 (max. 8388607)
- 1745 compressed objects within 18 object streams
- 1240 named destinations out of 1440 (max. 500000)
+ 1934 PDF objects out of 2073 (max. 8388607)
+ 1752 compressed objects within 18 object streams
+ 1242 named destinations out of 1440 (max. 500000)
  313 words of extra memory for PDF output out of 10000 (max. 10000000)
 
