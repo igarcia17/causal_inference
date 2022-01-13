@@ -4,23 +4,19 @@
 Creation of dataset for causal inference examples%%  ~~function to do ... ~~
 }
 \description{
-Create a dataset that at least contains variables X, Y and Z with a given numerical relation between them. Necessary for common cause description functions. Version 2 and 3 required to make dataset with variables A and B respectively, for scenario 1 with ancestor of common cause and scenario 2 when Y is a collider.%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Create a dataset that at least contains variables X, Y and Z with a given numerical relation between them. Necessary for common cause description functions. Version 2 and 3 required to make dataset with variables A and B respectively, for scenario 1 with ancestor of common cause and scenario 2 when Y is a collider.
 }
 \usage{
-Dataset creation(x)
+Dataset creation
 }
-\arguments{ -- Nera: falta o quitar
-  \item{x}{
-%%     ~~Describe \code{x} here~~
-}
-}
+\arguments{
 
-\value{ -- Falta
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+  \item{b_yz}{ Coefficient of Y over Z}
+  \item{b_xz}{ Coefficient of X over Z}
+  \item{b_xy}{ Coefficient of X over Y}
+
+}
+\value{ A dataframe with at least variable X, Y and Z.
 }
 
 \author{
@@ -67,12 +63,3 @@ create.dataset(b_yz)
 create.datasetv2(b_ax)
 create.datasetv3(b_by, b_bz)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory (show via RShowDoc("KEYWORDS")):
-% \keyword{ ~kwd1 }
-% \keyword{ ~kwd2 }
-% Use only one keyword per line.
-% For non-standard keywords, use \concept instead of \keyword:
-% \concept{ ~cpt1 }
-% \concept{ ~cpt2 }
-% Use only one concept per line.
