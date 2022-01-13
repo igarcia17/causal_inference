@@ -2,7 +2,6 @@
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
 \usepackage{array}
-\usepackage{mathtools}
 \usepackage{hyperref}
 \usepackage{Sweave}
 %\usepackage{amsmath}
@@ -559,10 +558,10 @@ To condition on Y or not may give unexpected outcomes when looking at X over Z. 
 If we input a higher X->Z value:
 \begin{lstlisting}
 when_xz_4 <- create.dataset(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,N = samplesize)
-scatterplot(Z~X, data = when_xz_4, main ='Original case', regLine=TRUE, boxplots = FALSE, ylab = 'INK4a expression')
+scatterplot(Z~X, data = when_xz_4, main ='Original case', regLine=TRUE)
 \end{lstlisting}
 \begin{figure}[h]
-\includegraphics[width=7cm]{scatterplotOriginal.png}
+\includegraphics[width=7cm]{scatterplotOriginal.jpeg}
 \centering
 \end{figure}
 \begin{lstlisting}
@@ -587,7 +586,7 @@ scatterplot(Z~X, data = when_xz_40, main = 'If UV radiation effect is stronger',
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=6cm]{scatterplotradiationHIGH.png}
+\includegraphics[width=6cm]{scatterplotradiationHIGH.jpeg}
 \centering
 \end{figure}
 
@@ -707,6 +706,896 @@ This last causal structure introduce us to the next issue: colliders and common 
 \newpage
 \section{What to do when there is a common effect}
 
+
+In this second section, we are going to analyze the problems and biases you can create by not controlling a particular case of covariates: the colliders. When studying the effects of differents variables on a particular one, and the  difficulties of adjusting by the collider, Z, when X and Y are its parents and may or may not have an association between them. In this case Z is the \textbf{common effect} of X and Y. We have used the following modules to make the analysis:
+
+\begin{lstlisting}
+
+library(dagitty)
+if(!suppressWarnings(require("rethinking", 
+quietly = TRUE))) {drawdag <- plot}
+  
+\end{lstlisting}
+
+The variable X can have an effect on Y or not. This gives us two basic scenarios to work on.The first scenario is illustrated in the following DAG:
+
+\begin{lstlisting}
+
+
+comm.effect.DAG <- dagitty("dag {
+X -> Z
+Y -> Z
+}")
+
+coordinates(comm.effect.DAG) <- list(x = c(X = 1, Y = 3, Z = 2),
+                                     y = c(X = 1, Y = 1, Z = 3))
+drawdag(comm.effect.DAG)
+
+\end{lstlisting}
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{comm.effect.DAG.png}
+\centering
+\end{figure}
+
+
+For this first case, X is not associated to Y. The second scenario would be:
+
+\begin{lstlisting}
+
+DAG_Situation2 <- dagitty("dag {
+X -> Z
+Y -> Z
+X -> Y
+}")
+
+coordinates(DAG_Situation2) <- list(x = c(X = 1, Y = 3, Z = 2),
+                                       y = c(X = 1, Y = 1, Z = 3))
+drawdag(DAG_Situation2)
+
+\end{lstlisting}
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_Situation2.png}
+\centering
+\end{figure}
+
+In this second case, X does have an effect over Y. Whether this two variables do or do not affect each other is important in terms of what kind of effect the adjustment of the collider will have on each one. For the first case, adjusting on the collider will create an association not present before. For the second one, the association between the variables already existed, so what happens is that when we adjust for our collider the direction of that relation might change. 
+For this part, we will simulate our data using vectors. Let's see how we are going to do that for case 1 and case 2.
+
+Let us begin with case 1:
+
+\begin{lstlisting}
+
+N <- 500 # Our sample size throughout the whole code will be 500
+b_xz <- 3 # The value of the relation between X and Z is 3
+b_yz <- 2 # The value of the relation between Y and Z is 2
+sd_z <- 1 # The standard deviation for Z will be 5
+
+# We will try not to repeat this information description as we already know what
+# each variable represents.
+
+X <- runif(N, 1, 10)
+Y <- runif(N, 1.5, 12)
+Z <- b_xz * X + b_yz * Y + rnorm(N, 0, sd = sd_z)
+
+\end{lstlisting}
+
+We use vectors to generate random numbers from 1 to 10 for our X variable and from 1.5 to 12 for our Y variable, as both are independent. For our collider (Z) we multiply the values of the two previous variables by a number we want to set as the relation between the parents (X and Y) and the collider (Z). We also add our standard deviation.
+
+Now for our case number 2:
+
+\begin{lstlisting}
+
+b_xy2 <- 1.7 
+b_xz2 <- 1.5
+b_yz2 <- 2.5
+
+X2 <- runif(N, 1, 10)
+Y2 <- X2 * b_xy2 + rnorm(N, mean = 0, sd = 1)
+Z2 <- X2 * b_xz2 + Y2 * b_yz2 + rnorm(N, mean = 0, sd = 1)
+
+\end{lstlisting}
+
+In this case there \textbf{is} a relation between X2 and Y2, so for that, we  generate the values for Y2 by multiplying our b\_xy2 and our X values. We  do the same process for the Z2 values as we did for Z in our previous case.
+
+Next we will see a function created to generate plots for the regression between two variables, adding our abline. This function will come in handy when we want to check the distribution of our data.
+
+
+\begin{lstlisting}
+
+
+PLOT.REG <- function(reg_line, plot.var = '') {
+  Regres.line <- lm(reg_line)
+  plot(reg_line, main = plot.var)
+  abline(Regres.line)
+}
+
+\end{lstlisting}
+
+The function is quite simple, there is a manual for this particular function and it can be checked in the repository in case more information is needed.
+
+
+
+\begin{lstlisting}
+
+op <- par(mfrow= c(3, 1))
+PLOT.REG(Z ~ X, 'Var distribution X-Z')
+PLOT.REG(Z ~ Y, 'Var distribution Y-Z')
+PLOT.REG(X ~ Y, 'Var distribution X-Y')
+par(op)
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{PLOT_CASE1.png}
+\centering
+\end{figure}
+\newpage
+
+
+As we can see, there is, apparently, a positive association between Z and X and also Z and Y. On the other hand, there is no visible association between X and Y  (as should). We can check it by calculating the estimates and significance of each pair. For that we will create a function that accepts the following  arguments: variables to check, dependent variable (to get the estimate and p value), and the title of the variables; the last two ones should be text input in order to make it work.
+
+
+Now that we already checked the distribution of our data, now we should check for our estimates and p values to see if that association or lack thereof is also visible in our values. To do so, we created a function that returns a string that reveals whether there is an association or not, and the values for the estimate and pvalue for our two variables.
+
+
+\begin{lstlisting}
+
+SUM.2VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, ...){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
+} # SUMMARY for 2 variables
+
+SUM.3VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, variable3, v_dep3, title_var3){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  PV3 <- summary(lm(variable3))$coefficients[v_dep3, 'Pr(>|t|)']
+  E3 <- summary(lm(variable3))$coefficients[v_dep3, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  assign(title_var3, PV3, P.VAL.DICT)
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  assign(title_var3, E3, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
+} # SUMMARY for 3 variables
+
+SUM.4VAR <- function(variable1, v_dep1, title_var1, variable2, 
+                     v_dep2, title_var2, variable3, v_dep3, title_var3, 
+                     variable4, v_dep4, title_var4){
+  PV1 <- summary(lm(variable1))$coefficients[v_dep1, 'Pr(>|t|)']
+  E1 <- summary(lm(variable1))$coefficients[v_dep1, 'Estimate']
+  
+  PV2 <- summary(lm(variable2))$coefficients[v_dep2, 'Pr(>|t|)']
+  E2 <- summary(lm(variable2))$coefficients[v_dep2, 'Estimate']
+  
+  PV3 <- summary(lm(variable3))$coefficients[v_dep3, 'Pr(>|t|)']
+  E3 <- summary(lm(variable3))$coefficients[v_dep3, 'Estimate']
+  
+  PV4 <- summary(lm(variable4))$coefficients[v_dep4, 'Pr(>|t|)']
+  E4 <- summary(lm(variable4))$coefficients[v_dep4, 'Estimate']
+  
+  P.VAL.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, PV1, P.VAL.DICT)
+  assign(title_var2, PV2, P.VAL.DICT)
+  assign(title_var3, PV3, P.VAL.DICT)
+  assign(title_var4, PV4, P.VAL.DICT)
+  
+  
+  E.DICT <- new.env(hash = T, parent = emptyenv())
+  assign(title_var1, E1, E.DICT)
+  assign(title_var2, E2, E.DICT)
+  assign(title_var3, E3, E.DICT)
+  assign(title_var4, E4, E.DICT)
+  
+  for (i in ls(P.VAL.DICT)) {
+    if (P.VAL.DICT[[i]] > 0.05)
+      cat('The variables', i, 'do not show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')
+    else
+      cat('The variables', i, 'show an association with a p value of',  
+          P.VAL.DICT[[i]], 'and an estimate of', E.DICT[[i]], '\n')}
+} #SUMMARY for 4 variables
+
+
+#Let's check our variables:
+SUM.4VAR(X ~ Z, "Z", "X and Z", Y ~ Z, "Z", "Y and Z", X ~ Y, "Y", "X and Y", X ~ Y + Z, 
+         "Y", "X and Y (when Z)")
+         
+#The variables X and Y do not show an association with a p value of 0.3328062 and an #estimate of 0.03488318 
+#The variables X and Y (when Z) show an association with a p value of 0 and an estimate of 
+#-0.6506454 
+#The variables X and Z show an association with a p value of 6.677158e-103 and an estimate #of 0.1942392 
+#The variables Y and Z show an association with a p value of 5.433219e-62 and an estimate of #0.2025114
+
+
+
+\end{lstlisting}
+
+
+We can see a strong association between Z and X. There is also a positive relation between Z and Y, but none between X and Y. But the two independent  variables (X and Y) when we adjust by Z raise a association that wasn't supposed to be there.
+When controling a collider, you can induce a bias in the estimate of theparent variables when there is, actually, none.
+Knowing now well how to check our estimates and pvalues to aknowledge the association between the two variables (X and Y, whatever those might be), let's explore a more realistic example:
+
+Here we have a set of variables: cigarettes smoked in a day, COVID19 virus load and \% of lung capacity. Both cigarette consumption and virus load should affect the lung capacity, but there should not be a relation between the number of cigarettes consumed daily and the COV19 virus load.
+
+Let's take a look at the DAG:
+
+\begin{lstlisting}
+
+DAG.Lung <- dagitty("dag {
+cigarettes_day -> lung_capacity
+vir_load_COV19 -> lung_capacity
+}")
+
+coordinates(DAG.Lung) <- list(x = c(cigarettes_day = 1, vir_load_COV19 = 3, 
+                                    lung_capacity = 2),
+                              y = c(cigarettes_day = 1, vir_load_COV19 = 1,
+                                     lung_capacity = 3))
+drawdag(DAG.Lung)
+
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_CIG_LUNG.png}
+\centering
+\end{figure}
+
+
+We now simulate the data for this particular example, in which both cigarettes and virus load are numerical values, while lung capacity is expressed as a percentage.
+
+
+\begin{lstlisting}
+
+b_cd <- (-0.7) # Relation between cigarettes and lung capacity
+b_vlc <- (-0.8) # Relation between virus load and lung capacity 
+
+cigarettes_day <- floor(runif(N, min = 0, max = 45)) #number of cig a day
+vir_load_COV19 <- floor(runif(N, min = 0, max = 40)) #Ct
+lung_capacity <- 100 + b_cd * cigarettes_day + b_vlc * vir_load_COV19 + 
+  rnorm(N, 0, sd = 0.01) #percentage of lung capacity
+
+\end{lstlisting}
+
+Here we have the plots showing the distribution of the variables cigarettes\_day and vir\_load\_COV19, where apparently there is no association and a plot for comparison, cigarettes and lung capacity, with a negative association:
+
+
+\begin{lstlisting}
+
+op <- par(mfrow= c(2, 1))
+PLOT.REG(cigarettes_day ~ vir_load_COV19, "Cigarettes ~ Virus_load")
+PLOT.REG(cigarettes_day ~ lung_capacity, "Cigarettes ~ Lung_capacity")
+par(op)
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=7cm]{PLOT_cig_vir_lung.png}
+\centering
+\end{figure}
+
+Let's see the relations between our variables.
+
+\begin{lstlisting}
+
+SUM.4VAR(cigarettes_day ~ lung_capacity, "lung_capacity", "cigarettes and lung capacity",
+         vir_load_COV19 ~ lung_capacity, "lung_capacity", "vir_load_COV19 and lung capacity",
+         cigarettes_day ~ vir_load_COV19, "vir_load_COV19", "cigarettes and vir_load_COV19",
+          cigarettes_day ~ vir_load_COV19 + lung_capacity, "vir_load_COV19",
+         "cigarettes and vir_load_COV19 (when lung capacity)")
+
+
+#The variables cigarettes and lung capacity show an association with a p value of 3.086284e-83 and an estimate of -0.756362 
+#The variables cigarettes and vir_load_COV19 do not show an association with a p value of 0.9486949 and an estimate of -0.003496631 
+#The variables cigarettes and vir_load_COV19 (when lung capacity) show an association with a p value of 0 and an estimate of -1.142745 
+#The variables vir_load_COV19 and lung capacity show an association with a p value of 1.787942e-70 and an estimate of -0.5881356 
+
+\end{lstlisting}
+
+No association between number of cigarettes smoked a day and the viral load of COV19 infection but a association between these two variables arises when  adjusting for the collider (lung\_capacity).
+
+At this point we have already seen how adjusting a collider may create some problems when analyzing data. But things can get a lot more complicated. Let's  not go too far, but see a new example which is a bit more complicated than the previous ones.
+
+Imagine we are studying the performance of a professional runner. We have a few variables to take into consideration, but we will focus on the following ones: leg length,metabolism (which affects weight, meaning it also affects performance), heart disease (measured through the values of high-sensitivity cardiac troponin  (hs-cTn)), cholesterol (as a measure of overall health); this last variable  does not affect directly the performance of the runner (speed), but it might through its health. 
+
+Let's take a look at the DAG:
+
+\begin{lstlisting}
+
+DAG.Runner <- dagitty("dag {
+cholesterol -> heart
+metabolism -> heart
+metabolism -> speed
+leg_lenght -> speed
+}")
+
+coordinates(DAG.Runner) <- list(x = c(cholesterol = 1, heart = 3, metabolism = 1, speed = 3, leg_lenght = 1),
+                                       y = c(cholesterol = 5, heart = 4, metabolism = 3, speed = 2, leg_lenght = 1))
+                                       
+drawdag(DAG.Runner)
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_Runner.png}
+\centering
+\end{figure}
+
+Let's, one more time, generate the data. In this case we have 5 variables, some are associated, others not, it's all on the next piece of code:
+
+\begin{lstlisting}
+
+b_ll_s <- 1.2
+b_m_s <- 1
+b_ch_h <- 0.05
+b_m_h <- (-0.3)
+
+leg_lenght <- runif(N, max = 49.75, min = 42.09) #cm
+metabolism <- runif(N, 1, 20) 
+cholesterol <- runif(N, 125, 200) #mg/dL
+speed <- leg_lenght * b_ll_s + metabolism * b_m_s + rnorm(N, mean = 0, sd = 5) #mph
+heart <- cholesterol * b_ch_h + metabolism * b_m_h + rnorm(N, mean = 0, sd = 0.1) #ng/L
+
+\end{lstlisting}
+
+Again, let's take a look at the plots for the distribution:
+
+\begin{lstlisting}
+
+PLOT.REG(leg_lenght ~ heart, "LEG_LEN ~ HEART")
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{PLOT_RUNNER.png}
+\centering
+\end{figure}
+
+
+
+Let's, one more time, check the relations:
+
+\begin{lstlisting}
+
+SUM.4VAR(leg_lenght ~ metabolism, "metabolism", "leg_len and metabolism", leg_lenght ~ cholesterol,
+         "cholesterol", "leg_len and cholesterol", leg_lenght ~ heart, "heart", "leg_len and heart", 
+         leg_lenght ~ heart + speed, "heart", "leg_len and heart (when speed)")
+
+
+#The variables leg_len and cholesterol do not show an association with a p value of 0.841257 and an estimate of -0.0009198866 
+#The variables leg_len and heart do not show an association with a p value of 0.5383972 and an estimate of 0.0302165 
+#The variables leg_len and heart (when speed) show an association with a p value of 3.277156e-12 and an estimate of 0.3962244 
+#The variables leg_len and metabolism do not show an association with a p value of 0.3730765 and an estimate of -0.01604611 
+
+\end{lstlisting}
+
+
+There is no association between leg lenght and metabolism, leg lenght and  cholesterol and leg lenght and heart disease; but when we adjust for the  collider speed, we open a path between leg lenght and heart disease. We  do find  a association between heart when there is no association between  how long your legs are and cardiac disease.
+
+Let's look at our data one more time and see whether this association we find when adjusting by our collider (speed) is actually present. The second plot shows the association that actually exists between the variables cholesterol and heart, as opposed to the previous ones (for comparison).
+
+
+\begin{lstlisting}
+
+op <- par(mfrow= c(2, 1))
+PLOT.REG(leg_lenght ~ heart, "LEG ~ HEART")
+
+PLOT.REG(cholesterol ~ heart, "CHOLESTEROL ~ HEART")
+
+par(op)
+\end{lstlisting}
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{COMP_LEG_CHOL_HEART.png}
+\centering
+\end{figure}
+
+
+
+Let's dive in into our second case. In this situation our X and Y variables have some sort of relation but the estimate (its association) changes from positive to negative when we condition on Z (collider).
+
+Let's take another peak at the DAG to remind us of the structure:
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_Situation2.png}
+\centering
+\end{figure}
+
+
+We, again, generate random data, but in this case the values of Y are associated to the ones from X:
+
+
+\begin{lstlisting}
+
+b_xy2 <- 1.7 
+b_xz2 <- 1.5
+b_yz2 <- 2.5
+
+X2 <- runif(N, 1, 10)
+Y2 <- X2 * b_xz2 + rnorm(N, mean = 0, sd = 1)
+Z2 <- X2 * b_xz2 + Y2 * b_yz2 + rnorm(N, mean = 0, sd = 1)
+
+
+\end{lstlisting}
+
+Let's check our data:
+
+
+\begin{lstlisting}
+
+op <- par(mfrow= c(3, 1))
+
+PLOT.REG(Z2 ~ X2, "Var distribution Z2 ~ X2")
+PLOT.REG(Z2 ~ Y2, "Var distribution Z2 ~ Y2")
+PLOT.REG(X2 ~ Y2, "Var distribution X2 ~ Y2")
+
+par(op)
+
+
+\end{lstlisting}
+
+
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{PLOT_CASE2.png}
+\centering
+\end{figure}
+
+
+As we can see, there is, apparently a positive association between Z2 and X2;   Z2 and Y2; and X2 and Y2. In this case we are interested in the relationship between X2 and Y2; we can check it: 
+
+
+\begin{lstlisting}
+
+SUM.2VAR(X2 ~ Y2, "Y2", "X2 and Y2", X2 ~ Y2 + Z2, "Y2", "X2 and Y2 (when Z2)")
+
+
+#The variables X2 and Y2 show an association with a p value of 1.074789e-301 and an estimate of 0.6174945 
+#The variables X2 and Y2 (when Z2) show an association with a p value of 2.690063e-19 and an estimate of -0.4720634 
+
+\end{lstlisting}
+
+
+The positive association we find between X2 and Y2 switches to a negative association when we adjust for Z2. As we can see, in this particular case, conditioning on Z changes the sign of the estimate for the Y2 variable, as in Simpson's paradox
+
+
+Now, with a more practical example: 
+
+We want to study the effect of UV radiation (hours of exposure a day) and INK4a on the mutation of gen p53. First of all we illustrate the causal structure:
+
+\begin{lstlisting}
+
+DAG.p53 <- dagitty("dag {
+UV_radiation -> mutated_p53
+INK4a -> mutated_p53
+UV_radiation -> INK4a
+}")
+
+coordinates(DAG.p53) <- list(x = c(UV_radiation = 1, INK4a = 3, 
+                                   mutated_p53 = 2),
+                            y = c(UV_radiation = 1, INK4a = 1, 
+                                  mutated_p53 = 3))
+drawdag(DAG.p53)
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_UV_INK_P53.png}
+\centering
+\end{figure}
+
+
+Let's generate our data for this particular case:
+
+
+\begin{lstlisting}
+
+b_UV_INK4a <- 0.2
+b_INK4a_mp53 <- 2
+b_UV_mp53 <- 0.7
+
+
+UV_radiation <- runif(N, 0, 9)
+INK4a <- UV_radiation * b_UV_INK4a + rnorm(N, mean = 0, sd = 0.5)
+mutatedp53 <- UV_radiation * b_UV_mp53 + INK4a * b_INK4a_mp53 + 
+  rnorm(N, mean = 0, sd = 0.1)
+  
+\end{lstlisting}
+
+Let's check our data distribution: 
+
+\begin{lstlisting}
+
+PLOT.REG(UV_radiation ~ INK4a, 'UV ~ INK4a')
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{PLOT_UV_INK4A.png}
+\centering
+\end{figure}
+
+
+We can see a positive association between UV radiation and INK4a
+
+And once again, let's take a look at our models when we adjust for mutated p53 and also when we don't. Does anything change?
+
+\begin{lstlisting}
+
+SUM.2VAR(UV_radiation ~ INK4a, "INK4a", "UV and INK4a", UV_radiation ~ INK4a
+         + mutatedp53, "INK4a", "UV and INK4a (when Mp53)")
+
+
+#The variables UV and INK4a show an association with a p value of 4.878714e-87 and an estimate of 2.647573 
+#The variables UV and INK4a (when Mp53) show an association with a p value of 0 and an estimate of -2.81791 
+
+\end{lstlisting}
+
+
+As shown in the Summary function, the association between the variables UV  radiation is maintained after adjusting for the collider but the relation that was once positive becomes negative when adjusting for Mp53 (collider). Which means, when adjusting for a collider not only we can find an association that isn't supposed to be there but also we can find a change in direction of the association that was previousely present.
+
+
+Now that we have seen how adjusting the collider can afect the estimates and pvalues, we should also check two more scenarios: Ancestors and Descendants. Let's start with the ancestors:
+
+
+Imagine we have now a variable Z (a collider) that has an ancestor (variable W), does conditioning on any of those two affect the relation between variable X and Y?
+
+Let's draw our DAG: 
+
+\begin{lstlisting}
+
+DAG_Ancestor <- dagitty("dag {
+X -> Z
+Y -> Z
+W -> Z
+}")
+
+coordinates(DAG_Ancestor) <- list(x = c(X = 1, Y = 3, Z = 2, W = 2),
+                                       y = c(X = 1, Y = 1, Z = 2, W = 3))
+drawdag(DAG_Ancestor)
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_ANCESTOR.png}
+\centering
+\end{figure}
+
+
+As always, we create the data according to our DAG:
+
+\begin{lstlisting}
+
+b_xz <- 3 
+b_yz <- 2
+b_wz <- 2.5
+sd_z <- 1
+
+
+X3 <- runif(N, 1, 5)
+Y3 <- runif(N, 2, 4)
+W3 <- runif(N, 1.5, 3)
+Z3 <- b_xz * X3 + b_yz * Y3 + W3 * b_wz + rnorm(N, 0, sd = sd_z)
+
+\end{lstlisting}
+
+
+And once again we will be checking the summaries for our estimates and pvalues, but this time we want to check also what happens when we adjust for the ancestor of our collider (W).
+
+
+\begin{lstlisting}
+
+SUM.4VAR(X3 ~ W3, "W3", "X3 and W3", X3 ~ W3 + Z3, "W3", "X3 and W3 (when Z3)", X3 ~ Y3 + Z3, 
+         "Y3", "X3 and Y3 (when Z3)", X3 ~ Y3, "Y3", "X3 and Y3")
+
+
+#The variables X3 and W3 show an association with a p value of 0.02225708 and an estimate of 0.2704141 
+#The variables X3 and W3 (when Z3) show an association with a p value of 6.253145e-32 and an estimate of -0.6510684 
+#The variables X3 and Y3 do not show an association with a p value of 0.7848218 and an estimate of -0.02393977 
+#The variables X3 and Y3 (when Z3) show an association with a p value of 1.57704e-41 and an estimate of -0.5242863 
+\end{lstlisting}
+
+
+
+There is no significant association between X3 and W3, but when conditioned for Z3 a negative association arises. Same thing hapopens between the  variables X3 and Y3. Therefore, conditioning on Z3 modifies the independence between X3, Y3 and W3
+
+
+
+\begin{lstlisting}
+
+SUM.2VAR(X3 ~ Y3, "Y3", "X3 and Y3", X3 ~ Y3 + W3, "Y3", "X3 and Y3 (when W3)")
+
+
+#The variables X3 and Y3 do not show an association with a p value of 0.7848218 and an estimate of -0.02393977 
+#The variables X3 and Y3 (when W3) do not show an association with a p value of 0.8489813 and an estimate of -0.01663633 
+
+\end{lstlisting}
+
+No significant association found between X3 and Y3, nor can we find a  association when adjusting for the ancestor (W3). So, conditioning on W3 does not change the independence between X3 and Y3.
+
+Let's take a look at a more realistic example: we want to study the effect of cortisol and cholesterol on diabetes, but we also have to take into consideration the variable "sugar consumption in gr". Here is the DAG:
+
+
+\begin{lstlisting}
+
+DAG.Diabetes.Ancestor <- dagitty("dag {
+cortisol -> diabetes
+cholesterol -> diabetes
+sugar_consumpt -> diabetes
+}")
+
+coordinates(DAG.Diabetes.Ancestor) <- list(x = c(cortisol = 1, cholesterol = 3,
+                                           diabetes = 2, 
+                                            sugar_consumpt = 2),
+                                       y = c(cortisol = 1, cholesterol = 1, 
+                                             diabetes = 2, 
+                                             sugar_consumpt = 3))
+drawdag(DAG.Diabetes.Ancestor)
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_DIAB_ANCESTOR.png}
+\centering
+\end{figure}
+
+More data...
+
+\begin{lstlisting}
+
+b_co_d <- 0.9
+b_ch_d <- 0.95
+b_sc_d <- 1.2
+sd_d <- 1
+
+
+cortisol <- runif(N, 1, 50)
+cholesterol <- runif(N, 10, 250)
+diabetes <- cortisol * b_co_d + cholesterol * b_ch_d + sug_consumption * 
+  b_sc_d+ rnorm(N, 0, sd = sd_d)
+sug_consumption <- runif(N, 0, 150)
+
+\end{lstlisting}
+
+There should not be any association between cortisol and cholesterol. Let's check it on our plot:
+
+\begin{lstlisting}
+
+PLOT.REG(cortisol ~ cholesterol, 'cortisol ~ cholesterol')
+
+\end{lstlisting}
+
+
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{PLOT_CORT_CHOL.png}
+\centering
+\end{figure}
+
+As we can seee, apparently there is no association... But what happens when we adjust for the collider and ancestor?
+
+\begin{lstlisting}
+
+SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cortisol 
+         ~ cholesterol + sug_consumption, "cholesterol", "colesterol and cortisol (when sugar)")
+
+
+#The variables colesterol and cortisol (when sugar) do not show an association with a p value of 0.4571814 and an estimate of 0.006613713 
+#The variables cortisol and cholesterol do not show an association with a p value of 0.4510984 and an estimate of 0.006693875 
+
+\end{lstlisting}
+
+Again we find no association between cortisol and cholesterol, even if we adjust for the ancestor (sugar\_consumption).
+
+
+
+\begin{lstlisting}
+
+SUM.2VAR(cortisol ~ cholesterol, "cholesterol", "cortisol and cholesterol", cortisol 
+         ~ cholesterol + diabetes, "cholesterol", "colesterol and cortisol (when diabetes)")
+
+#The variables colesterol and cortisol (when diabetes) show an association with a p value of 7.764322e-07 and an estimate of -0.07041942 
+#The variables cortisol and cholesterol do not show an association with a p value of 0.4510984 and an estimate of 0.006693875 
+
+\end{lstlisting}
+
+
+But we do find a association between those two variables when adjusting for diabetes (the collider).
+
+Let's take a look at our second possible scenario with the ancestor and descendant situations. We now have a variable Z (a collider) that has a descendant (variable W), does conditioning on any of those two affect the relation between variable X and Y?
+Starting with the DAG:
+
+\begin{lstlisting}
+
+DAG.Descendant <- dagitty("dag {
+X -> Z
+Y -> Z
+Z -> W
+e_z -> Z
+}")
+
+coordinates(DAG.Descendant) <- list(x = c(X = 1, Y = 3, Z = 2, e_z = 1.75, W = 2),y = c(X = 1, Y = 1, Z = 2, e_z = 2, W = 3))
+drawdag(DAG.Descendant)
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_DESCENDANT.png}
+\centering
+\end{figure}
+
+
+We generate the data...
+
+
+\begin{lstlisting}
+
+b_xz <- 1.1
+b_yz <- 0.7
+b_zw <- 2
+sd_z <- 0.5
+sd_w <- 0.5
+
+X4 <- runif(N, 1, 10)
+Y4 <- runif(N, 2, 20)
+Z4 <- b_xz * X4 + b_yz * Y4 +  rnorm(N, 0, sd = sd_z)
+W4 <- b_zw * Z4 + rnorm(N, 0, sd = sd_w)
+
+\end{lstlisting}
+
+And check our estimates and pvalues once more:
+
+\begin{lstlisting}
+
+SUM.3VAR(X4 ~ Y4, "Y4", "X4 and Y4", X4 ~ Y4 + W4, "Y4", "X4 and Y4 (when W4)", X4 ~ Y4 + Z4,
+         "Y4", "X4 and Y4 (when Z4)")
+
+#The variables X4 and Y4 do not show an association with a p value of 0.471942 and an estimate of -0.01698028 
+#The variables X4 and Y4 (when W4) show an association with a p value of 8.300303e-322 and an estimate of -0.6199551 
+#The variables X4 and Y4 (when Z4) show an association with a p value of 0 and an estimate of -0.6217867 
+
+
+\end{lstlisting}
+
+We find no association between X4 and Y4, but when we condition on the collider (Z) or its descendant (W4) we find a significantly negative association between the two variables. 
+In this case adjusting by Z4 and W4 (its descendant) resulted in a association between the variables X4 and Y4. 
+
+
+
+Practical example: we want to see how does diabetes affect heart disease for that we will also measure cortisol and cholesterol, which affect diabetes. Let's see what happens when we condition the collider or its descendant in this particular case. First we create the DAG:
+
+
+\begin{lstlisting}
+
+DAG.Diabetes.Descendant <- dagitty("dag {
+cortisol -> diabetes
+cholesterol -> diabetes
+diabetes -> heart_disease
+}")
+
+coordinates(DAG.Diabetes.Descendant) <- list(x = c(cortisol = 1, 
+                                        cholesterol = 3, diabetes = 2,
+                                        heart_disease = 2),
+                                       y = c(cortisol = 1, cholesterol = 1, 
+                                             diabetes = 2,  
+                                             heart_disease = 3))
+drawdag(DAG.Diabetes.Descendant)
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_DESCENDANT_DIAB.png}
+\centering
+\end{figure}
+
+
+As the example is very simmilar to the previous one, we will be using the same values for the data, excepting the heart disease variable.
+ 
+ 
+\begin{lstlisting}
+ 
+b_co_d_d <- 1.5
+b_ch_d_d <- 0.95
+b_d_hd <- 2.5
+sd_d_d <- 5
+sd_hd <- 2
+
+
+cortisol_desc <- runif(N, 1, 50)
+cholesterol_desc <- runif(N, 10, 250)
+diabetes_desc <- cortisol_desc * b_co_d_d + cholesterol_desc * b_ch_d_d + 
+  rnorm(N, 0, sd = sd_d_d)
+heart_disease <- diabetes_desc * b_d_hd + rnorm(N, 0, sd = sd_hd)
+
+\end{lstlisting}
+
+Let's check the values...
+
+\begin{lstlisting}
+
+SUM.3VAR(cortisol_desc ~ cholesterol_desc, "cholesterol_desc", "cortisol and cholesterol", 
+         cortisol_desc ~ cholesterol_desc + diabetes_desc, "cholesterol_desc",
+         "cortisol and cholesterol (when diabetes)", cortisol_desc ~ cholesterol_desc + heart_disease,
+         "cholesterol_desc", "cortisol and cholesterol (when heart disease)")
+
+
+#The variables cortisol and cholesterol do not show an association with a p value of 0.424835 and an estimate of -0.007447195 
+#The variables cortisol and cholesterol (when diabetes) show an association with a p value of 8.388719e-309 and an estimate of -0.6025828 
+#The variables cortisol and cholesterol (when heart disease) show an association with a p value of 1.393365e-304 and an estimate of -0.6017466 
+
+\end{lstlisting}
+
+Just like in our previous simple example, in this case there should not be any relation between cortisol and cholesterol (as we did intend with our data) and when we see our summary we can confirm there is no relation. But when we  condition on our collider or its descendant (heart disease) a association between the variables cortisol and cholesterol arises. 
+
+To better visualize this non existent association between our two variables we can check the plot for the regression of both of them and it's pretty clear that there is no apparent positive or negative association. To reinforce this data, we can also check and compare the plot for the variables cortisol and heart disease, where we see a positive association.
+
+\begin{lstlisting}
+
+op <- par(mfrow= c(2, 1))
+
+PLOT.REG(cortisol_desc ~ cholesterol_desc, 'cortisol ~ cholesterol')
+
+PLOT.REG(cortisol_desc ~ heart_disease, 'cortisol ~ heart_disease')
+
+
+\end{lstlisting}
+
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{PLOT_CR_CH_HD.png}
+\centering
+\end{figure}
+\newpage
+
 \section{Complex cases and backdoor criteria}
 
 To develop this issue, we will need the following packages:
@@ -714,12 +1603,120 @@ To develop this issue, we will need the following packages:
 \begin{lstlisting}
 library(simstudy)
 library(dagitty)
-library(car)
 library(rethinking)
 if(!suppressWarnings(require("rethinking", quietly = TRUE))) {drawdag <- plot}
 \end{lstlistings}
 
-A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification \(Hernan, 2017\).
+\subsection{Berkson's paradox}
+
+
+A specific collider bias that has a quite famous example (\"Why are handsome men such jerks?\") is the Berkson's paradox. This paradox produces a selection bias, and it is caused by systematically observing some events more than others. Let's explain a little bit of this paradox using the previousely mentioned example:
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{berkson_men.png}
+\centering
+\end{figure}
+
+If we take a look at this plot, we can see that there is no apparent association between being handsome and being nice. The data shows independence between these two varaibles. But, being a smart woman, you are probably not going to look for an unpleasant man or an ugly one, right? Your goal is probably somwhere in the green area shown in the plot. But those man might not be single or interested in you so, is there any other man you would consider? Yes, for sure. But not all of them. You would probably accept a not so handsome man that is really nice or a not so nice man that is really handsome. And that's what causes your bias. You only pay attention to specific groups of population, as you are not even considering man who are not very nice and also not very handsome (who would want that, right\?). This is what Berkson's paradox describes, a selection bias in our observations.
+
+Okay, now that we know not all handsome man are jerks, let's take a look at a different example.
+We are going to observe hospital patients with diabetes and hospital patients with cholecystitis.The corresponding DAG:
+
+\begin{lstlisting}
+DAG.Berkson <- dagitty("dag {
+diabetes -> hosp_patient
+cholycistitis -> hosp_patient
+
+}")
+
+coordinates(DAG.Berkson) <- list(x = c(diabetes = 1,  cholycistitis = 3, 
+                                       hosp_patient = 2),
+                                 y = c(diabetes = 1, cholycistitis = 1, 
+                                       hosp_patient = 3))
+drawdag(DAG.Berkson)
+\end{lstlisting}
+
+
+
+Let us generate the data according to the DAG. For this particular case we are going to work with dicotomyc variables.
+
+\begin{lstlisting}
+
+N=100
+
+diabetes <- rbinom(n=100, size=1, prob=0.7)
+cholecystitis <- rbinom(n=100, size=1, prob=0.3) 
+hosp_patients <- diabetes*0.6 + cholecystitis*0.4 + rnorm(N, mean = 0, sd = 0.2)
+
+\end{lstlisting}
+
+
+Let's take a look at our data estimates, for that we will use a function that creates a dataframe containing the p values and estimates for the variables diabetes and cholecystitis and also diabetes and cholecystitis adjusting by the hospital patients. It also returns a string checking the  significance of the pvalue for diabetes and cholecystitis and another one for the same value but when adjusting by the hospital patients.
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{DAG_DESCENDANT.png} %%change it for the Berkson one
+\centering
+\end{figure}
+\begin{lstlisting}
+
+df_pval_estimates <- function(var1, var2, var3) {
+  dataset_2var <- data.frame(var1,var2)
+  
+  
+  dataset_3var <- data.frame(var1,var2,var3)
+  
+  
+  est_v1_v2 <- summary(glm(var1~var2, data = dataset_2var, family = 'binomial')
+  )$coefficients['var2', 'Estimate']
+  pval_v1_v2 <- summary(glm(var1~var2, data = dataset_2var, family = 'binomial')
+  )$coefficients['var2', 'Pr(>|z|)']
+  
+  
+  est_v1_v2_v3 <- summary(glm(var1~var2+var3, data=dataset_3var, 
+                              family = 'binomial'))$coefficients['var2', 'Estimate']
+  pval_v1_v2_v3 <-summary(glm(var1~var2+var3, data=dataset_3var, 
+                              family = 'binomial'))$coefficients['var2', 'Pr(>|z|)']
+  
+  df_final <- data.frame('values_of' = c('Estimates', 'P_values'), 'diab_chol' = 
+                           c(est_v1_v2, pval_v1_v2), 'diab_chol_HP' = 
+                           c(est_v1_v2_v3, pval_v1_v2_v3))
+  
+  print(df_final)
+  cat('\n')
+  
+  {if (pval_v1_v2 > 0.05)
+    cat('The variables do not show an association. The p value is', 
+        pval_v1_v2, 'and the estimate is',est_v1_v2, '\n')
+    else
+      cat('The variables do show an association. The p value is', 
+          pval_v1_v2, 'and the estimate is',est_v1_v2, '\n')}
+  
+  {if (pval_v1_v2_v3 > 0.05)
+    cat('The variables do not show an association when adjusting by the collider. The p value is', 
+        pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')
+    else
+      cat('The variables do show an association when adjusting by the collider. The p value is', 
+          pval_v1_v2_v3, 'and the estimate is',est_v1_v2_v3, '\n')}
+}
+
+df_pval_estimates(diabetes, cholecystitis, hosp_patients)
+
+# values_of diab_chol diab_chol_HP
+#1 Estimates 0.6988779  -7.36168368
+#2  P_values 0.3038396   0.00373474
+
+# The variables do not show an association. The p value is 0.3038396 and the estimate is 0.6988779 
+#The variables do show an association when adjusting by the collider. The p value is 0.00373474 and the estimate is -7.361684
+
+\end{lstlisting}
+
+So, for this example we can see how two variables that should not have any association between them, when adjusting for our collider (a small selection of the population, in this case hospital patients) a negative association arises, meaning you should not find the two diseases in one person.
+
+
+
+\subsection{Simpson's paradox}
+
+A complex causal phenomenom that has been studied for long is the Simpson's paradox: there is a trend between variables when different groups of data are observed, but when the groups are combined, this trend disappears or is reversed. This paradox is commonly explained as a extreme case of confounding, though some experts argue that this is a oversimplification (Hernan, 2017).
 One striking example of Simpson's paradox is the low birth-weight paradox. It will also help us to introduce the problem that may involve the unmeasured variables: those events that may affect the causal structure of our model but can't be measured, or that we are not even aware of. This example presents the same issue in any of the following two directed acyclic graphs:
 \begin{lstlisting}
 LBWsc1.DAG <- dagitty('dag {
@@ -752,10 +1749,9 @@ drawdag(LBWsc2.DAG)
 \centering
 \end{figure}
 \newpage
-The variables of study are three: if the mother smokes or not, if the baby presents a low weight at the moment of birth, and if the baby survives the first month of life. Notice the shape of the graphs: if U is ignored, they are the same scenarios as presented in the common cause section. What medical studies suggest is that underweighted babies present less chances of survival than ordinary babies for multiple reasons: weight involves a better organ development, and indicates that there is certain fat that can be used for protection, warmth and energy. Experts also proclaim that if the mother smokes during the pregnancy, the baby development can be compromised, leading to miscarriage or fragile health \(increasing infant mortality\). But when 'smoking mother' and 'low birth weight' are implied in the same model, it seems that if the mother smokes during the pregnancy, and the baby has low weight at birth, she has less chances of dying. 
+The variables of study are three: if the mother smokes or not, if the baby presents a low weight at the moment of birth, and if the baby survives the first month of life. Notice the shape of the graphs: if U is ignored, they are the same scenarios as presented in the common cause section. What medical studies suggest is that underweighted babies present less chances of survival than ordinary babies for multiple reasons: weight involves a better organ development, and indicates that there is certain fat that can be used for protection, warmth and energy. Experts also proclaim that if the mother smokes during the pregnancy, the baby development can be compromised, leading to miscarriage or fragile health (increasing infant mortality). But when 'smoking mother' and 'low birth weight' are implied in the same model, it seems that if the mother smokes during the pregnancy, and the baby has low weight at birth, she has less chances of dying. 
 
-
-In this example, there are unmeasured variables \(U\) that affect both low birth weight and mortality, though the only cause that we are accounting for is smoking. The questions that arise are: does smoking cause mortality? Does low birth weight cause mortality? We will simulate the data with the R package \textbf{simstudy}. We will increase the natural probabilities to visualize with clarity the issue. Let's assume that U is an unkown health condtion that can be absent \(0\) or present \(1\).
+In this example, there are unmeasured variables (U) that affect both low birth weight and mortality, though the only cause that we are accounting for is smoking. The questions that arise are: does smoking cause mortality? Does low birth weight cause mortality? We will simulate the data with the R package \textbf{simstudy}. We will increase the natural probabilities to visualize with clarity the issue. Let's assume that U is an unkown health condtion that can be absent (0) or present (1).
 \begin{lstlisting}
 samplesize <- 10000
 #Data for scenario 1
@@ -773,42 +1769,95 @@ var.sc2 <- defData(var.sc2, varname = 'Mortality', dist = 'binary', formula = '0
 set.seed(13)
 LBWsc2.df <- genData(samplesize, var.sc2)
 \end{lstlisting}
+With the following function, we will see what actually happens with the variable Smoking when LBW is present in the model. The coefficients and estimates that are not relevant for the problem are not shown:
+\begin{lstlisting}
+LBW.fun <- function(dataset, reps = 100){
+  #it doesn't check the p value of LBW because it is not the main issue of this type of paradox
+  
+  onlyS_coefS <- rep(NA, reps)
+  both_coefS <- rep(NA, reps)
+  
+  for (i in 1:reps){
+    onlyS <- glm(Mortality~Smoking, data = dataset, family = 'binomial')
+    both <- glm(Mortality~LBW+Smoking, data = dataset, family = 'binomial')
+    
+    onlyS_coefS[i] <- summary(onlyS)$coefficients['Smoking','Estimate']
+    both_coefS[i] <- summary(both)$coefficients['Smoking','Estimate'] }
+  
+  cat('\nThe estimate for Smoking is:\nWhen Mortality ~ Smoking:', mean(onlyS_coefS),
+      '\nWhen Mortality ~ Smoking + LBW:', mean(both_coefS), '\n')
+}
+
+LBW.fun(LBWsc1.df)
+#The estimate for Smoking is:
+#When Mortality ~ Smoking: 0.180505 
+#When Mortality ~ Smoking + LBW: -0.7805442
+LBW.fun(LBWsc2.df)
+#The estimate for Smoking is:
+#When Mortality ~ Smoking: 0.2600481 
+#When Mortality ~ Smoking + LBW: -0.7021735 
+\end{lstlisting}
+
+It doesn't matter if in the causal structure of the initial DAG LBW relates to mortality or not, in both cases when the model conditions on LBW, the estimate for Smoking (which is always significant, though not shown, it is obvious), gets negative. These results are contraintuitive: there is something that we are not taking into account. 
+What happens is that those unmeasured variables have a higher influence on mortality and low birth weight than smoking, maybe because they cause serious birth defects. They are 'invisible confounders' that may lead to a wrong conclusion, and by conditioning on Low Birth Weight we are creating a bridge for them to show their effect.
+It is very common for the so called experts to get excited when they have measured many variables, but sometimes adjusting for other covariates that enable the exposure of a non\-causal relationship can be a real handicap. This is why it arises the necessity to stablish a criteria to know what to condition on and what to avoid.
+The backdoor cirteria is the most common method to condition on covariates, along with frontdoor criteria which is very similar.
+We introduce this concept at the end, as it is necessary to know certain basic concepts of the \(Science of Why\) to apply this criteria correctly and with sense.
+In the backdoor criteria, given a pair of treatment-outcome variables, we should condition on the set of covariates (Z) that:
+\begin{itemize} \item Block all the backdoor paths. \item Are not a descendant of the 'treatment', or cause of study, variable.\end{itemize}
+We are going to explain this with another example, given the treatment variable is X\_i and the outcome variable is X\_j:
+\begin{lstlisting}
+complex.DAG <- dagitty('dag{
+X_1 -> X_3
+X_1 -> X_4
+X_2 -> X_4
+X_2 -> X_5
+X_3 -> X_i
+X_4 -> X_i
+X_4 -> X_j
+X_5 -> X_j
+X_i -> X_6
+X_6 -> X_j}')
+
+coordinates(complex.DAG) <- list(x = c(X_1 =1, X_3 = 1, X_i =1,X_4 = 2, X_6 = 2,X_2 = 3, X_5 = 3, X_j =3),y = c(X_1=1, X_2 = 1, X_3 =2, X_4 = 2, X_5 = 2, X_i = 3, X_6 = 3, X_j =3))
+
+drawdag(complex.DAG)
+\end{lstlisting}
+\begin{figure}[h]
+\includegraphics[width=8cm]{complex.DAG.png}
+\centering
+\end{figure}
+First we have to identify all the backdoor paths. A backdoor path is a non causal path between the treatment variable X\_i and the outcome variable, which can be identified by an arrow pointing to X\_i.
 
 
 
-
-
-
-
+\newpage
 \section{Conclusion}
 
-
-
-
-
+As we have seen, causal inference analysis have more tricks and traps than expected. It is crucial to know the causal structure that is followed in the real life cases, and use it properly. If this first model is not correct, it will be very difficult to have a correct insight of the problem. For this same reason, we cannot forget the causal context of the covariates and reduce them just to scatistical terms. The causal structure is important if we want to apply backdoor criteria, and to identify if what we are observing is a direct effect or a total effect. 
 
 
 
 
 \section{References}
 
-Causal Mediation | Columbia Public Health. \(2022\). Retrieved 11 January 2022, from \href{https://www.publichealth.columbia.edu/research/population-health-methods/causal-mediation}{PublicHealth Columbia - Causal Mediation}
+Causal Mediation | Columbia Public Health. (2022). Retrieved 11 January 2022, from \href{https://www.publichealth.columbia.edu/research/population-health-methods/causal-mediation}{PublicHealth Columbia - Causal Mediation}
 
-Coffman, D., \& Zhong, W. \(2012\). Assessing mediation using marginal structural models in the presence of confounding and moderation. Psychological Methods, 17\(4\), 642-664. doi: 10.1037\/a0029311
+Coffman, D., \& Zhong, W. (2012). Assessing mediation using marginal structural models in the presence of confounding and moderation. Psychological Methods, 17(4), 642-664. doi: 10.1037\/a0029311
 
-Cole, S., \& Hernan, M. \(2002\). Fallibility in estimating direct effects. International Journal Of Epidemiology, 31\(1\), 163-165. doi: 10.1093\/ije\/31.1.163
+Cole, S., \& Hernan, M. (2002). Fallibility in estimating direct effects. International Journal Of Epidemiology, 31(1), 163-165. doi: 10.1093\/ije\/31.1.163
 
-Davis, D. \(2020\). Average Sprinting Speed \& Usain Bolt Top Speed | Track Spikes. Retrieved 11 January 2022, from \href{https://trackspikes.co.uk/average-sprinting-speed/#}{Trackspikes.co.uk}
+Davis, D. (2020). Average Sprinting Speed \& Usain Bolt Top Speed | Track Spikes. Retrieved 11 January 2022, from \href{https://trackspikes.co.uk/average-sprinting-speed/#}{Trackspikes.co.uk}
 
-Hernan, M. \(2017\). Simpson's Paradox Unraveled. Retrieved 11 January 2022, from \href{https://twitter.com/_MiguelHernan/status/860542619818106881?s=20}{Miguel Hernan's Tweet, very recomended blog.}
+Hernan, M. (2017). Simpson's Paradox Unraveled. Retrieved 11 January 2022, from \href{https://twitter.com/_MiguelHernan/status/860542619818106881?s=20}{Miguel Hernan's Tweet, very recomended blog.}
 
-Hernan, M., Clayton, D., \& Keiding, N. \(2011\). The Simpson\'s paradox unraveled. International Journal Of Epidemiology, 40\(3\), 780\-785. doi: 10.1093\/ije\/dyr041
+Hernan, M., Clayton, D., \& Keiding, N. (2011). The Simpson\'s paradox unraveled. International Journal Of Epidemiology, 40(3), 780\-785. doi: 10.1093\/ije\/dyr041
 
-Santalo Bel, M., Guindo Soldevila, J., \& Ordonez Llanos, J. \(2003\). Marcadores biológicos de necrosis miocardica. Revista Española De Cardiologia, 56\(7\), 703-720. doi: 10.1016\/s0300-8932\(03\)76942-5
+Santalo Bel, M., Guindo Soldevila, J., \& Ordonez Llanos, J. (2003). Marcadores biológicos de necrosis miocardica. Revista Española De Cardiologia, 56(7), 703-720. doi: 10.1016\/s0300-8932(03)76942-5
 
-SARS-CoV-2: PCR, Carga Viral y CTs | Life Length BLOG \(2022\). Retrieved 11 January 2022, \href{from https://lifelength.com/es/sars-cov-2-pcr-carga-viral-y-cts/}{Life Length Divulgation Blog}
+SARS-CoV-2: PCR, Carga Viral y CTs | Life Length BLOG (2022). Retrieved 11 January 2022, \href{from https://lifelength.com/es/sars-cov-2-pcr-carga-viral-y-cts/}{Life Length Divulgation Blog}
 
-Soufir, N., Guedj, M., Bourrillon, A., Combadieres, C., Descamps, V., \& Dupin, N. et al. \(2008\). Polymorphisms of the MATP\/SLC45A2 gene and susceptibility to melanoma in the French population. Journal Of Clinical Oncology, 26\(15\_suppl\), 11040-11040. doi: 10.1200\/jco.2008.26.15\_suppl.11040
+Soufir, N., Guedj, M., Bourrillon, A., Combadieres, C., Descamps, V., \& Dupin, N. et al. (2008). Polymorphisms of the MATP\/SLC45A2 gene and susceptibility to melanoma in the French population. Journal Of Clinical Oncology, 26(15\_suppl), 11040-11040. doi: 10.1200\/jco.2008.26.15\_suppl.11040
 
 The Birth-Weight paradox. Retrieved 11 January 2022, from \href{https://library.bayesia.com/articles/#!bayesialab-knowledge-hub/the-birth-weight-paradox}{BayesiaLab - Weight Paradox simulation}
 
@@ -816,8 +1865,8 @@ Cholesterol Levels: What You Need to Know: MedlinePlus. Retrieved 11 January 202
 
 Troponin - Health Encyclopedia - University of Rochester Medical Center. Retrieved 11 January 2022, from \href{https://www.urmc.rochester.edu/encyclopedia/content.aspx?contenttypeid=167&contentid=troponin}{Encyclopedia entry: Troponin}
 
-VanderWeele, T. \(2014\). Commentary: Resolutions of the birthweight paradox: competing explanations and analytical insights. International Journal Of Epidemiology, 43\(5\), 1368-1373. doi: 10.1093\/ije\/dyu162
+VanderWeele, T. (2014). Commentary: Resolutions of the birthweight paradox: competing explanations and analytical insights. International Journal Of Epidemiology, 43(5), 1368-1373. doi: 10.1093\/ije\/dyu162
 
-VanderWeele, T., \& Shpitser, I. \(2011\). A New Criterion for Confounder Selection. Biometrics, 67\(4\), 1406-1413. doi: 10.1111\/j.1541-0420.2011.01619.x
+VanderWeele, T., \& Shpitser, I. (2011). A New Criterion for Confounder Selection. Biometrics, 67(4), 1406-1413. doi: 10.1111\/j.1541-0420.2011.01619.x
 
 \end{document}
