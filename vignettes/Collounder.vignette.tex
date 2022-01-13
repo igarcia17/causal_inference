@@ -1638,6 +1638,13 @@ drawdag(DAG.Berkson)
 \end{lstlisting}
 
 
+\begin{figure}[h]
+\includegraphics[width=5cm]{BERKS_DAG.png} %%change it for the Berkson one
+\centering
+\end{figure}
+\begin{lstlisting}
+
+
 
 Let us generate the data according to the DAG. For this particular case we are going to work with dicotomyc variables.
 
@@ -1654,10 +1661,7 @@ hosp_patients <- diabetes*0.6 + cholecystitis*0.4 + rnorm(N, mean = 0, sd = 0.2)
 
 Let's take a look at our data estimates, for that we will use a function that creates a dataframe containing the p values and estimates for the variables diabetes and cholecystitis and also diabetes and cholecystitis adjusting by the hospital patients. It also returns a string checking the  significance of the pvalue for diabetes and cholecystitis and another one for the same value but when adjusting by the hospital patients.
 
-\begin{figure}[h]
-\includegraphics[width=5cm]{DAG_DESCENDANT.png} %%change it for the Berkson one
-\centering
-\end{figure}
+
 \begin{lstlisting}
 
 df_pval_estimates <- function(var1, var2, var3) {
