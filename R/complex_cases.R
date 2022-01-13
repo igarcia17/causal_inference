@@ -69,11 +69,13 @@ df_pval_estimates <- function(var1, var2, var3) {
   cat('\n')
   
   {if (pval_v1_v2 > 0.05)
-    cat('The variables diabetes and cholecystitis do not show an association. The p value is',
-        pval_v1_v2, 'and the estimate is', est_v1_v2, 'for this model', '\n')
+    cat('The variables diabetes and cholecystitis do not show an association.',
+    'The p value is',pval_v1_v2, 'and the estimate is', est_v1_v2, 
+    'for this model', '\n')
     else
-      cat('The variables diabetes and cholecystitis do show an association. The p value is',
-          pval_v1_v2, 'and the estimate is', est_v1_v2, 'for this model', '\n')}
+      cat('The variables diabetes and cholecystitis do show an association.',
+          'The p value is', pval_v1_v2, 'and the estimate is', est_v1_v2, 
+          'for this model', '\n')}
   
   {if (pval_v1_v2_v3 > 0.05)
     cat('The variables diabetes and cholycistitis do not show an association',
@@ -88,8 +90,8 @@ df_pval_estimates <- function(var1, var2, var3) {
 df_pval_estimates(diabetes, cholecystitis, hosp_patients)
 
 #_______________________________Simpson paradox and backdoor criterion
-#Simpson paradox -> extreme case of confounding (though this is a simplicity of what he
-#originally published)
+#Simpson paradox -> extreme case of confounding (though this is a simplicity of 
+#what he originally published)
 #It is given when a trend appears in multiple data groups but
 #disappears or is reversed when the groups are combined.
 
@@ -122,36 +124,41 @@ coordinates(LBWsc2.DAG) <- list(x = c(LBW = 1, Smoking = 2, U = 2, Mortality = 3
 drawdag(LBWsc2.DAG)
 
 #If U is not taken into consideration, same scenarios as in common cause analysis.
-#An unmeasured variable can't be controlled in a model, and may represent for causes that
-#we don't even consider in the experiment. In the low birth weight paradox, there are 
-#unmeasured causes of low birth weight and mortality, though the only cause that we are accounting for
-#is smoking. The questions are: does smoking cause mortality? Does LBW cause mortality?
-#Does smoking cause LBW? Let's simulate the data: we will increase the natural proba-
-#bilities to maximise the effect. Let's assume that U is an unkown health condition, and
-#can be 0 or 1 in the absence or presence.
+#An unmeasured variable can't be controlled in a model, and may represent for causes 
+#that we don't even consider in the experiment. In the low birth weight paradox, 
+#there are unmeasured causes of low birth weight and mortality, though the only 
+#cause that we are accounting for is smoking. The questions are: does smoking 
+#cause mortality? 
+#Does LBW cause mortality? Does smoking cause LBW? Let's simulate the data: 
+#we will increase the natural probabilities to maximise the effect. Let's assume 
+#that U is an unkown health condition, and can be 0 or 1 in the absence or presence.
 samplesize <- 100
 
 var.sc1 <- defData(varname = 'U', dist = 'binary', formula = 0.5)
 var.sc1 <- defData(var.sc1, varname = 'Smoking', dist = 'binary', formula = 0.5)
-var.sc1 <- defData(var.sc1, varname = 'LBW', dist = 'binary', formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
-var.sc1 <- defData(var.sc1, varname = 'Mortality', dist = 'binary', formula = '0.1 * Smoking + 0.7 * U', link = 'identity')
+var.sc1 <- defData(var.sc1, varname = 'LBW', dist = 'binary', 
+                   formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
+var.sc1 <- defData(var.sc1, varname = 'Mortality', dist = 'binary', 
+                   formula = '0.1 * Smoking + 0.7 * U', link = 'identity')
 #two seed to have the data on both dataframes as similar as possible
 set.seed(13)
 LBWsc1.df <- genData(samplesize, var.sc1)
 
 var.sc2 <- defData(varname = 'U', dist = 'binary', formula = 0.5)
 var.sc2 <- defData(var.sc2, varname = 'Smoking', dist = 'binary', formula = 0.5)
-var.sc2 <- defData(var.sc2, varname = 'LBW', dist = 'binary', formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
-var.sc2 <- defData(var.sc2, varname = 'Mortality', dist = 'binary', formula = '0.1 * Smoking + 0.7 * U + 0.1 * LBW', link = 'identity')
+var.sc2 <- defData(var.sc2, varname = 'LBW', dist = 'binary', 
+                   formula = '0.5 * U + 0.4 * Smoking', link = 'identity')
+var.sc2 <- defData(var.sc2, varname = 'Mortality', dist = 'binary', 
+                   formula = '0.1 * Smoking + 0.7 * U + 0.1 * LBW', link = 'identity')
 
 set.seed(13)
 LBWsc2.df <- genData(samplesize, var.sc2)
 
+#it doesn't check the p value of LBW because it is not the main issue of this 
+#type ofparadox; we want to focus on how the effect of Smoking changes in 
+#presence or absence of LBW
 
 LBW.fun <- function(dataset){
-  #it doesn't check the p value of LBW because it is not the main issue of this type of
-  #paradox; we want to focus on how the effect of Smoking changes in presence or absence of LBW
-
   onlyS <- glm(Mortality~Smoking, data = dataset, family = 'binomial')
   both <- glm(Mortality~LBW+Smoking, data = dataset, family = 'binomial')
 
@@ -178,15 +185,20 @@ Birth.defects -> LBW
 Birth.defects -> Mortality
 }")
 
-coordinates(LBWsc3.DAG) <- list(x = c(LBW = 1.5, Smoking = 1, Birth.defects = 1, Mortality = 3),
-                                y = c(LBW = 2, Smoking = 3, Birth.defects = 1, Mortality = 2))
+coordinates(LBWsc3.DAG) <- list(x = c(LBW = 1.5, Smoking = 1, Birth.defects = 1, 
+                                      Mortality = 3),
+                                y = c(LBW = 2, Smoking = 3, Birth.defects = 1, 
+                                      Mortality = 2))
 
 drawdag(LBWsc3.DAG)
 
 var.sc3 <- defData(varname = 'Birth_defects', dist = 'binary', formula = 0.5)
 var.sc3 <- defData(var.sc3, varname = 'Smoking', dist = 'binary', formula = 0.5)
-var.sc3 <- defData(var.sc3, varname = 'LBW', dist = 'binary', formula = '0.5 * Birth_defects + 0.4 * Smoking', link = 'identity')
-var.sc3 <- defData(var.sc3, varname = 'Mortality', dist = 'binary', formula = '0.1 * Smoking + 0.7 * Birth_defects + 0.1 * LBW', link = 'identity')
+var.sc3 <- defData(var.sc3, varname = 'LBW', dist = 'binary', 
+                   formula = '0.5 * Birth_defects + 0.4 * Smoking', link = 'identity')
+var.sc3 <- defData(var.sc3, varname = 'Mortality', dist = 'binary', 
+                   formula = '0.1 * Smoking + 0.7 * Birth_defects + 0.1 * LBW', 
+                   link = 'identity')
 
 set.seed(13)
 LBWsc3.df <- genData(samplesize, var.sc3)
@@ -286,15 +298,20 @@ Birth.defects -> LBW
 Birth.defects -> Mortality
 }")
 
-coordinates(LBWsc3.DAG) <- list(x = c(LBW = 1.5, Smoking = 1, Birth.defects = 1, Mortality = 3),
-                                y = c(LBW = 2, Smoking = 3, Birth.defects = 1, Mortality = 2))
+coordinates(LBWsc3.DAG) <- list(x = c(LBW = 1.5, Smoking = 1, Birth.defects = 1, 
+                                      Mortality = 3),
+                                y = c(LBW = 2, Smoking = 3, Birth.defects = 1, 
+                                      Mortality = 2))
 
 drawdag(LBWsc3.DAG)
 
 var.sc3 <- defData(varname = 'Birth_defects', dist = 'binary', formula = 0.5)
 var.sc3 <- defData(var.sc3, varname = 'Smoking', dist = 'binary', formula = 0.5)
-var.sc3 <- defData(var.sc3, varname = 'LBW', dist = 'binary', formula = '0.5 * Birth_defects + 0.4 * Smoking', link = 'identity')
-var.sc3 <- defData(var.sc3, varname = 'Mortality', dist = 'binary', formula = '0.1 * Smoking + 0.7 * Birth_defects + 0.1 * LBW', link = 'identity')
+var.sc3 <- defData(var.sc3, varname = 'LBW', dist = 'binary', 
+                   formula = '0.5 * Birth_defects + 0.4 * Smoking', link = 'identity')
+var.sc3 <- defData(var.sc3, varname = 'Mortality', dist = 'binary', 
+                   formula = '0.1 * Smoking + 0.7 * Birth_defects + 0.1 * LBW', 
+                   link = 'identity')
 
 set.seed(13)
 LBWsc3.df <- genData(samplesize, var.sc3)
