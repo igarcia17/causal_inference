@@ -240,7 +240,8 @@ LBW.fun_noU(LBWsc3.df)
 #variable (X j) and the 'treatment' variable (X i). A backdoor path is a
 #a non causal path between X and Y that has an arrow pointing to X i. We will 
 #have to adjust for the set of variables Z when:
-#(1) All back door paths between X and Y are blocked after conditioning on Z -> that is,
+#(1) All back door paths between X and Y are blocked after conditioning on Z -> 
+#that is,
 #as seen before, when Z is a mediator or a confounder or not a collider
 #(2) No variables in Z are descendants of X.
 #Given the DAG:

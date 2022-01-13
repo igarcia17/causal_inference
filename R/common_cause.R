@@ -8,8 +8,8 @@ if(!suppressWarnings(require("rethinking", quietly = TRUE))) {
   drawdag <- plot
 } 
 
-#Imagine you want to study what variables influence the Z variable, having as well
-#X and Y as covariates
+#Imagine you want to study what variables influence the Z variable, 
+#having as well X and Y as covariates
 #You may want to consider the DAG:
 
 scenario1.DAG <- dagitty("dag {
@@ -19,8 +19,10 @@ e_y -> Y
 e_z -> Z
 }")
 
-coordinates(scenario1.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
-                                    y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+coordinates(scenario1.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, 
+                                         e_z = 2.75),
+                                    y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, 
+                                          e_z = 2.75))
 
 drawdag(scenario1.DAG)
 
@@ -34,14 +36,16 @@ e_y -> Y
 e_z -> Z
 }")
 
-coordinates(scenario2.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
-                                  y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+coordinates(scenario2.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, 
+                                         e_z = 2.75),
+                                  y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, 
+                                        e_z = 2.75))
 drawdag(scenario2.DAG)
-#In both cases X is common cause of Y and Z. In the first case, Y has a causal effect
-#on Z, while in the second case they are independent.
+#In both cases X is common cause of Y and Z. In the first case, Y has a causal 
+#effect on Z, while in the second case they are independent.
 
-#How can you know which is the case? How do you know if you want to consider X, Y or both?
-#Let's analyze all the possibilities!
+#How can you know which is the case? How do you know if you want to consider X, 
+#Y or both? Let's analyze all the possibilities!
 
 #Let's create a function that creates the different datasets that we need.
 create.dataset <- function(b_yz, N = 500, b_xy = 3, b_xz = 3,
@@ -99,8 +103,10 @@ Y_check <- function (dataset, conflevel = 0.01) {
     e_z -> Z
     }")
     
-    coordinates(scenario1.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
-                                       y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+    coordinates(scenario1.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, 
+                                             e_z = 2.75),
+                                       y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, 
+                                             e_z = 2.75))
     
     drawdag(scenario1.DAG)
     return(invisible(1))
@@ -117,18 +123,22 @@ Y_check <- function (dataset, conflevel = 0.01) {
     e_z -> Z
     }")
     
-    coordinates(scenario2.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, e_z = 2.75),
-                                       y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, e_z = 2.75))
+    coordinates(scenario2.DAG) <- list(x = c(Y = 1, X = 2, Z = 3, e_y = 0.75, 
+                                             e_z = 2.75),
+                                       y = c(Y = 3, X = 1, Z = 3, e_y = 2.75, 
+                                             e_z = 2.75))
     
     drawdag(scenario2.DAG)
     return(invisible(2))}
 
   if ((p.v.X > conflevel)&(p.v.Y > conflevel))
-  {cat("It seems that neither X or Y affect Z\nYou may want to review your working model\n")
+  {cat('It seems that neither X or Y affect Z',
+       '\nYou may want to review your working model\n')
   return(invisible(0))}
   
   if ((p.v.Y <= conflevel)&(p.v.X > conflevel))
-  {cat('It looks like Y is related to Z, but not Z\nYou may want to revisit the hypothesis \'X = common cause of Y and Z\'')
+  {cat('It looks like Y is related to Z, but not Z',
+       '\nYou may want to revisit the hypothesis \'X = common cause of Y and Z\'')
   return(invisible(0))}
   }
 
@@ -137,18 +147,15 @@ b <- Y_check(Yinfluences)
 c <- Y_check(Ynoinfluences)
 #d <- Y_check(wrongcommoncause)
 
-#Another sensitive question that may arise before the analysis is if we have identified
-#the common cause correctly: the objective of the analysis is to 
+###______________________Scenario 1 of common cause
 
-#We will now create a toy example to illustrate the problems of a bad modeling of 
-#scenario 1.
-#We will study the expression of gene INK4a, key for melanoma development. It will be
-#the outcome variable of Z.
-#It is directly affected by UV radiation. UV radiation can come from sunbathing, which
-#increases the appetite for ice cream consumption (measured in ml of consumed ice cream)
-#You collect data of potentially cancerous tissue from 100 people, from which you know the
-#hours they have spent in the sun the last year, the amount of consumed ice cream and
-#the expression of INK4a.
+#We will study the expression of gene INK4a, key for melanoma development. It 
+#will be the outcome variable of Z.
+#It is directly affected by UV radiation. UV radiation can come from sunbathing, 
+#which increases the appetite for ice cream consumption (measured in ml of 
+#consumed ice cream) You collect data of potentially cancerous tissue from
+#100 people, from which you know the hours they have spent in the sun the 
+#last year, the amount of consumed ice cream and the expression of INK4a.
 
 b_xy_i_uv_i <- 5
 b_xz_i_uv_i <- 10
@@ -159,7 +166,8 @@ i_uv_i.DAG <- dagitty("dag {
 UV.radiation -> Ice.cream.consumption
 UV.radiation -> INK4a
 }")
-coordinates(i_uv_i.DAG) <- list(x = c(Ice.cream.consumption = 1, UV.radiation = 2, INK4a = 3),
+coordinates(i_uv_i.DAG) <- list(x = c(Ice.cream.consumption = 1, 
+                                      UV.radiation = 2, INK4a = 3),
  y = c(Ice.cream.consumption = 3, UV.radiation = 1, INK4a = 3))
 
 drawdag(i_uv_i.DAG)
@@ -193,12 +201,13 @@ sc1.comm <- function(b_yz, N, b_xz, b_xy, reps = 100, ...){
   
   cat('\n Change in effect of X over Z')
 
-  cat('\nWhen Z ~ X: \nThe estimate for X is ', mean(onlyX_coefX),'and its s.d. is',
-      sd(onlyX_coefX),'\n')
+  cat('\nWhen Z ~ X: \nThe estimate for X is ', mean(onlyX_coefX),
+      'and its s.d. is', sd(onlyX_coefX),'\n')
   cat('\nWhen Z ~Y + X: \nThe estimate for X is ', mean(both_coefX), 
       'and its s.d. is', sd(both_coefX),'\n')
   cat('\nBeing input x -> z: ', b_xz)
-  #This illustrates how, even if the estimate of the coefficient for X is similar in both cases, the variance is higher in the presence of Y
+  #This illustrates how, even if the estimate of the coefficient for X is 
+  #similar in both cases, the variance is higher in the presence of Y
   op <- par(mfrow= c(2,1))
   hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z', ylab = FALSE)
   abline(v = b_xz, col = 'red')
@@ -214,10 +223,10 @@ sc1.comm(b_yz = b_yz_i_uv_i, N = samplesize, b_xz = b_xz_i_uv_i, b_xy = b_xy_i_u
 #when Uv radiation is present in the model. UV radiation is a confounder.
 #This corresponds to:
 impliedConditionalIndependencies(i_uv_i.DAG)
-#The power of UV radiation over INK4a doesn't vary much with the presence or absence of Y in the model.
-#But its variance increases when Y is taken into account.
-#Hence, in scenario 1 we should always condition on the common cause X or we could see 
-#a fake, but significant, causal relation between Y and Z.
+#The power of UV radiation over INK4a doesn't vary much with the presence or 
+#absence of Y in the model. But its variance increases when Y is taken into account.
+#Hence, in scenario 1 we should always condition on the common cause X or we 
+#could see a fake, but significant, causal relation between Y and Z.
 
 #A variation would be to consider that uv raditaion depends on sun exposure, 
 #having the following DAG:
@@ -232,15 +241,18 @@ UV.radiation -> Ice.cream.consumption
 UV.radiation -> INK4a
 }")
 
-coordinates(i_uv_i_sun.DAG) <- list(x = c(Ice.cream.consumption = 1, UV.radiation = 2, Sun = 2, INK4a = 3),
-                                y = c(Ice.cream.consumption = 3, UV.radiation = 2, Sun = 1, INK4a = 3))
+coordinates(i_uv_i_sun.DAG) <- list(x = c(Ice.cream.consumption = 1, 
+                                          UV.radiation = 2, Sun = 2, INK4a = 3),
+                                y = c(Ice.cream.consumption = 3, UV.radiation = 2, 
+                                      Sun = 1, INK4a = 3))
 drawdag(i_uv_i_sun.DAG)
 
 #As the significance of ice cream, Y, was covered in the previous function, 
-#it will be skipped in this one. We are interested in knowing if the sun, A, plays a role 
-#in the value of INK4a, Z, and how important is it.
+#it will be skipped in this one. We are interested in knowing if the sun, A, 
+#plays a role in the value of INK4a, Z, and how important is it.
 
-sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, ...){
+sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, 
+                                  e_x= 1, ...){
   onlyA_pvA <- rep(NA, reps)
   bothXA_pvA <- rep(NA,reps)
   three_pvA <- rep(NA, reps)
@@ -287,20 +299,23 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   }
   
   ###Changes in A
-  #p valor de A en los modelos, es relevante o no
+
   cat('\n____Change in p value of A on Z\n')
   cat('\nWhen Z ~ A: \nThe p value of A is ', mean(onlyA_pvA),'\n')
   cat('\nWhen Z ~ X + A: \nThe p value of A is ', mean(bothXA_pvA), '\n')
   cat('\nWhen Z ~ Y + X + A: \nThe p value of A is ', mean(three_pvA), '\n')
-  #estimate de A con y sin X
+
   cat('\n____Effect of A over Z\n')
-  cat('Input A -> X: ', b_ax,'\nInput X -> Z:', b_xz,'\nTotal effect A -> Z', b_xz * b_ax, '\n')
+  cat('Input A -> X: ', b_ax,'\nInput X -> Z:', b_xz,'\nTotal effect A -> Z', 
+      b_xz * b_ax, '\n')
   cat('\nWhen Z ~ A: \nCoefficient of A is ', mean(onlyA_coefA),'and its s.d. is',
       sd(onlyA_coefA),'\n')
-  cat('\nWhen Z ~ X + A: \nCoefficient of A is ', mean(bothXA_coefA),'and its s.d. is',
-      sd(bothXA_coefA),'\n')
-  cat('\nWhen Z ~ Y + X + A: \nCoefficient of A is ', mean(three_coefA),'and its s.d. is',
-      sd(three_coefA), '\nSee plots:\n')
+  
+  cat('\nWhen Z ~ X + A: \nCoefficient of A is ', mean(bothXA_coefA),
+      'and its s.d. is', sd(bothXA_coefA),'\n')
+  cat('\nWhen Z ~ Y + X + A: \nCoefficient of A is ', mean(three_coefA),
+      'and its s.d. is', sd(three_coefA), '\nSee plots:\n')
+  
   op <- par(mfrow= c(2,3))
   hist(onlyA_pvA, main = 'Z ~ A', xlab = 'p value of A')
   hist(bothXA_pvA, main = 'Z ~ X + A', xlab = 'p value of A')
@@ -325,10 +340,10 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
   cat('Input X -> Z: ', b_xz,'\n')
   cat('\nWhen Z ~ X: \nCoefficient of X is ', mean(onlyX_coefX),'and its s.d. is',
       sd(onlyX_coefX),'\n')
-  cat('\nWhen Z ~ X + A: \nCoefficient of X is ', mean(bothXA_coefX),'and its s.d. is',
-      sd(bothXA_coefX),'\n')
-  cat('\nWhen Z ~ Y + X + A: \nCoefficient of X is ', mean(three_coefX),'and its s.d. is',
-      sd(three_coefX),'\nSee plots:\n')
+  cat('\nWhen Z ~ X + A: \nCoefficient of X is ', mean(bothXA_coefX),
+      'and its s.d. is', sd(bothXA_coefX),'\n')
+  cat('\nWhen Z ~ Y + X + A: \nCoefficient of X is ', mean(three_coefX),
+      'and its s.d. is', sd(three_coefX),'\nSee plots:\n')
   
   op <- par(mfrow= c(2,3), mar = rep(4,4))
   
@@ -348,19 +363,24 @@ sc1.comm.plusancestor <- function(b_yz, N, b_xz, b_xy, b_ax, reps = 30, e_x= 1, 
 
 sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2,
                       b_ax = b_ax_i_uv_i2, b_xy = b_xy_i_uv_i2)
-#From this it can be concluded that A is only significant when X is not in the model.
-#The total effect of A is only appreciated in this model as well.
-#From this it can be concluded that the adjustment of A is required only if we are interested
-#on the effect of A over Z. By conditioning by X, A loses its relevance. This is supported by:
-impliedConditionalIndependencies(i_uv_i_sun.DAG)
-#The p value of X increases with the complexity of the model, but in any case it is significant.
-#The estimate of X is around the expected even if complexity is increased, but its standard error gets higher.
-#It the cause of study is X, conditioning by A is detrimental as the standard error of its coefficient
-#increases, though its p value is never below any sensible significance level by adjusting by other
-#covariates.
+#From this it can be concluded that A is only significant when X is not in the 
+#model. The total effect of A is only appreciated in this model as well.
 
-#As seen in the cause of the cause previous work from Ram?n D?az Uriarte, when the standard
-#error of X increases the variance of the estimate is reduced
+#From this it can be concluded that the adjustment of A is required only if we 
+#are interested on the effect of A over Z. By conditioning by X, A loses its 
+#relevance. This is supported by:
+impliedConditionalIndependencies(i_uv_i_sun.DAG)
+
+#The p value of X increases with the complexity of the model, but in any case 
+#it is significant.
+#The estimate of X is around the expected even if complexity is increased, 
+#but its standard error gets higher.
+#It the cause of study is X, conditioning by A is detrimental as the standard 
+#error of its coefficient increases, though its p value is never below any 
+#sensible significance level by adjusting by other covariates.
+
+#As seen in the cause of the cause previous work from Ramon Diaz Uriarte, when 
+#the standard error of X increases the variance of the estimate is reduced
 sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2,
                       b_ax = b_ax_i_uv_i2, b_xy=b_xy_i_uv_i2, e_x =20)
 
@@ -368,13 +388,14 @@ sc1.comm.plusancestor(b_yz = b_yz_i_uv_i2, N = samplesize, b_xz=b_xz_i_uv_i2,
 #simple models (toy example in Z_X_Y_adjust.R) can be applied to more complex models
 #(as in this case).
 
-###
+#_______________Scenario 2 in common cause
 
-#Let's move on to the scenario 2. We will illustrate with another example what to expect
-#conditioning on the different possibilities. We have concluded that INK4a over expression
-#is caused by UV radiation. A recent study shows that there is also intervention of 
-#MATP in the French population in this process. It seems to follow the following
-#DAG.
+#Let's move on to the scenario 2. We will illustrate with another example what 
+#to expect conditioning on the different possibilities. We have concluded that 
+#INK4a over expression is caused by UV radiation. A recent study shows that there 
+#is also intervention of MATP in the French population in this process. It seems
+#to follow the following DAG.
+
 samplesize <- 100
 b_xz_m_uv_i <- 4
 b_yz_m_uv_i <- (-3)
@@ -432,7 +453,8 @@ sc2.comm <- function(b_xz, b_yz, b_xy, N, reps = 200, ...) {
   
   op <- par(mfrow= c(2,2), mar = rep(4,4))
   hist(onlyX_coefX, main = 'Z ~ X', xlab = 'Effect X over Z')
-  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect, it takes into account both sources of effect
+  abline(v = b_xz + b_yz*b_xy, col = 'blue')#total effect, it takes into account 
+                                              #both sources of effect
   abline(v = b_xz, col = 'red')#direct effect
   
   hist(both_coefX, main = 'Z ~ X + Y', xlab = 'Effect X over Z')
@@ -453,16 +475,18 @@ sc2.comm(b_xz = b_xz_m_uv_i, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
 #In this case, Y, thus, MATP, has a significant p value in both models, in presence
 #and absence of the common cause X, UV radiation. This makes sense and was expected.
 
-#On blue it is shown the total effect of X over Z, as it takes into account the effect
-#of X over Y as well. On red, it is shown the direct effect of X over Z. On green, the effect of Y over 
-#Z. 
+#On blue it is shown the total effect of X over Z, as it takes into account the 
+#effect of X over Y as well. On red, it is shown the direct effect of X over Z. 
+#On green, the effect of Y over Z. 
+
 #When the mediator Y is out of the model, the X estimates the total effect over Z,
 #including Y contribution. Only when Y is included it is possible to discern what is the
 #direct effect of X.
 #Depending on the case it would be more interesting to study the total or the direct
 #effect of X. For this case, we argue that to know the total effect would be better
 #because in the human body MATP expression is unavoidable.
-#In any case, when there are two covariates in the model the variance of the estimate increases
+#In any case, when there are two covariates in the model the variance of the 
+#estimate increases
 
 #To know the effect of Y over Z, X has to be taken into account. When X is not 
 #considered, the estimate for Y is biased; for this reason in this kind of graphs 
@@ -478,21 +502,26 @@ scatterplot(Z ~ X, data = when_xz_4, main ='Original case', regLine=TRUE,
 #If we input a higher X->Z value
 sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
          N = samplesize)
-when_xz_40 <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, b_xy = b_xy_m_uv_i,
+when_xz_40 <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i, 
+                             b_xy = b_xy_m_uv_i,
                              N = samplesize)
-scatterplot(Z~X, data = when_xz_40, main = 'If UV radiation effect is stronger', regLine=TRUE,
-            xlab = 'UV radiation (exposure/time)', ylab = 'INK4a expression')
-#This is because the X contribution has a higher impact over Z than Y in this second case.
+scatterplot(Z~X, data = when_xz_40, main = 'If UV radiation effect is stronger', 
+            regLine=TRUE, xlab = 'UV radiation (exposure/time)', 
+            ylab = 'INK4a expression')
+#This is because the X contribution has a higher impact over Z than Y in this 
+#second case.
 
 #The estimate for X in the simpler model isn't negative, it's total effect is lower
 #than the direct effect.
 #If the Y -> Z value wasn't negative:
 sc2.comm(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
          N = samplesize)
-when_xz_40andnegative <- create.dataset(b_xz = b_xz_m_uv_i*10, b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
+when_xz_40andnegative <- create.dataset(b_xz = b_xz_m_uv_i*10, 
+                                        b_yz = b_yz_m_uv_i*(-1), b_xy = b_xy_m_uv_i,
                              N = samplesize)
-scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', regLine=TRUE,
-            xlab = 'UV radiation (exposure/time)', ylab = 'INK4a expression', boxplots = FALSE)
+scatterplot(Z~X, data = when_xz_40andnegative, main = 'If MATP enhances INK4a', 
+            regLine=TRUE, xlab = 'UV radiation (exposure/time)', 
+            ylab = 'INK4a expression', boxplots = FALSE)
 
 #Then the effect of X, UV radiation, over Z, INK4a, is increased, as it should be obvious.
 
@@ -514,14 +543,18 @@ Cortisol -> INK4a
 MATP -> INK4a
 }")
 
-coordinates(m_uv_i_c.DAG) <- list(x = c(UV.radiation = 1, MATP = 2, INK4a = 2, Cortisol = 3),
-                                y = c(UV.radiation = 1, MATP = 2, INK4a = 3, Cortisol = 1))
+coordinates(m_uv_i_c.DAG) <- list(x = c(UV.radiation = 1, MATP = 2, 
+                                        INK4a = 2, Cortisol = 3),
+                                y = c(UV.radiation = 1, MATP = 2, 
+                                      INK4a = 3, Cortisol = 1))
 drawdag(m_uv_i_c.DAG)
 
 #From the previous function we have learnt that the condition on the mediator
-#variable Y, MATP, would allow us to know the direct effect of UV.radiation. If it is not 
+#variable Y, MATP, would allow us to know the direct effect of UV.radiation. 
+#If it is not 
 #present in the model, what we can see is the total effect.
-#The reasoning behing the UV.radiation-MATP-INK4a set also apply to the Cortisol-MATP-INK4a set.
+#The reasoning behing the UV.radiation-MATP-INK4a set also apply to the 
+#Cortisol-MATP-INK4a set.
 sc2.comm.extraoverY <- function(b_by, b_bz, b_xz, b_xy, b_yz, N, reps = 200, ...) {
   #que variables quiero ver ahora
   onlyB_coefB <- rep(NA,reps)
@@ -543,9 +576,12 @@ sc2.comm.extraoverY <- function(b_by, b_bz, b_xz, b_xy, b_yz, N, reps = 200, ...
   }
 
   cat('___Changes in B\n')
-  cat('When Z ~ B:\nB coefficient:', mean(onlyB_coefB), 's.d:', sd(onlyB_coefB))
-  cat('\nWhen Z ~ X + B:\nB coefficient:', mean(bothBX_coefB), 's.d:', sd(bothBX_coefB))
-  cat('\nWhen Z ~ Y + X + B:\nB coefficient:', mean(three_coefB), 's.d:', sd(three_coefB))
+  cat('When Z ~ B:\nB coefficient:', mean(onlyB_coefB), 's.d:', 
+      sd(onlyB_coefB))
+  cat('\nWhen Z ~ X + B:\nB coefficient:', mean(bothBX_coefB), 's.d:',
+      sd(bothBX_coefB))
+  cat('\nWhen Z ~ Y + X + B:\nB coefficient:', mean(three_coefB), 's.d:', 
+      sd(three_coefB))
   
  ##legend: blue, total efffect X, red direct effect X, green effect Y
   
@@ -567,13 +603,16 @@ sc2.comm.extraoverY <- function(b_by, b_bz, b_xz, b_xy, b_yz, N, reps = 200, ...
 sc2.comm.extraoverY(b_by = b_by_m_uv_i_c, b_bz = b_bz_m_uv_i_c,
                      b_xz = b_xz_m_uv_i_c, b_xy = b_xy_m_uv_i_c,
                      b_yz = b_yz_m_uv_i_c, N = samplesize)
-#The total effect of cortisol, B, is well reflected when it is on its own in the model or 
+#The total effect of cortisol, B, is well reflected when it is on its own in the 
+#model or 
 #when UV radition, X, is considered, because they are independent from each other
 #as can be seen in
 impliedConditionalIndependencies(m_uv_i_c.DAG)
-#The variance of the coefficient when it is found along X is smaller than when B (cortisol)
+#The variance of the coefficient when it is found along X is smaller than when B 
+#(cortisol)
 #is checked on its own or when it also considers the collider Y (MATP).
-#Therefore in this type of graph it would be prefered to consider both B and X on the model:
+#Therefore in this type of graph it would be prefered to consider both B and X
+#on the model:
 #the variance of the estimates is smaller and the toal effect is calculated.
 #As in the previous case, condiotioning on Y may be counterproductive.
 #The absence of unmeasured confounding for the influence of both the exposure 
