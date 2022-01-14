@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.13)  14 JAN 2022 00:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.1.13)  14 JAN 2022 11:11
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1855,7 +1855,7 @@ Package pdftex.def Info: images//PLOT_CR_CH_HD.png  used on input line 1506.
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1520.
-<images//berkson_men.png, id=1317, 578.16pt x 433.62pt>
+<images//berkson_men.png, id=1319, 578.16pt x 433.62pt>
 File: images//berkson_men.png Graphic file (type png)
 <use images//berkson_men.png>
 Package pdftex.def Info: images//berkson_men.png  used on input line 1529.
@@ -1873,7 +1873,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1542.
-<images//BERKS_DAG.png, id=1330, 752.8125pt x 614.295pt>
+<images//BERKS_DAG.png, id=1336, 752.8125pt x 614.295pt>
 File: images//BERKS_DAG.png Graphic file (type png)
 <use images//BERKS_DAG.png>
 Package pdftex.def Info: images//BERKS_DAG.png  used on input line 1549.
@@ -1938,7 +1938,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1629.
-<images//LBW1DAG.png, id=1412, 349.305pt x 298.11375pt>
+<images//LBW1DAG.png, id=1418, 349.305pt x 298.11375pt>
 File: images//LBW1DAG.png Graphic file (type png)
 <use images//LBW1DAG.png>
 Package pdftex.def Info: images//LBW1DAG.png  used on input line 1635.
@@ -1965,7 +1965,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1647.
-<images//LBW2DAG.png, id=1425, 349.305pt x 298.11375pt>
+<images//LBW2DAG.png, id=1431, 349.305pt x 298.11375pt>
 File: images//LBW2DAG.png Graphic file (type png)
 <use images//LBW2DAG.png>
 Package pdftex.def Info: images//LBW2DAG.png  used on input line 1654.
@@ -2069,7 +2069,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1727.
-<images//complex.DAG.png, id=1497, 350.05782pt x 280.79906pt>
+<images//complex.DAG.png, id=1500, 350.05782pt x 280.79906pt>
 File: images//complex.DAG.png Graphic file (type png)
 <use images//complex.DAG.png>
 Package pdftex.def Info: images//complex.DAG.png  used on input line 1733.
@@ -2077,7 +2077,7 @@ Package pdftex.def Info: images//complex.DAG.png  used on input line 1733.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images//complex.DAG.arrows.png, id=1498, 509.65407pt x 424.96266pt>
+<images//complex.DAG.arrows.png, id=1501, 509.65407pt x 424.96266pt>
 File: images//complex.DAG.arrows.png Graphic file (type png)
 <use images//complex.DAG.arrows.png>
 Package pdftex.def Info: images//complex.DAG.arrows.png  used on input line 1739.
@@ -2162,7 +2162,7 @@ Package textcomp Info: Symbol \textminus not provided by
 Package textcomp Info: Symbol \textminus not provided by
 (textcomp)             font family aer in TS1 encoding.
 (textcomp)             Default family used instead on input line 1773.
-<images//LBW3.DAG.png, id=1539, 350.05782pt x 280.79906pt>
+<images//LBW3.DAG.png, id=1542, 350.05782pt x 280.79906pt>
 File: images//LBW3.DAG.png Graphic file (type png)
 <use images//LBW3.DAG.png>
 Package pdftex.def Info: images//LBW3.DAG.png  used on input line 1780.
@@ -2208,18 +2208,18 @@ Package rerunfilecheck Info: File `Collounder.vignette.out' has not changed.
 (rerunfilecheck)             Checksum: 4E7C14D1C34207FC9FF25A37A602D931;3127.
  ) 
 Here is how much of TeX's memory you used:
- 15068 strings out of 480246
- 239850 string characters out of 5894451
+ 15069 strings out of 480246
+ 239861 string characters out of 5894451
  1080905 words of memory out of 5000000
  31507 multiletter control sequences out of 15000+600000
  521886 words of font info for 97 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  70i,8n,79p,1052b,1827s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc} <c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk>{c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}<c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/inesk/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb>
-Output written on Collounder.vignette.pdf (67 pages, 1172315 bytes).
+Output written on Collounder.vignette.pdf (67 pages, 1173767 bytes).
 PDF statistics:
- 1934 PDF objects out of 2073 (max. 8388607)
- 1752 compressed objects within 18 object streams
- 1242 named destinations out of 1440 (max. 500000)
+ 1938 PDF objects out of 2073 (max. 8388607)
+ 1756 compressed objects within 18 object streams
+ 1243 named destinations out of 1440 (max. 500000)
  313 words of extra memory for PDF output out of 10000 (max. 10000000)
 
