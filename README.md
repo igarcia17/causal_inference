@@ -1,5 +1,7 @@
 # R project: Causal inference
-Authors: Nermina Logo and Inés García
+Authors: Nermina Logo and Inés García;
+
+
 Bioinformatics and Computational Biology MSc, UAM, 2021-2022
 
 Illustration of different causal inference scenarios and what happens when it is model in a wrong or a correct way. Data can be biased, the estimates can have different variance, trands may change if we condition or not for other variables, etc. 
