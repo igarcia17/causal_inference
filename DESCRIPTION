@@ -1,0 +1,14 @@
+Package: collounder
+Type: Package
+Title: Causal inference scenarios description
+Version: 0.0.0.9000
+Date: 2022-01-18
+Authors@R: c(person("Ines", , "Garcia Ortiz", "ines.garciaortiz99@gmail.com", 
+    role = c('aut', 'cre')), person("Nermina", , "Logo Lendo", "nerminalogolendo@gmail.com", 
+    role = c("ctb")))
+Description: The package offers a walkthrough over different causal inference scenarios and offers examples based in real life to help to understand the problems derived of a bad causal inference interpretation. 
+License: Open source
+Encoding: UTF-8
+URL: https://github.com/igarcia17/causal_inference.git
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2

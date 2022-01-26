@@ -493,9 +493,10 @@ sd_d <- 1
 
 cortisol <- runif(N, 1, 50)
 cholesterol <- runif(N, 10, 250)
+sug_consumption <- runif(N, 0, 150)
 diabetes <- cortisol * b_co_d + cholesterol * b_ch_d + sug_consumption * 
   b_sc_d+ rnorm(N, 0, sd = sd_d)
-sug_consumption <- runif(N, 0, 150)
+
 
 PLOT.REG(cortisol ~ cholesterol, 'cortisol ~ cholesterol')
 
